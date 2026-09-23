@@ -1,0 +1,48 @@
+#pragma kernel KernelA
+#pragma kernel AddVelocity
+#pragma kernel AdvectDye
+
+//RWStructuredBuffer<int> _Buffer;
+RWTexture2D<float2> _Buffer;
+
+// Common
+uint2 _Resolution;
+// AddVelocity
+RWTexture2D<float2> _VelocityBufferWrite;
+float2 _InputPosition;
+float2 _InputVelocity;
+float _InputRadius;
+
+// AdvectDye
+Texture2D<float2> _VelocityBufferRead;
+Texture2D<float4> _DyeBufferRead;
+RWTexture2D<float4> _DyeBufferWrite;
+SamplerState linearRepeatSampler;
+float _DeltaTime;
+
+
+[numthreads(8,8,1)]
+void KernelA(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    if (dispatchThreadID.x >= _Resolution.x || dispatchThreadID.y >= _Resolution.y) return;
+    float volume = dispatchThreadID.x / _Resolution.x;
+    _Buffer[dispatchThreadID.xy] = float2(volume, volume);
+}
+
+[numthreads(8,8,1)]
+void AddVelocity(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    if (dispatchThreadID.x >= _Resolution.x || dispatchThreadID.y >= _Resolution.y) return;
+    float2 pos = float2(dispatchThreadID.x + 0.5, dispatchThreadID.y + 0.5);
+    float2 toInputPosition = _InputPosition - pos;
+    _VelocityBufferWrite[dispatchThreadID.xy] = _VelocityBufferRead[dispatchThreadID.xy] + _InputVelocity * exp(-dot(toInputPosition, toInputPosition) / (_InputRadius *_InputRadius)); 
+}
+
+[numthreads(8,8,1)]
+void AdvectDye(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    if (dispatchThreadID.x >= _Resolution.x || dispatchThreadID.y >= _Resolution.y) return;
+    float2 pos = dispatchThreadID.xy + 0.5;
+    float2 uv = (pos - _VelocityBufferRead[dispatchThreadID.xy] * _DeltaTime) / _Resolution;
+    _DyeBufferWrite[dispatchThreadID.xy] = _DyeBufferRead.SampleLevel(linearRepeatSampler, uv, 0);
+}
