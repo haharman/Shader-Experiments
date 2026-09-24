@@ -1,9 +1,9 @@
-#pragma kernel KernelA
 #pragma kernel AddVelocity
+#pragma kernel AdvectVelocity
 #pragma kernel AdvectDye
-
-//RWStructuredBuffer<int> _Buffer;
-RWTexture2D<float2> _Buffer;
+#pragma kernel Divergence
+#pragma kernel PressureJacobi
+#pragma kernel SubtractPressureGradient
 
 // Common
 uint2 _Resolution;
@@ -20,13 +20,18 @@ RWTexture2D<float4> _DyeBufferWrite;
 SamplerState linearRepeatSampler;
 float _DeltaTime;
 
+// Divergence
+RWTexture2D<float> _DivergenceBufferWrite;
 
-[numthreads(8,8,1)]
-void KernelA(uint3 dispatchThreadID : SV_DispatchThreadID)
+// PressureJacobi
+Texture2D<float> _DivergenceBufferRead;
+Texture2D<float> _PressureBufferRead;
+RWTexture2D<float> _PressureBufferWrite;
+
+uint2 modIndex(int2 index)
 {
-    if (dispatchThreadID.x >= _Resolution.x || dispatchThreadID.y >= _Resolution.y) return;
-    float volume = dispatchThreadID.x / _Resolution.x;
-    _Buffer[dispatchThreadID.xy] = float2(volume, volume);
+    int2 res = (int2)_Resolution;
+    return (uint2)((index % res + res) % res);
 }
 
 [numthreads(8,8,1)]
@@ -45,4 +50,51 @@ void AdvectDye(uint3 dispatchThreadID : SV_DispatchThreadID)
     float2 pos = dispatchThreadID.xy + 0.5;
     float2 uv = (pos - _VelocityBufferRead[dispatchThreadID.xy] * _DeltaTime) / _Resolution;
     _DyeBufferWrite[dispatchThreadID.xy] = _DyeBufferRead.SampleLevel(linearRepeatSampler, uv, 0);
+}
+
+[numthreads(8,8,1)]
+void Divergence(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    if (dispatchThreadID.x >= _Resolution.x || dispatchThreadID.y >= _Resolution.y) return;
+    int2 id = (int2)dispatchThreadID.xy;
+    float xIn = _VelocityBufferRead[modIndex(id + int2(-1,0))].x;
+    float xOut = _VelocityBufferRead[modIndex(id + int2(1,0))].x;
+    float yIn = _VelocityBufferRead[modIndex(id + int2(0,-1))].y;
+    float yOut = _VelocityBufferRead[modIndex(id + int2(0,1))].y;
+    _DivergenceBufferWrite[dispatchThreadID.xy] = (xOut - xIn + yOut - yIn) * 0.5;
+}
+
+[numthreads(8,8,1)]
+void PressureJacobi(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    if (dispatchThreadID.x >= _Resolution.x || dispatchThreadID.y >= _Resolution.y) return;
+    int2 id = (int2)dispatchThreadID.xy;
+    float pLeft = _PressureBufferRead[modIndex(id + int2(-1,0))];
+    float pRight = _PressureBufferRead[modIndex(id + int2(1,0))];
+    float pDown = _PressureBufferRead[modIndex(id + int2(0,-1))];
+    float pUp = _PressureBufferRead[modIndex(id + int2(0,1))];
+    float divergence = _DivergenceBufferRead[id];
+    _PressureBufferWrite[id] = (pLeft + pRight + pDown + pUp - divergence) * 0.25;
+}
+
+[numthreads(8,8,1)]
+void SubtractPressureGradient(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    if (dispatchThreadID.x >= _Resolution.x || dispatchThreadID.y >= _Resolution.y) return;
+    int2 id = (int2)dispatchThreadID.xy;
+    float pLeft = _PressureBufferRead[modIndex(id + int2(-1,0))];
+    float pRight = _PressureBufferRead[modIndex(id + int2(1,0))];
+    float pDown = _PressureBufferRead[modIndex(id + int2(0,-1))];
+    float pUp = _PressureBufferRead[modIndex(id + int2(0,1))];
+    float2 velocity = _VelocityBufferRead[id];
+    _VelocityBufferWrite[id] = velocity - 0.5 * (float2(pRight - pLeft, pUp - pDown));
+}
+
+[numthreads(8,8,1)]
+void AdvectVelocity(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    if (dispatchThreadID.x >= _Resolution.x || dispatchThreadID.y >= _Resolution.y) return;
+    float2 pos = dispatchThreadID.xy + 0.5;
+    float2 uv = (pos - _VelocityBufferRead[dispatchThreadID.xy] * _DeltaTime) / _Resolution;
+    _VelocityBufferWrite[dispatchThreadID.xy] = _VelocityBufferRead.SampleLevel(linearRepeatSampler, uv, 0);
 }

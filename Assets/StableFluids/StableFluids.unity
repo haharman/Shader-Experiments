@@ -151,9 +151,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DefaultNamespace.StableFluids
   velocityInputMock: {fileID: 226749968}
   shader: {fileID: 7200000, guid: 48b426927eda485d92ae7e99e860ec5f, type: 3}
-  w: 1920
-  h: 1080
-  dyeInitTex: {fileID: 2800000, guid: b0debaed861810946b871143323216d7, type: 3}
+  w: 1280
+  h: 720
+  pressureJacobiCount: 300
+  dyeInitTex: {fileID: 2800000, guid: c4571729347dc354d8da33203e4ea009, type: 3}
   rawImage: {fileID: 1611301585}
 --- !u!4 &226749967
 Transform:
@@ -183,7 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StableFluids.VelocityInputMock
   minVelocity: 0
-  radius: 100
+  radius: 50
 --- !u!1 &897437003
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,8 +273,8 @@ Canvas:
   m_GameObject: {fileID: 897437003}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 1841727494}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
