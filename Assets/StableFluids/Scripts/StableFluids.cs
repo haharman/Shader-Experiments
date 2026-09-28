@@ -10,8 +10,13 @@ namespace StableFluids
         [SerializeField] private int w;
         [SerializeField] private int h;
         [SerializeField, Range(1, 1000)] private int pressureJacobiCount;
+        [SerializeField] private float resetDyeInterval;
         [SerializeField] private Texture2D dyeInitTex;
         [SerializeField] private RawImage rawImage;
+
+        public RenderTexture velocityRt => _velocity.read;
+
+        private float _elapsed;
 
         private PingPongRenderTexture _dye;
         private PingPongRenderTexture _velocity;
@@ -58,6 +63,7 @@ namespace StableFluids
            
            // 初期状態を書き込む
            Graphics.Blit(Texture2D.blackTexture, velFirstReadRt);
+           Graphics.Blit(Texture2D.blackTexture, presFirstReadRt);
            Graphics.Blit(dyeInitTex, dyeFirstReadRt);
            
            // PingPongラッパーにする
@@ -90,8 +96,6 @@ namespace StableFluids
            
            // 反映テスト
            rawImage.texture = _dye.read;
-
-           //shader.SetTexture(_kernelId, "_Buffer", _rt);
         }
 
         private void Update()
@@ -99,7 +103,6 @@ namespace StableFluids
             // 共通の値をセット
             shader.SetFloat("_DeltaTime", Time.deltaTime);
             shader.SetInts("_Resolution", w, h);
-            
             #region Add Velocity
             if(velocityInputMock.TryGetVelocityInput(out VelocityInputData velocityInput))
             {
@@ -150,14 +153,13 @@ namespace StableFluids
             #endregion
             #region PressureJacobi
             
-            _pressure.ClearRead();
-            
             shader.SetTexture(_pressureJacobiKernelIndex, "_DivergenceBufferRead", _divergenceRt);
             
             for (int i = 0; i < pressureJacobiCount; i++)
             {
                 shader.SetTexture(_pressureJacobiKernelIndex, "_PressureBufferRead", _pressure.read);
                 shader.SetTexture(_pressureJacobiKernelIndex, "_PressureBufferWrite", _pressure.write);
+                
                 shader.Dispatch(_pressureJacobiKernelIndex,
                     (w + _pressureJacobiGroupSize.x - 1) / _pressureJacobiGroupSize.x,
                     (h + _pressureJacobiGroupSize.y - 1) / _pressureJacobiGroupSize.y,
@@ -166,7 +168,7 @@ namespace StableFluids
             }
             
             #endregion
-            #region PressureJacobi
+            #region subtractPressureGradient
             
             shader.SetTexture(_subtractPressureGradientKernelIndex, "_PressureBufferRead", _pressure.read);
             shader.SetTexture(_subtractPressureGradientKernelIndex,  "_VelocityBufferRead", _velocity.read);
@@ -176,6 +178,16 @@ namespace StableFluids
                 (h + _subtractPressureGradientGroupSize.y - 1) / _subtractPressureGradientGroupSize.y,
                 1);
             _velocity.Swap();
+            
+            #endregion
+            #region Dyeのリセット
+            
+            _elapsed += Time.deltaTime;
+            if (_elapsed >= resetDyeInterval)
+            {
+                _elapsed -= resetDyeInterval;
+                Graphics.Blit(dyeInitTex, _dye.read);
+            }
             
             #endregion
             #region Advect Dye
@@ -193,7 +205,6 @@ namespace StableFluids
             
             #endregion
             
-            //rawImage.texture = _dye.read;
             rawImage.texture = _dye.read;
         }
 

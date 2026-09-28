@@ -20,24 +20,12 @@ namespace StableFluids
             _write = firstWrite;
         }
         
-        public void Swap()
-        {
-            (_read, _write) = (_write, _read);
-        }
-
-        public void ClearRead()
-        {
-            var current = RenderTexture.active;
-            RenderTexture.active = _read;
-            GL.Clear(false, true, Color.clear);
-            RenderTexture.active = current;
-        }
+        public void Swap() { (_read, _write) = (_write, _read); }
         
         public void Dispose()
         {
             if (_read != null) { UnityEngine.Object.Destroy(_read); }
             if (_write != null) { UnityEngine.Object.Destroy(_write); }
-            
             _read = null;
             _write = null;
         }

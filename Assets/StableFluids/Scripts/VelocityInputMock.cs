@@ -5,7 +5,7 @@ namespace StableFluids
 {
     public readonly struct VelocityInputData
     {
-        public VelocityInputData(Vector3 position, Vector3 velocity, float radius)
+        public VelocityInputData(Vector2 position, Vector2 velocity, float radius)
         {
             PositionUv = position;
             VelocityUv = velocity;
@@ -18,35 +18,34 @@ namespace StableFluids
     
     public class VelocityInputMock : MonoBehaviour
     {
-        [SerializeField] private float minVelocity;
-        [SerializeField] private float radius;
-        private VelocityInputData _velocityInputData;
+        [SerializeField] private float minVelocityPx;
+        [SerializeField] private float radiusPx;
         public bool TryGetVelocityInput(out VelocityInputData velocityInput)
         {
-            // ポインターが押されているか
-            var isPressed = Pointer.current.press.isPressed;
-            if (!isPressed) { velocityInput = default; return false; }
+            velocityInput = default;
+            if (Time.deltaTime <= 0f) { return false; }
             
-            // ポインターのUV速度
+            // ポインターが押されているか
+            if (Pointer.current == null) { return false; }
+            var isPressed = Pointer.current.press.isPressed;
+            if (!isPressed) { return false; }
+            
+            // UV速度
             var velocity = Pointer.current.delta.ReadValue() / Time.deltaTime;
+            if (velocity.sqrMagnitude < minVelocityPx * minVelocityPx) { return false; }
             velocity.x /= Screen.width;
             velocity.y /= Screen.height;
             
-            if (_velocityInputData.Radius < minVelocity)
-            {
-                velocityInput = default;
-                return false;
-            }
-            
-            // ポインターのUV位置
+            // UV位置
             var position = Pointer.current.position.ReadValue();
             position.x /= Screen.width;
             position.y /= Screen.height;
             
-            var r = radius / Screen.height;
+            // 影響半径
+            var r = radiusPx / Screen.height;
             
-            _velocityInputData = new VelocityInputData(position, velocity, r);
-            velocityInput = _velocityInputData;
+            // return
+            velocityInput = new VelocityInputData(position, velocity, r);
             return true;
         }
     }
