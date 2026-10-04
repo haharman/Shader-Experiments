@@ -1,0 +1,23 @@
+#pragma kernel AdvectDye
+
+// Buffer
+Texture2D<float2> _VelocityFieldRead;
+Texture2D<float4> _DyeTextureRead;
+RWTexture2D<float4> _DyeTextureWrite;
+
+// Common
+uint2 _Resolution;
+float _DeltaTime;
+
+// AdvectDye
+SamplerState linearRepeatSampler;
+
+[numthreads(8,8,1)]
+void AdvectDye(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    uint2 id = dispatchThreadID.xy;
+    if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
+    float2 pos = id + 0.5;
+    float2 uv = (pos - _VelocityFieldRead[id] * _DeltaTime) / _Resolution;
+    _DyeTextureWrite[id] = _DyeTextureRead.SampleLevel(linearRepeatSampler, uv, 0);
+}

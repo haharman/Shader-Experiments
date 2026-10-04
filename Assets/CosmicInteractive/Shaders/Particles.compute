@@ -1,0 +1,65 @@
+#pragma kernel Fade
+#pragma kernel Update
+
+struct ParticleData
+{
+    float2 position;
+};
+
+Texture2D<float2> _VelocityField;
+Texture2D<float4> _ParticleTextureRead;
+RWTexture2D<float4> _ParticleTextureWrite;
+
+RWStructuredBuffer<ParticleData> _ParticleBuffer;
+
+uint _ParticleCount;
+float _SeparateWeight;
+float _SeparateRadius;
+float _DeltaTime;
+float _Fade;
+float4 _SlowColor;
+float4 _FastColor;
+float _SlowVelocitySq;
+float _FastVelocitySq;
+uint2 _Resolution;
+
+SamplerState linearRepeatSampler;
+
+[numthreads(8,8,1)]
+void Fade(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    uint2 id = dispatchThreadID.xy;
+    if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
+    
+    float4 color = _ParticleTextureRead[id] * _Fade;
+    color.a = 1;
+    _ParticleTextureWrite[id] = color;
+}
+
+[numthreads(64,1,1)]
+void Update(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    uint id = dispatchThreadID.x;
+    if (id >= _ParticleCount) return;
+    
+    ParticleData data = _ParticleBuffer[id];
+    float2 from = data.position;
+    float2 velocity = _VelocityField.SampleLevel(linearRepeatSampler, data.position / _Resolution, 0);
+    data.position += velocity * _DeltaTime;
+    
+    float4 color = lerp(_SlowColor, _FastColor, smoothstep(_SlowVelocitySq, _FastVelocitySq, dot(velocity,velocity)));
+    color.a = 1;
+    float2 delta = data.position - from;
+    uint steps = (uint)ceil(max(abs(delta.x), abs(delta.y)));
+    steps = clamp(steps, 1u, 64u);
+    for (uint i = 0; i <= steps; i++)
+    {
+        float2 pos = from + delta * ((float)i / steps);
+        int2 texel = (int2)floor(pos);
+        if (any(texel < 0) || any(texel >= (int2)_Resolution)) continue;
+        
+        _ParticleTextureWrite[texel] = color;
+    }
+    data.position = frac(data.position / _Resolution) * _Resolution;
+    _ParticleBuffer[id] = data;
+}
