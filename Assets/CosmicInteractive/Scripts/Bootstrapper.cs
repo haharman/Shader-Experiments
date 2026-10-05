@@ -11,9 +11,9 @@ public class Bootstrapper : MonoBehaviour
     [SerializeField] private StableFluids stableFluids;
     [SerializeField] private Particles particles;
     [SerializeField] private Dye dye;
-    [SerializeField] private VelocityInputMock velocityInputMock;
-    [SerializeField] private int width;
-    [SerializeField] private int height;
+    [SerializeField] private int resolutionX;
+    [SerializeField] private int resolutionY;
+    [SerializeField, Min(1)] private int velocityDownsample;
     [SerializeField] private RawImage image; 
     [SerializeField] private Material addMat;
 
@@ -37,18 +37,12 @@ public class Bootstrapper : MonoBehaviour
             return;
         }
 
-        if (velocityInputMock == null)
-        {
-            Debug.LogError("[Bootstrapper] velocityInputMock を割り当ててください");
-            return;
-        }
-
         _initialized = true;
         
-        stableFluids.Initialize(width, height);
-        particles.Initialize(width,height);
-        dye.Initialize(width,height);
-        _combined = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32);
+        stableFluids.Initialize(resolutionX / velocityDownsample, resolutionY / velocityDownsample);
+        particles.Initialize(resolutionX,resolutionY);
+        dye.Initialize(resolutionX,resolutionY);
+        _combined = new RenderTexture(resolutionX, resolutionY, 0, RenderTextureFormat.ARGB32);
         image.texture = _combined;
     }
 

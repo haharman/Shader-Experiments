@@ -243,9 +243,9 @@ MonoBehaviour:
   stableFluids: {fileID: 1611301588}
   particles: {fileID: 1363980085}
   dye: {fileID: 475418630}
-  velocityInputMock: {fileID: 226749968}
-  width: 1920
-  height: 432
+  resolutionX: 4800
+  resolutionY: 1080
+  velocityDownsample: 10
   image: {fileID: 873637760}
   addMat: {fileID: 2100000, guid: 361b05b34b767a74bbe5e3f4879cb694, type: 2}
 --- !u!4 &230858937
@@ -489,8 +489,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 664870779}
+  - component: {fileID: 664870780}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: InputSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -511,6 +512,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 604230036}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &664870780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664870778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc1b41c93b494b49982882a445355720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputSource
+  minVelocityPx: 5
+  radiusPx: 50
 --- !u!1 &873637759
 GameObject:
   m_ObjectHideFlags: 0
@@ -1373,7 +1388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35e84d30f80b47f0a3f13f11fa6ee841, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefaultNamespace.StableFluids
-  velocityInputMock: {fileID: 226749968}
+  inputSource: {fileID: 664870780}
   shader: {fileID: 7200000, guid: 48b426927eda485d92ae7e99e860ec5f, type: 3}
   pressureJacobiCount: 256
 --- !u!1 &1841727492

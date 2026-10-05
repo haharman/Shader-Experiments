@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public readonly struct VelocityInputData
+public readonly struct InputData
 {
-    public VelocityInputData(Vector2 position, Vector2 velocity, float radius)
+    public InputData(Vector2 position, Vector2 velocity, float radius)
     {
         PositionUv = position;
         VelocityUv = velocity;
@@ -14,13 +14,14 @@ public readonly struct VelocityInputData
     public readonly float Radius;
 }
 
-public class VelocityInputMock : MonoBehaviour
+public class InputSource : MonoBehaviour
 {
     [SerializeField] private float minVelocityPx;
     [SerializeField] private float radiusPx;
-    public bool TryGetVelocityInput(out VelocityInputData velocityInput)
+    
+    public bool TryGetInput(out InputData[] input)
     {
-        velocityInput = default;
+        input = default;
         if (Time.deltaTime <= 0f) { return false; }
         
         // ポインターが押されているか
@@ -43,7 +44,9 @@ public class VelocityInputMock : MonoBehaviour
         var r = radiusPx / Screen.height;
         
         // return
-        velocityInput = new VelocityInputData(position, velocity, r);
+        input = new InputData[2];
+        input[0] = new InputData(position, velocity, r);
+        input[1] = new InputData(Vector2.zero, Vector2.right, r/2);
         return true;
     }
 }

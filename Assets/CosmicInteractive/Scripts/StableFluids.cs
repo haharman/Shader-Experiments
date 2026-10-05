@@ -1,8 +1,9 @@
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class StableFluids : MonoBehaviour
 {
-    [SerializeField] private VelocityInputMock velocityInputMock;
+    [SerializeField] private InputSource inputSource;
     [SerializeField] private ComputeShader shader;
     private int _w;
     private int _h;
@@ -27,17 +28,18 @@ public class StableFluids : MonoBehaviour
     
     private int _pressureJacobiKernelIndex;
     private Vector3Int _pressureJacobiGroupSize;
-
-
+    
     private int _subtractPressureGradientKernelIndex;
     private Vector3Int _subtractPressureGradientGroupSize;
     
+    private ComputeBuffer _inputBuffer;
+    private const int MaxInputs = 1000;
     
     public void Initialize(int w, int h)
     {
-        if (velocityInputMock == null)
+        if (inputSource == null)
         {
-            Debug.LogError("[Bootstrapper] velocityInputMock を割り当ててください");
+            Debug.LogError("[Bootstrapper] InputSource を割り当ててください");
             return;
         }
 
@@ -89,6 +91,12 @@ public class StableFluids : MonoBehaviour
        _pressureJacobiGroupSize = new Vector3Int((int)x, (int)y, (int)z);
        shader.GetKernelThreadGroupSizes(_subtractPressureGradientKernelIndex, out x, out y, out z);
        _subtractPressureGradientGroupSize = new Vector3Int((int)x, (int)y, (int)z);
+       
+       // InputBufferの初期化
+       int stride = Marshal.SizeOf<InputData>();
+       var input = new InputData[MaxInputs];
+       _inputBuffer = new ComputeBuffer(MaxInputs, stride);
+       _inputBuffer.SetData(input);
     }
 
    public RenderTexture Tick()
@@ -96,18 +104,14 @@ public class StableFluids : MonoBehaviour
         // 共通の値をセット
         shader.SetFloat("_DeltaTime", Time.deltaTime);
         shader.SetInts("_Resolution", _w, _h);
+        shader.SetFloat("_Aspect", (float)_w / _h);
         #region Add Velocity
-        if(velocityInputMock.TryGetVelocityInput(out VelocityInputData velocityInput))
+        if(inputSource.TryGetInput(out InputData[] input))
         {
-            // 速度入力データを格子座標に変換
-            var position = new Vector2(velocityInput.PositionUv.x * _w, velocityInput.PositionUv.y * _h);
-            var velocity = new Vector2(velocityInput.VelocityUv.x * _w, velocityInput.VelocityUv.y * _h);
-            var radius = velocityInput.Radius * _h;
-            
-            shader.SetVector("_InputPosition", position);
-            shader.SetVector("_InputVelocity", velocity);
-            shader.SetFloat("_InputRadius", radius);
-            
+            shader.SetInt( "_MaxInputs", MaxInputs);
+            shader.SetInt( "_InputCount", input.Length);
+            _inputBuffer.SetData(input);
+            shader.SetBuffer(_addVelocityKernelIndex, "_InputBufferRead", _inputBuffer);
             shader.SetTexture(_addVelocityKernelIndex, "_VelocityFieldRead", _velocity.read);
             shader.SetTexture(_addVelocityKernelIndex, "_VelocityFieldWrite", _velocity.write);
             
@@ -184,5 +188,6 @@ public class StableFluids : MonoBehaviour
         if(_divergenceRt != null) { UnityEngine.GameObject.Destroy(_divergenceRt); }
         _divergenceRt = null;
         _pressure?.Dispose();
+        _inputBuffer?.Release();
     }
 }

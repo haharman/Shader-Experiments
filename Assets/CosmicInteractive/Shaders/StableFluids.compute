@@ -4,7 +4,16 @@
 #pragma kernel PressureJacobi
 #pragma kernel SubtractPressureGradient
 
+struct InputData
+{
+    float2 position;
+    float2 velocity;
+    float radius;
+};
+
 // Buffer
+StructuredBuffer<InputData> _InputBufferRead;
+
 Texture2D<float2> _VelocityFieldRead;
 RWTexture2D<float2> _VelocityFieldWrite;
 
@@ -16,12 +25,12 @@ RWTexture2D<float> _PressureBufferWrite;
 
 // Common
 uint2 _Resolution;
+float _Aspect;
 float _DeltaTime;
 
-// AddVelocity
-float2 _InputPosition;
-float2 _InputVelocity;
-float _InputRadius;
+// AddVelocity(Input)
+uint _InputCount;
+uint _MaxInputs;
 
 // AdvectVelocity
 SamplerState linearRepeatSampler;
@@ -32,15 +41,25 @@ uint2 modIndex(int2 index)
     return (uint2)((index % res + res) % res);
 }
 
+float2 texcel2Uv(float2 id) { return (id + 0.5) / (float2)_Resolution; }
+
 [numthreads(8,8,1)]
 void AddVelocity(uint3 dispatchThreadID : SV_DispatchThreadID)
 {
     uint2 id = dispatchThreadID.xy;
     if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
-    float2 pos = float2(id.x + 0.5, id.y + 0.5);
-    float2 toInputPosition = _InputPosition - pos;
-    float weight = exp(-dot(toInputPosition, toInputPosition) / (_InputRadius *_InputRadius));
-    _VelocityFieldWrite[id] = _VelocityFieldRead[id] + _InputVelocity * weight; 
+    
+    float2 uv = texcel2Uv(id);
+    float2 velocity = _VelocityFieldRead[id];
+
+    for (int i = 0; i < min(_InputCount, _MaxInputs); i++)
+    {
+        InputData d = _InputBufferRead[i];
+        float2 toInput = (d.position - uv) * float2(_Aspect, 1);
+        float weight = exp(-dot(toInput, toInput) / (d.radius * d.radius));
+        velocity += d.velocity * weight;
+    }
+    _VelocityFieldWrite[id] = velocity;
 }
 
 [numthreads(8,8,1)]
@@ -48,8 +67,7 @@ void AdvectVelocity(uint3 dispatchThreadID : SV_DispatchThreadID)
 {
     uint2 id = dispatchThreadID.xy;
     if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
-    float2 pos = dispatchThreadID.xy + 0.5;
-    float2 uv = (pos - _VelocityFieldRead[id] * _DeltaTime) / _Resolution;
+    float2 uv = texcel2Uv(id) - _VelocityFieldRead[id] * _DeltaTime;
     _VelocityFieldWrite[id] = _VelocityFieldRead.SampleLevel(linearRepeatSampler, uv, 0);
 }
 
@@ -62,7 +80,7 @@ void Divergence(uint3 dispatchThreadID : SV_DispatchThreadID)
     float xOut = _VelocityFieldRead[modIndex(id + int2(1,0))].x;
     float yIn = _VelocityFieldRead[modIndex(id + int2(0,-1))].y;
     float yOut = _VelocityFieldRead[modIndex(id + int2(0,1))].y;
-    _DivergenceBufferWrite[id] = (xOut - xIn + yOut - yIn) * 0.5;
+    _DivergenceBufferWrite[id] = ((xOut - xIn) * _Resolution.x + (yOut - yIn) * _Resolution.y) * 0.5;
 }
 
 [numthreads(8,8,1)]
@@ -88,5 +106,5 @@ void SubtractPressureGradient(uint3 dispatchThreadID : SV_DispatchThreadID)
     float pDown = _PressureBufferRead[modIndex(id + int2(0,-1))];
     float pUp = _PressureBufferRead[modIndex(id + int2(0,1))];
     float2 velocity = _VelocityFieldRead[id];
-    _VelocityFieldWrite[id] = velocity + 0.5 * (float2(pLeft - pRight, pDown - pUp));
+    _VelocityFieldWrite[id] = velocity + 0.5 * float2(pLeft - pRight, pDown - pUp) / _Resolution;
 }

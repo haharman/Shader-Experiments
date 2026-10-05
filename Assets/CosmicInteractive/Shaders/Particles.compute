@@ -44,7 +44,7 @@ void Update(uint3 dispatchThreadID : SV_DispatchThreadID)
     
     ParticleData data = _ParticleBuffer[id];
     float2 from = data.position;
-    float2 velocity = _VelocityField.SampleLevel(linearRepeatSampler, data.position / _Resolution, 0);
+    float2 velocity = _VelocityField.SampleLevel(linearRepeatSampler, data.position / _Resolution, 0) * _Resolution;
     data.position += velocity * _DeltaTime;
     
     float4 color = lerp(_SlowColor, _FastColor, smoothstep(_SlowVelocitySq, _FastVelocitySq, dot(velocity,velocity)));

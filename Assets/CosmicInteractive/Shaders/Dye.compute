@@ -17,7 +17,8 @@ void AdvectDye(uint3 dispatchThreadID : SV_DispatchThreadID)
 {
     uint2 id = dispatchThreadID.xy;
     if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
-    float2 pos = id + 0.5;
-    float2 uv = (pos - _VelocityFieldRead[id] * _DeltaTime) / _Resolution;
-    _DyeTextureWrite[id] = _DyeTextureRead.SampleLevel(linearRepeatSampler, uv, 0);
+    
+    float2 uv = (id + 0.5) / float2(_Resolution);
+    float2 velocity = _VelocityFieldRead.SampleLevel(linearRepeatSampler, uv, 0);
+    _DyeTextureWrite[id] = _DyeTextureRead.SampleLevel(linearRepeatSampler, uv - velocity * _DeltaTime, 0);
 }
