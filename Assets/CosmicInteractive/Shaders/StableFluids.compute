@@ -31,6 +31,7 @@ float _DeltaTime;
 // AddVelocity(Input)
 uint _InputCount;
 uint _MaxInputs;
+float _VelocityBlendFactor;
 
 // AdvectVelocity
 SamplerState linearRepeatSampler;
@@ -50,6 +51,7 @@ void AddVelocity(uint3 dispatchThreadID : SV_DispatchThreadID)
     if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
     
     float2 uv = texcel2Uv(id);
+    float2 prev = _VelocityFieldRead[id];
     float2 velocity = _VelocityFieldRead[id];
 
     for (int i = 0; i < min(_InputCount, _MaxInputs); i++)
@@ -59,7 +61,7 @@ void AddVelocity(uint3 dispatchThreadID : SV_DispatchThreadID)
         float weight = exp(-dot(toInput, toInput) / (d.radius * d.radius));
         velocity += d.velocity * weight;
     }
-    _VelocityFieldWrite[id] = velocity;
+    _VelocityFieldWrite[id] = lerp(prev, velocity, _VelocityBlendFactor);
 }
 
 [numthreads(8,8,1)]

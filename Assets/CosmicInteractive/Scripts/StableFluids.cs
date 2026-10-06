@@ -8,6 +8,7 @@ public class StableFluids : MonoBehaviour
     private int _w;
     private int _h;
     [SerializeField, Range(1, 1000)] private int pressureJacobiCount;
+    [SerializeField] private float velocityBlendFactor = 0.5f;
 
     public RenderTexture velocityRt => _velocity.read;
 
@@ -105,6 +106,7 @@ public class StableFluids : MonoBehaviour
         shader.SetFloat("_DeltaTime", Time.deltaTime);
         shader.SetInts("_Resolution", _w, _h);
         shader.SetFloat("_Aspect", (float)_w / _h);
+        shader.SetFloat("_VelocityBlendFactor", velocityBlendFactor);
         #region Add Velocity
         if(inputSource.TryGetInput(out InputData[] input))
         {
