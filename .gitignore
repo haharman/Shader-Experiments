@@ -115,3 +115,7 @@ InitTestScene*.unity*
 
 # Unity auto-recovery scenes (created after a crash or unsaved-scene recovery)
 /[Aa]ssets/_Recovery*
+
+# TextMesh Pro (imported essentials)
+/[Aa]ssets/TextMesh Pro/
+/[Aa]ssets/TextMesh Pro.meta

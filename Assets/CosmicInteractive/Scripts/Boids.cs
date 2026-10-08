@@ -8,7 +8,7 @@ public class Boids : MonoBehaviour
     [SerializeField] private Boid boidInstance;
     [SerializeField] private ComputeShader shader;
     
-    [SerializeField, Range(1, 100)] private int boidCount = 10;
+    [SerializeField, Range(1, 100)] private int boidsCount = 10;
     [Header("Boidが生成、移動可能な領域")]
     [SerializeField] private Vector3 minBounds;
     [SerializeField] private Vector3 maxBounds;
@@ -19,6 +19,7 @@ public class Boids : MonoBehaviour
     [SerializeField] private float minVelocity;
     [SerializeField] private float maxVelocity;
     [SerializeField] private float maxSteeringForce;
+    [SerializeField] private float rotationSpeed;
     [Header("結合")]
     [SerializeField] private float cohesionRadius;
     [SerializeField] private float cohesionWeight;
@@ -85,20 +86,21 @@ public class Boids : MonoBehaviour
         {
             Destroy(transform.GetChild(i).gameObject);
         }
-        _uvs = new Vector2[boidCount];
-        _uvVelocities = new Vector2[boidCount];
-        _sampleVelocities = new Vector2[boidCount];
+        _uvs = new Vector2[boidsCount];
+        _uvVelocities = new Vector2[boidsCount];
+        _sampleVelocities = new Vector2[boidsCount];
         
-        _boids = new Boid[boidCount];
-        for (int i = 0; i < boidCount; i++)
+        _boids = new Boid[boidsCount];
+        for (int i = 0; i < boidsCount; i++)
         {
             var position = new Vector3(
                 Random.Range(minBounds.x, maxBounds.x),
                 Random.Range(minBounds.y, maxBounds.y),
                 Random.Range(minBounds.z, maxBounds.z));
             _boids[i] = Instantiate(boidInstance, position, Random.rotation, this.transform);
-            _boids[i].gameObject.transform.localScale = scale;
+            _boids[i].model.transform.localScale = scale;
             _boids[i].velocity = Random.insideUnitSphere * Random.Range(minVelocity, maxVelocity);
+            _boids[i].model.localRotation = Quaternion.Euler(rotation);
             _uvs[i] = ((Vector2)position - minDisplayArea) / (maxDisplayArea - minDisplayArea);
             Debug.Log($"i[{i}] = {_uvs[i]}");
         }
@@ -113,7 +115,7 @@ public class Boids : MonoBehaviour
         
         SampleVelocity(velocityField);
         
-        for (int i = 0; i < boidCount; i++)
+        for (int i = 0; i < boidsCount; i++)
         {
             Vector3 targetVelocity = Vector3.zero;
             Vector3 pos = _boids[i].transform.position;
@@ -129,7 +131,7 @@ public class Boids : MonoBehaviour
             int alignmentCount = 0;
 
             // Separation
-            for (int j = 0; j < boidCount; j++)
+            for (int j = 0; j < boidsCount; j++)
             {
                 if (j == i) continue;
                 var dist = Vector3.Distance(pos, _boids[j].transform.position);
@@ -188,7 +190,9 @@ public class Boids : MonoBehaviour
             // Rotationの更新
             if (_boids[i].velocity.sqrMagnitude > 1e-8f)
             {
-                _boids[i].transform.rotation = Quaternion.LookRotation(_boids[i].velocity) * Quaternion.Euler(rotation);
+                var delta = Quaternion.FromToRotation(_boids[i].transform.forward, _boids[i].velocity);
+                var target = delta * _boids[i].transform.rotation;
+                _boids[i].transform.rotation = Quaternion.Slerp(_boids[i].transform.rotation, target, rotationSpeed * Time.deltaTime);
             }
             // ワールド速度(unit/s)を表示領域に対するUV速度(uv/s)に変換
             var displaySize = maxDisplayArea - minDisplayArea;

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &9005666811922894756
+--- !u!1 &309363545413095746
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,52 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9055299956499243753}
-  - component: {fileID: 8187384762781553640}
-  - component: {fileID: 5720626165112104220}
-  - component: {fileID: 8560376646696352488}
+  - component: {fileID: 920622849818879424}
+  - component: {fileID: 5265663475923670922}
+  - component: {fileID: 4572336311321669102}
   m_Layer: 0
-  m_Name: Boid
+  m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9055299956499243753
+--- !u!4 &920622849818879424
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9005666811922894756}
+  m_GameObject: {fileID: 309363545413095746}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 33.57, y: 33.57, z: 33.57}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 9055299956499243753}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8187384762781553640
-MonoBehaviour:
+--- !u!33 &5265663475923670922
+MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9005666811922894756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f6e1137b1b74af09ee5dddcfd494ee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FishBoid
-  velocity: {x: 0, y: 0, z: 0}
---- !u!23 &5720626165112104220
+  m_GameObject: {fileID: 309363545413095746}
+  m_Mesh: {fileID: 3361024914681784795, guid: e8330b0fead9a2241b64e5fbcad1de71, type: 3}
+--- !u!23 &4572336311321669102
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9005666811922894756}
+  m_GameObject: {fileID: 309363545413095746}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -72,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a758d8bf8e2e1b543bd1a1a91220f949, type: 2}
+  - {fileID: 2100000, guid: 47029d8dc3b5bad45af678ca23b00e57, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,11 +90,50 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &8560376646696352488
-MeshFilter:
+--- !u!1 &9005666811922894756
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9055299956499243753}
+  - component: {fileID: 8187384762781553640}
+  m_Layer: 0
+  m_Name: Boid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9055299956499243753
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9005666811922894756}
-  m_Mesh: {fileID: 3361024914681784795, guid: e8330b0fead9a2241b64e5fbcad1de71, type: 3}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 920622849818879424}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8187384762781553640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9005666811922894756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6e1137b1b74af09ee5dddcfd494ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishBoid
+  velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 920622849818879424}

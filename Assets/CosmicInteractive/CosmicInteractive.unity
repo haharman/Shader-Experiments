@@ -164,6 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &14856374
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &15394849
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,6 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &17113157
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,6 +302,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &20724256
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,6 +348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &23474440 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
@@ -435,6 +440,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &39803167
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,6 +486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &45911272
 GameObject:
   m_ObjectHideFlags: 0
@@ -525,6 +532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &48224143
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,6 +578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &64801301
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,6 +624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &66279371
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,6 +670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &66450965
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,6 +716,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &75670616
 GameObject:
   m_ObjectHideFlags: 0
@@ -750,6 +762,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &85379524
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,6 +808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &97347309
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,6 +854,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &107227974
 GameObject:
   m_ObjectHideFlags: 0
@@ -885,6 +900,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &108651038
 GameObject:
   m_ObjectHideFlags: 0
@@ -930,6 +946,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &113080510
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,6 +992,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &114216938
 GameObject:
   m_ObjectHideFlags: 0
@@ -1020,6 +1038,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &127399594
 GameObject:
   m_ObjectHideFlags: 0
@@ -1065,6 +1084,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &138804615
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,6 +1130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &144719065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1155,6 +1176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &150608318
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,6 +1222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &150642359
 GameObject:
   m_ObjectHideFlags: 0
@@ -1245,6 +1268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &157182785
 GameObject:
   m_ObjectHideFlags: 0
@@ -1290,6 +1314,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &159932961
 GameObject:
   m_ObjectHideFlags: 0
@@ -1335,6 +1360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &167419888
 GameObject:
   m_ObjectHideFlags: 0
@@ -1380,6 +1406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &167514521
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,6 +1452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &170795571
 GameObject:
   m_ObjectHideFlags: 0
@@ -1470,6 +1498,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &175440248
 GameObject:
   m_ObjectHideFlags: 0
@@ -1515,6 +1544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &176740004
 GameObject:
   m_ObjectHideFlags: 0
@@ -1560,6 +1590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &182272456
 GameObject:
   m_ObjectHideFlags: 0
@@ -1605,6 +1636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &196183541
 GameObject:
   m_ObjectHideFlags: 0
@@ -1650,6 +1682,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &197998941
 GameObject:
   m_ObjectHideFlags: 0
@@ -1695,6 +1728,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &206253121
 GameObject:
   m_ObjectHideFlags: 0
@@ -1740,6 +1774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &217124815
 GameObject:
   m_ObjectHideFlags: 0
@@ -1785,6 +1820,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &219655667
 GameObject:
   m_ObjectHideFlags: 0
@@ -1830,6 +1866,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &228694414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1875,6 +1912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &229896275
 GameObject:
   m_ObjectHideFlags: 0
@@ -1920,6 +1958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &230340232
 GameObject:
   m_ObjectHideFlags: 0
@@ -1965,6 +2004,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &230858935
 GameObject:
   m_ObjectHideFlags: 0
@@ -2063,6 +2103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &251997436
 GameObject:
   m_ObjectHideFlags: 0
@@ -2108,6 +2149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &252720060
 GameObject:
   m_ObjectHideFlags: 0
@@ -2153,6 +2195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &261632343
 GameObject:
   m_ObjectHideFlags: 0
@@ -2198,6 +2241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &262095837
 GameObject:
   m_ObjectHideFlags: 0
@@ -2243,6 +2287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &265269678
 GameObject:
   m_ObjectHideFlags: 0
@@ -2288,6 +2333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &276578746
 GameObject:
   m_ObjectHideFlags: 0
@@ -2333,6 +2379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &276992469
 GameObject:
   m_ObjectHideFlags: 0
@@ -2378,6 +2425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &279891571
 GameObject:
   m_ObjectHideFlags: 0
@@ -2423,6 +2471,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &282798700
 GameObject:
   m_ObjectHideFlags: 0
@@ -2468,6 +2517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &287603644
 GameObject:
   m_ObjectHideFlags: 0
@@ -2513,6 +2563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &289164191
 GameObject:
   m_ObjectHideFlags: 0
@@ -2558,6 +2609,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &309240227
 GameObject:
   m_ObjectHideFlags: 0
@@ -2603,6 +2655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &312070183
 GameObject:
   m_ObjectHideFlags: 0
@@ -2648,6 +2701,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1001 &313148805
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2780,6 +2834,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &316182196
 GameObject:
   m_ObjectHideFlags: 0
@@ -2825,6 +2880,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &326795084
 GameObject:
   m_ObjectHideFlags: 0
@@ -2870,6 +2926,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &330119949
 GameObject:
   m_ObjectHideFlags: 0
@@ -2915,6 +2972,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &333666850
 GameObject:
   m_ObjectHideFlags: 0
@@ -2960,6 +3018,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &333761830
 GameObject:
   m_ObjectHideFlags: 0
@@ -3005,6 +3064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &343914168
 GameObject:
   m_ObjectHideFlags: 0
@@ -3050,6 +3110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &344609218
 GameObject:
   m_ObjectHideFlags: 0
@@ -3095,6 +3156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &355158187
 GameObject:
   m_ObjectHideFlags: 0
@@ -3140,6 +3202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &355375629
 GameObject:
   m_ObjectHideFlags: 0
@@ -3185,6 +3248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &366984655
 GameObject:
   m_ObjectHideFlags: 0
@@ -3230,6 +3294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &367507213
 GameObject:
   m_ObjectHideFlags: 0
@@ -3275,6 +3340,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &369788930
 GameObject:
   m_ObjectHideFlags: 0
@@ -3320,6 +3386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &381192235
 GameObject:
   m_ObjectHideFlags: 0
@@ -3365,6 +3432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &387365324
 GameObject:
   m_ObjectHideFlags: 0
@@ -3410,6 +3478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &395056085
 GameObject:
   m_ObjectHideFlags: 0
@@ -3455,6 +3524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &409523452
 GameObject:
   m_ObjectHideFlags: 0
@@ -3500,6 +3570,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &416305644 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
@@ -3591,6 +3662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &449114995
 GameObject:
   m_ObjectHideFlags: 0
@@ -3636,6 +3708,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &457177663
 GameObject:
   m_ObjectHideFlags: 0
@@ -3681,6 +3754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &457876626
 GameObject:
   m_ObjectHideFlags: 0
@@ -3726,6 +3800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &458260960
 GameObject:
   m_ObjectHideFlags: 0
@@ -3771,6 +3846,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &460956707
 GameObject:
   m_ObjectHideFlags: 0
@@ -3816,6 +3892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &468245841
 GameObject:
   m_ObjectHideFlags: 0
@@ -3861,6 +3938,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &470143874
 GameObject:
   m_ObjectHideFlags: 0
@@ -3906,6 +3984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &472383708
 GameObject:
   m_ObjectHideFlags: 0
@@ -3951,6 +4030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &474225249
 GameObject:
   m_ObjectHideFlags: 0
@@ -3996,6 +4076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &475418628
 GameObject:
   m_ObjectHideFlags: 0
@@ -4092,6 +4173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &485640254
 GameObject:
   m_ObjectHideFlags: 0
@@ -4137,6 +4219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &488134831
 GameObject:
   m_ObjectHideFlags: 0
@@ -4182,6 +4265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &488606029
 GameObject:
   m_ObjectHideFlags: 0
@@ -4227,6 +4311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &497190499
 GameObject:
   m_ObjectHideFlags: 0
@@ -4272,6 +4357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &498170523
 GameObject:
   m_ObjectHideFlags: 0
@@ -4317,6 +4403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &500180692
 GameObject:
   m_ObjectHideFlags: 0
@@ -4362,6 +4449,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &505395650
 GameObject:
   m_ObjectHideFlags: 0
@@ -4407,6 +4495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &516402582
 GameObject:
   m_ObjectHideFlags: 0
@@ -4452,6 +4541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &552516020
 GameObject:
   m_ObjectHideFlags: 0
@@ -4497,6 +4587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &566073548
 GameObject:
   m_ObjectHideFlags: 0
@@ -4542,6 +4633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &571203685
 GameObject:
   m_ObjectHideFlags: 0
@@ -4587,6 +4679,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &572091482
 GameObject:
   m_ObjectHideFlags: 0
@@ -4632,6 +4725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &573468426
 GameObject:
   m_ObjectHideFlags: 0
@@ -4677,6 +4771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &579319213
 GameObject:
   m_ObjectHideFlags: 0
@@ -4722,6 +4817,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &589833890
 GameObject:
   m_ObjectHideFlags: 0
@@ -4767,6 +4863,144 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
+--- !u!1 &591301802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 591301803}
+  - component: {fileID: 591301805}
+  - component: {fileID: 591301804}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &591301803
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591301802}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 897437004}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.9}
+  m_AnchorMax: {x: 0.1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 1}
+--- !u!114 &591301804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591301802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: ' Denpa Festival 2026'
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 50.65
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &591301805
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591301802}
+  m_CullTransparentMesh: 1
 --- !u!1 &595715046
 GameObject:
   m_ObjectHideFlags: 0
@@ -4812,6 +5046,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &603388621
 GameObject:
   m_ObjectHideFlags: 0
@@ -4857,6 +5092,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &604148899
 GameObject:
   m_ObjectHideFlags: 0
@@ -4902,6 +5138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &604230035
 GameObject:
   m_ObjectHideFlags: 0
@@ -4979,6 +5216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &631882057
 GameObject:
   m_ObjectHideFlags: 0
@@ -5024,6 +5262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &636121201
 GameObject:
   m_ObjectHideFlags: 0
@@ -5069,6 +5308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &651458370
 GameObject:
   m_ObjectHideFlags: 0
@@ -5114,6 +5354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &661139625
 GameObject:
   m_ObjectHideFlags: 0
@@ -5159,6 +5400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &664870778
 GameObject:
   m_ObjectHideFlags: 0
@@ -5252,6 +5494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &670100484
 GameObject:
   m_ObjectHideFlags: 0
@@ -5297,6 +5540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &689626186
 GameObject:
   m_ObjectHideFlags: 0
@@ -5342,6 +5586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &700176944
 GameObject:
   m_ObjectHideFlags: 0
@@ -5514,6 +5759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &701484445
 GameObject:
   m_ObjectHideFlags: 0
@@ -5559,6 +5805,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &706098169
 GameObject:
   m_ObjectHideFlags: 0
@@ -5604,6 +5851,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &707280133
 GameObject:
   m_ObjectHideFlags: 0
@@ -5649,6 +5897,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &715838851
 GameObject:
   m_ObjectHideFlags: 0
@@ -5694,6 +5943,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &723659550
 GameObject:
   m_ObjectHideFlags: 0
@@ -5739,6 +5989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &725123540
 GameObject:
   m_ObjectHideFlags: 0
@@ -5784,6 +6035,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &725566421
 GameObject:
   m_ObjectHideFlags: 0
@@ -5829,6 +6081,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &726706904
 GameObject:
   m_ObjectHideFlags: 0
@@ -5874,6 +6127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &730462820
 GameObject:
   m_ObjectHideFlags: 0
@@ -5919,6 +6173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &747685525
 GameObject:
   m_ObjectHideFlags: 0
@@ -5964,6 +6219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &749308277
 GameObject:
   m_ObjectHideFlags: 0
@@ -6009,6 +6265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &766533569
 GameObject:
   m_ObjectHideFlags: 0
@@ -6054,6 +6311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &771072284
 GameObject:
   m_ObjectHideFlags: 0
@@ -6099,6 +6357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &774031299
 GameObject:
   m_ObjectHideFlags: 0
@@ -6144,6 +6403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &775613490
 GameObject:
   m_ObjectHideFlags: 0
@@ -6189,6 +6449,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &781472122
 GameObject:
   m_ObjectHideFlags: 0
@@ -6234,6 +6495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &781980698
 GameObject:
   m_ObjectHideFlags: 0
@@ -6279,6 +6541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &783132067
 GameObject:
   m_ObjectHideFlags: 0
@@ -6324,6 +6587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &799659714
 GameObject:
   m_ObjectHideFlags: 0
@@ -6369,6 +6633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &800815730
 GameObject:
   m_ObjectHideFlags: 0
@@ -6414,6 +6679,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &822319500
 GameObject:
   m_ObjectHideFlags: 0
@@ -6459,6 +6725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &822745820
 GameObject:
   m_ObjectHideFlags: 0
@@ -6504,6 +6771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &823070051
 GameObject:
   m_ObjectHideFlags: 0
@@ -6549,6 +6817,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &836065684
 GameObject:
   m_ObjectHideFlags: 0
@@ -6594,6 +6863,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &838205872
 GameObject:
   m_ObjectHideFlags: 0
@@ -6639,6 +6909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &841202604
 GameObject:
   m_ObjectHideFlags: 0
@@ -6684,6 +6955,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &848836868
 GameObject:
   m_ObjectHideFlags: 0
@@ -6729,6 +7001,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &857960151
 GameObject:
   m_ObjectHideFlags: 0
@@ -6774,6 +7047,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &861962555
 GameObject:
   m_ObjectHideFlags: 0
@@ -6819,6 +7093,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &862067551
 GameObject:
   m_ObjectHideFlags: 0
@@ -6864,6 +7139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &862536057
 GameObject:
   m_ObjectHideFlags: 0
@@ -6909,6 +7185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &870003600
 GameObject:
   m_ObjectHideFlags: 0
@@ -6954,6 +7231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &873637759
 GameObject:
   m_ObjectHideFlags: 0
@@ -7071,6 +7349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &886193398
 GameObject:
   m_ObjectHideFlags: 0
@@ -7116,6 +7395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &889002054
 GameObject:
   m_ObjectHideFlags: 0
@@ -7161,6 +7441,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &891904762
 GameObject:
   m_ObjectHideFlags: 0
@@ -7206,6 +7487,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &897437003
 GameObject:
   m_ObjectHideFlags: 0
@@ -7238,6 +7520,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 873637762}
+  - {fileID: 591301803}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -7303,7 +7586,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -7353,6 +7636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &900364127
 GameObject:
   m_ObjectHideFlags: 0
@@ -7398,6 +7682,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &902775290
 GameObject:
   m_ObjectHideFlags: 0
@@ -7443,6 +7728,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &908183026
 GameObject:
   m_ObjectHideFlags: 0
@@ -7488,6 +7774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &909185656
 GameObject:
   m_ObjectHideFlags: 0
@@ -7533,6 +7820,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &922803575
 GameObject:
   m_ObjectHideFlags: 0
@@ -7578,6 +7866,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &923326882
 GameObject:
   m_ObjectHideFlags: 0
@@ -7623,6 +7912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &923809384
 GameObject:
   m_ObjectHideFlags: 0
@@ -7668,6 +7958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &926778151
 GameObject:
   m_ObjectHideFlags: 0
@@ -7713,6 +8004,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &930675406
 GameObject:
   m_ObjectHideFlags: 0
@@ -7758,6 +8050,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &931472269
 GameObject:
   m_ObjectHideFlags: 0
@@ -7803,6 +8096,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &940054373
 GameObject:
   m_ObjectHideFlags: 0
@@ -7848,6 +8142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &941617113
 GameObject:
   m_ObjectHideFlags: 0
@@ -7893,6 +8188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &950511229
 GameObject:
   m_ObjectHideFlags: 0
@@ -7938,6 +8234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &964376311
 GameObject:
   m_ObjectHideFlags: 0
@@ -7983,6 +8280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &969316161
 GameObject:
   m_ObjectHideFlags: 0
@@ -8028,6 +8326,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &972742893
 GameObject:
   m_ObjectHideFlags: 0
@@ -8073,6 +8372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &979395198
 GameObject:
   m_ObjectHideFlags: 0
@@ -8118,6 +8418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &980019096
 GameObject:
   m_ObjectHideFlags: 0
@@ -8163,6 +8464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &982799426
 GameObject:
   m_ObjectHideFlags: 0
@@ -8208,6 +8510,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &984608725
 GameObject:
   m_ObjectHideFlags: 0
@@ -8253,6 +8556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &984965590
 GameObject:
   m_ObjectHideFlags: 0
@@ -8298,6 +8602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &986681662
 GameObject:
   m_ObjectHideFlags: 0
@@ -8343,6 +8648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &989441217
 GameObject:
   m_ObjectHideFlags: 0
@@ -8388,6 +8694,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &995554384
 GameObject:
   m_ObjectHideFlags: 0
@@ -8433,6 +8740,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &998038745
 GameObject:
   m_ObjectHideFlags: 0
@@ -8478,6 +8786,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &999101348
 GameObject:
   m_ObjectHideFlags: 0
@@ -8523,6 +8832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1006859783
 GameObject:
   m_ObjectHideFlags: 0
@@ -8568,6 +8878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1008715435
 GameObject:
   m_ObjectHideFlags: 0
@@ -8613,6 +8924,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1013546999
 GameObject:
   m_ObjectHideFlags: 0
@@ -8658,6 +8970,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1022272052
 GameObject:
   m_ObjectHideFlags: 0
@@ -8703,6 +9016,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1028513608
 GameObject:
   m_ObjectHideFlags: 0
@@ -8748,6 +9062,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1032650198
 GameObject:
   m_ObjectHideFlags: 0
@@ -8793,6 +9108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1034770051
 GameObject:
   m_ObjectHideFlags: 0
@@ -8838,6 +9154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1042796029
 GameObject:
   m_ObjectHideFlags: 0
@@ -8883,6 +9200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1051033755
 GameObject:
   m_ObjectHideFlags: 0
@@ -8928,6 +9246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1052668439
 GameObject:
   m_ObjectHideFlags: 0
@@ -8973,6 +9292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1059652006
 GameObject:
   m_ObjectHideFlags: 0
@@ -9018,6 +9338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1059810456
 GameObject:
   m_ObjectHideFlags: 0
@@ -9063,6 +9384,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1063960798
 GameObject:
   m_ObjectHideFlags: 0
@@ -9108,6 +9430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1065516327
 GameObject:
   m_ObjectHideFlags: 0
@@ -9153,6 +9476,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1001 &1079281545
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9285,6 +9609,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1100833948 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
@@ -9376,6 +9701,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
+--- !u!4 &1112012344 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
+  m_PrefabInstance: {fileID: 1738084878}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1115961894
 GameObject:
   m_ObjectHideFlags: 0
@@ -9421,6 +9752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1122241972
 GameObject:
   m_ObjectHideFlags: 0
@@ -9466,6 +9798,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1122973606
 GameObject:
   m_ObjectHideFlags: 0
@@ -9511,6 +9844,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1123858163
 GameObject:
   m_ObjectHideFlags: 0
@@ -9556,6 +9890,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1127281360
 GameObject:
   m_ObjectHideFlags: 0
@@ -9601,6 +9936,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1128230687
 GameObject:
   m_ObjectHideFlags: 0
@@ -9646,6 +9982,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1135027391
 GameObject:
   m_ObjectHideFlags: 0
@@ -9691,6 +10028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1141851961
 GameObject:
   m_ObjectHideFlags: 0
@@ -9736,6 +10074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1144180642
 GameObject:
   m_ObjectHideFlags: 0
@@ -9781,6 +10120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1001 &1147208404
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9913,6 +10253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1156416458
 GameObject:
   m_ObjectHideFlags: 0
@@ -9958,6 +10299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1157481608
 GameObject:
   m_ObjectHideFlags: 0
@@ -10003,6 +10345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1168413868
 GameObject:
   m_ObjectHideFlags: 0
@@ -10048,6 +10391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1169557436
 GameObject:
   m_ObjectHideFlags: 0
@@ -10093,6 +10437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1169834276
 GameObject:
   m_ObjectHideFlags: 0
@@ -10138,6 +10483,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1179773264
 GameObject:
   m_ObjectHideFlags: 0
@@ -10183,6 +10529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1181103810
 GameObject:
   m_ObjectHideFlags: 0
@@ -10228,6 +10575,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1188368994
 GameObject:
   m_ObjectHideFlags: 0
@@ -10273,6 +10621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1189229180
 GameObject:
   m_ObjectHideFlags: 0
@@ -10318,6 +10667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1190931749
 GameObject:
   m_ObjectHideFlags: 0
@@ -10363,6 +10713,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1192196930
 GameObject:
   m_ObjectHideFlags: 0
@@ -10408,6 +10759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1192460069
 GameObject:
   m_ObjectHideFlags: 0
@@ -10453,6 +10805,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1192582708
 GameObject:
   m_ObjectHideFlags: 0
@@ -10498,6 +10851,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1194378379
 GameObject:
   m_ObjectHideFlags: 0
@@ -10543,6 +10897,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1203347167
 GameObject:
   m_ObjectHideFlags: 0
@@ -10588,6 +10943,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1001 &1205117740
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10720,6 +11076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1224709370
 GameObject:
   m_ObjectHideFlags: 0
@@ -10765,6 +11122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1226386989
 GameObject:
   m_ObjectHideFlags: 0
@@ -10810,6 +11168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1230769212
 GameObject:
   m_ObjectHideFlags: 0
@@ -10855,6 +11214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1233042534
 GameObject:
   m_ObjectHideFlags: 0
@@ -10900,6 +11260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1247160342 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
@@ -10991,6 +11352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1261132153
 GameObject:
   m_ObjectHideFlags: 0
@@ -11036,6 +11398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1267401868
 GameObject:
   m_ObjectHideFlags: 0
@@ -11081,6 +11444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1267644931
 GameObject:
   m_ObjectHideFlags: 0
@@ -11126,6 +11490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1273504818
 GameObject:
   m_ObjectHideFlags: 0
@@ -11171,6 +11536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1277884169
 GameObject:
   m_ObjectHideFlags: 0
@@ -11216,6 +11582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1281030879
 GameObject:
   m_ObjectHideFlags: 0
@@ -11261,6 +11628,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1285799313
 GameObject:
   m_ObjectHideFlags: 0
@@ -11306,6 +11674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1287284111
 GameObject:
   m_ObjectHideFlags: 0
@@ -11351,6 +11720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1287743464
 GameObject:
   m_ObjectHideFlags: 0
@@ -11396,6 +11766,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1001 &1288072680
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11528,6 +11899,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1290636931
 GameObject:
   m_ObjectHideFlags: 0
@@ -11573,6 +11945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1300146543
 GameObject:
   m_ObjectHideFlags: 0
@@ -11618,6 +11991,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1305517918
 GameObject:
   m_ObjectHideFlags: 0
@@ -11663,6 +12037,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1310605174
 GameObject:
   m_ObjectHideFlags: 0
@@ -11708,6 +12083,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1312785457
 GameObject:
   m_ObjectHideFlags: 0
@@ -11753,6 +12129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1315216142
 GameObject:
   m_ObjectHideFlags: 0
@@ -11798,6 +12175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1318723424
 GameObject:
   m_ObjectHideFlags: 0
@@ -11843,6 +12221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1321420544
 GameObject:
   m_ObjectHideFlags: 0
@@ -11888,6 +12267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1338890968
 GameObject:
   m_ObjectHideFlags: 0
@@ -11933,6 +12313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1339746650
 GameObject:
   m_ObjectHideFlags: 0
@@ -11978,6 +12359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1341595116
 GameObject:
   m_ObjectHideFlags: 0
@@ -12023,6 +12405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1341750884
 GameObject:
   m_ObjectHideFlags: 0
@@ -12068,6 +12451,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1346620567
 GameObject:
   m_ObjectHideFlags: 0
@@ -12113,6 +12497,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1363980081
 GameObject:
   m_ObjectHideFlags: 0
@@ -12223,6 +12608,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1369744639
 GameObject:
   m_ObjectHideFlags: 0
@@ -12268,6 +12654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1382847413
 GameObject:
   m_ObjectHideFlags: 0
@@ -12313,6 +12700,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1384090536
 GameObject:
   m_ObjectHideFlags: 0
@@ -12358,6 +12746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1388920197
 GameObject:
   m_ObjectHideFlags: 0
@@ -12403,6 +12792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1392064338
 GameObject:
   m_ObjectHideFlags: 0
@@ -12448,6 +12838,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1397546413
 GameObject:
   m_ObjectHideFlags: 0
@@ -12493,6 +12884,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1402057488
 GameObject:
   m_ObjectHideFlags: 0
@@ -12538,6 +12930,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1411537121
 GameObject:
   m_ObjectHideFlags: 0
@@ -12583,6 +12976,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1419173508
 GameObject:
   m_ObjectHideFlags: 0
@@ -12628,6 +13022,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1421676664
 GameObject:
   m_ObjectHideFlags: 0
@@ -12673,6 +13068,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1428213872
 GameObject:
   m_ObjectHideFlags: 0
@@ -12718,6 +13114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1431912638
 GameObject:
   m_ObjectHideFlags: 0
@@ -12763,6 +13160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1441507153
 GameObject:
   m_ObjectHideFlags: 0
@@ -12794,6 +13192,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7217144491361963959}
+  - {fileID: 1112012344}
   - {fileID: 1856996878}
   - {fileID: 1859270539}
   - {fileID: 886193399}
@@ -13170,23 +13569,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Boids
   boidInstance: {fileID: 8187384762781553640, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
   shader: {fileID: 7200000, guid: 3c4e9158c4c7bc64e9320809fd923abc, type: 3}
-  boidCount: 65
+  boidCount: 80
   minBounds: {x: -50, y: -10, z: -1}
   maxBounds: {x: 50, y: 10, z: -10}
   minDisplayArea: {x: -44.5, y: -9}
   maxDisplayArea: {x: 44.5, y: 9}
-  minVelocity: 5
-  maxVelocity: 20
+  minVelocity: 4
+  maxVelocity: 10
   maxSteeringForce: 10
+  rotationSpeed: 10
   cohesionRadius: 30
   cohesionWeight: 0.5
-  separationRadius: 2
+  separationRadius: 1
   separationWeight: 10
   alignmentRadius: 5
   alignmentWeight: 0.8
   upstreamWeight: 20
   containmentWeight: 1
-  scale: {x: 500, y: 500, z: 500}
+  scale: {x: 300, y: 300, z: 300}
   rotation: {x: 0, y: 90, z: 0}
 --- !u!1 &1443389148
 GameObject:
@@ -13233,6 +13633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1445865757 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
@@ -13324,6 +13725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1449838641
 GameObject:
   m_ObjectHideFlags: 0
@@ -13369,6 +13771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1460136505
 GameObject:
   m_ObjectHideFlags: 0
@@ -13414,6 +13817,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1471323899
 GameObject:
   m_ObjectHideFlags: 0
@@ -13459,6 +13863,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1471963627
 GameObject:
   m_ObjectHideFlags: 0
@@ -13504,6 +13909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1474881342
 GameObject:
   m_ObjectHideFlags: 0
@@ -13549,6 +13955,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1474979835
 GameObject:
   m_ObjectHideFlags: 0
@@ -13594,6 +14001,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1478581521
 GameObject:
   m_ObjectHideFlags: 0
@@ -13639,6 +14047,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1480897532
 GameObject:
   m_ObjectHideFlags: 0
@@ -13684,6 +14093,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1488923078 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
@@ -13775,6 +14185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1500633466
 GameObject:
   m_ObjectHideFlags: 0
@@ -13820,6 +14231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1508708577
 GameObject:
   m_ObjectHideFlags: 0
@@ -13865,6 +14277,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1523122939
 GameObject:
   m_ObjectHideFlags: 0
@@ -13910,6 +14323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1530613591
 GameObject:
   m_ObjectHideFlags: 0
@@ -13955,6 +14369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1536169409
 GameObject:
   m_ObjectHideFlags: 0
@@ -14000,6 +14415,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1540765714
 GameObject:
   m_ObjectHideFlags: 0
@@ -14045,6 +14461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1575687287
 GameObject:
   m_ObjectHideFlags: 0
@@ -14090,6 +14507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1580285950
 GameObject:
   m_ObjectHideFlags: 0
@@ -14135,6 +14553,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1584306029
 GameObject:
   m_ObjectHideFlags: 0
@@ -14180,6 +14599,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1589290190
 GameObject:
   m_ObjectHideFlags: 0
@@ -14225,6 +14645,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1592324276
 GameObject:
   m_ObjectHideFlags: 0
@@ -14270,6 +14691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1608221149
 GameObject:
   m_ObjectHideFlags: 0
@@ -14315,6 +14737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1611301584
 GameObject:
   m_ObjectHideFlags: 0
@@ -14423,6 +14846,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1616886888
 GameObject:
   m_ObjectHideFlags: 0
@@ -14468,6 +14892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1617165108
 GameObject:
   m_ObjectHideFlags: 0
@@ -14513,6 +14938,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1624047216
 GameObject:
   m_ObjectHideFlags: 0
@@ -14558,6 +14984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1640075557
 GameObject:
   m_ObjectHideFlags: 0
@@ -14603,6 +15030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1643849513
 GameObject:
   m_ObjectHideFlags: 0
@@ -14648,6 +15076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1647291577
 GameObject:
   m_ObjectHideFlags: 0
@@ -14693,6 +15122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1647348129
 GameObject:
   m_ObjectHideFlags: 0
@@ -14738,6 +15168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1655276569
 GameObject:
   m_ObjectHideFlags: 0
@@ -14783,6 +15214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1663144016
 GameObject:
   m_ObjectHideFlags: 0
@@ -14828,6 +15260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1672619023
 GameObject:
   m_ObjectHideFlags: 0
@@ -14873,6 +15306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1677106940
 GameObject:
   m_ObjectHideFlags: 0
@@ -14918,6 +15352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1680573715
 GameObject:
   m_ObjectHideFlags: 0
@@ -14963,6 +15398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1688723377
 GameObject:
   m_ObjectHideFlags: 0
@@ -15008,6 +15444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1695446839
 GameObject:
   m_ObjectHideFlags: 0
@@ -15053,6 +15490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1697554004
 GameObject:
   m_ObjectHideFlags: 0
@@ -15098,6 +15536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1702851839
 GameObject:
   m_ObjectHideFlags: 0
@@ -15143,6 +15582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1703442301
 GameObject:
   m_ObjectHideFlags: 0
@@ -15188,6 +15628,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1717397425
 GameObject:
   m_ObjectHideFlags: 0
@@ -15233,6 +15674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1718151816
 GameObject:
   m_ObjectHideFlags: 0
@@ -15278,6 +15720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1734571077
 GameObject:
   m_ObjectHideFlags: 0
@@ -15323,6 +15766,64 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
+--- !u!1001 &1738084878
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1441507154}
+    m_Modifications:
+    - target: {fileID: 9005666811922894756, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
+      propertyPath: m_Name
+      value: Boid (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.076
+      objectReference: {fileID: 0}
+    - target: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.00152
+      objectReference: {fileID: 0}
+    - target: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
 --- !u!1 &1738399194
 GameObject:
   m_ObjectHideFlags: 0
@@ -15368,6 +15869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1743865607
 GameObject:
   m_ObjectHideFlags: 0
@@ -15413,6 +15915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1751190284
 GameObject:
   m_ObjectHideFlags: 0
@@ -15458,6 +15961,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1754034100
 GameObject:
   m_ObjectHideFlags: 0
@@ -15503,6 +16007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1755875039
 GameObject:
   m_ObjectHideFlags: 0
@@ -15548,6 +16053,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1763854813
 GameObject:
   m_ObjectHideFlags: 0
@@ -15593,6 +16099,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1784582297
 GameObject:
   m_ObjectHideFlags: 0
@@ -15638,6 +16145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1787480539
 GameObject:
   m_ObjectHideFlags: 0
@@ -15683,6 +16191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1788468013
 GameObject:
   m_ObjectHideFlags: 0
@@ -15728,6 +16237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1800738031
 GameObject:
   m_ObjectHideFlags: 0
@@ -15773,6 +16283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1806958682
 GameObject:
   m_ObjectHideFlags: 0
@@ -15818,6 +16329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1816457343
 GameObject:
   m_ObjectHideFlags: 0
@@ -15863,6 +16375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1824643996
 GameObject:
   m_ObjectHideFlags: 0
@@ -15908,6 +16421,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1825510772
 GameObject:
   m_ObjectHideFlags: 0
@@ -15953,6 +16467,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1827753748
 GameObject:
   m_ObjectHideFlags: 0
@@ -15998,6 +16513,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1832101198
 GameObject:
   m_ObjectHideFlags: 0
@@ -16043,6 +16559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1840776161
 GameObject:
   m_ObjectHideFlags: 0
@@ -16088,6 +16605,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1841727492
 GameObject:
   m_ObjectHideFlags: 0
@@ -16270,6 +16788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1844645704
 GameObject:
   m_ObjectHideFlags: 0
@@ -16315,6 +16834,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1846521230
 GameObject:
   m_ObjectHideFlags: 0
@@ -16360,6 +16880,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1855423044
 GameObject:
   m_ObjectHideFlags: 0
@@ -16405,6 +16926,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1856996877
 GameObject:
   m_ObjectHideFlags: 0
@@ -16450,6 +16972,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1859270538
 GameObject:
   m_ObjectHideFlags: 0
@@ -16495,6 +17018,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1867711597
 GameObject:
   m_ObjectHideFlags: 0
@@ -16540,6 +17064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1875344706
 GameObject:
   m_ObjectHideFlags: 0
@@ -16585,6 +17110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1881284881
 GameObject:
   m_ObjectHideFlags: 0
@@ -16630,6 +17156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1887594119
 GameObject:
   m_ObjectHideFlags: 0
@@ -16675,6 +17202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1001 &1888380685
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16807,6 +17335,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1895893462
 GameObject:
   m_ObjectHideFlags: 0
@@ -16852,6 +17381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1897628556
 GameObject:
   m_ObjectHideFlags: 0
@@ -16897,6 +17427,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1901653186
 GameObject:
   m_ObjectHideFlags: 0
@@ -16942,6 +17473,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1908998269
 GameObject:
   m_ObjectHideFlags: 0
@@ -16987,6 +17519,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1924660871
 GameObject:
   m_ObjectHideFlags: 0
@@ -17032,6 +17565,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1937320720
 GameObject:
   m_ObjectHideFlags: 0
@@ -17077,6 +17611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1939533487
 GameObject:
   m_ObjectHideFlags: 0
@@ -17122,6 +17657,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1947912046
 GameObject:
   m_ObjectHideFlags: 0
@@ -17167,6 +17703,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1952260105
 GameObject:
   m_ObjectHideFlags: 0
@@ -17212,6 +17749,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1967327226
 GameObject:
   m_ObjectHideFlags: 0
@@ -17257,6 +17795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1970650277
 GameObject:
   m_ObjectHideFlags: 0
@@ -17302,6 +17841,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1974921646
 GameObject:
   m_ObjectHideFlags: 0
@@ -17347,6 +17887,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &1983548209
 GameObject:
   m_ObjectHideFlags: 0
@@ -17392,6 +17933,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2001574030
 GameObject:
   m_ObjectHideFlags: 0
@@ -17437,6 +17979,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2005892273
 GameObject:
   m_ObjectHideFlags: 0
@@ -17482,6 +18025,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2014965670
 GameObject:
   m_ObjectHideFlags: 0
@@ -17527,6 +18071,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2017915442
 GameObject:
   m_ObjectHideFlags: 0
@@ -17572,6 +18117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2020200458
 GameObject:
   m_ObjectHideFlags: 0
@@ -17617,6 +18163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2021884498
 GameObject:
   m_ObjectHideFlags: 0
@@ -17662,6 +18209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2022320910
 GameObject:
   m_ObjectHideFlags: 0
@@ -17707,6 +18255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2025488286
 GameObject:
   m_ObjectHideFlags: 0
@@ -17752,6 +18301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2032524691
 GameObject:
   m_ObjectHideFlags: 0
@@ -17797,6 +18347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2036689817
 GameObject:
   m_ObjectHideFlags: 0
@@ -17842,6 +18393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2062164023
 GameObject:
   m_ObjectHideFlags: 0
@@ -17887,6 +18439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2067702841
 GameObject:
   m_ObjectHideFlags: 0
@@ -17932,6 +18485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2068967233
 GameObject:
   m_ObjectHideFlags: 0
@@ -17977,6 +18531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2075857078
 GameObject:
   m_ObjectHideFlags: 0
@@ -18022,6 +18577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2092307147
 GameObject:
   m_ObjectHideFlags: 0
@@ -18067,6 +18623,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2104536389
 GameObject:
   m_ObjectHideFlags: 0
@@ -18112,6 +18669,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2105348710
 GameObject:
   m_ObjectHideFlags: 0
@@ -18157,6 +18715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2109642477
 GameObject:
   m_ObjectHideFlags: 0
@@ -18202,6 +18761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2119549102
 GameObject:
   m_ObjectHideFlags: 0
@@ -18247,6 +18807,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1 &2139116413
 GameObject:
   m_ObjectHideFlags: 0
@@ -18292,6 +18853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
+  model: {fileID: 0}
 --- !u!1001 &7217144491361963958
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18306,7 +18868,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0379
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9055299956499243753, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
       propertyPath: m_LocalPosition.y
