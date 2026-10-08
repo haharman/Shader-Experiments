@@ -60,7 +60,6 @@ public class WalkingHuman : MonoBehaviour
         _transform.position = position;
 
         float t = Mathf.Repeat(Mathf.Sign(_speed) * (position.x - _startX) / cycleLength, 1);
-        Debug.Log(t);
         _animator.Play(stateName, 0, t);
     }
 }

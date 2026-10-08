@@ -1,5 +1,6 @@
 #pragma kernel AddVelocity
 #pragma kernel AdvectVelocity
+#pragma kernel DiffuseVelocity
 #pragma kernel Divergence
 #pragma kernel PressureJacobi
 #pragma kernel SubtractPressureGradient
@@ -11,11 +12,12 @@ struct InputData
     float radius;
 };
 
-// Buffer
+// Buffer, Texture
 StructuredBuffer<InputData> _InputBufferRead;
 
 Texture2D<float2> _VelocityFieldRead;
 RWTexture2D<float2> _VelocityFieldWrite;
+Texture2D<float2> _VelocitySourceRead;
 
 Texture2D<float> _DivergenceBufferRead;
 RWTexture2D<float> _DivergenceBufferWrite;
@@ -35,6 +37,9 @@ float _VelocityBlendFactor;
 
 // AdvectVelocity
 SamplerState linearRepeatSampler;
+
+// DiffuseVelocity
+float _Viscosity;
 
 uint2 modIndex(int2 index)
 {
@@ -71,6 +76,20 @@ void AdvectVelocity(uint3 dispatchThreadID : SV_DispatchThreadID)
     if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
     float2 uv = texcel2Uv(id) - _VelocityFieldRead[id] * _DeltaTime;
     _VelocityFieldWrite[id] = _VelocityFieldRead.SampleLevel(linearRepeatSampler, uv, 0);
+}
+
+[numthreads(8,8,1)]
+void DiffuseVelocity(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    uint2 id = dispatchThreadID.xy;
+    if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
+    float2 vLeft = _VelocityFieldRead[modIndex(id + int2(-1,0))];
+    float2 vRight = _VelocityFieldRead[modIndex(id + int2(1,0))];
+    float2 vDown = _VelocityFieldRead[modIndex(id + int2(0,-1))];
+    float2 vUp = _VelocityFieldRead[modIndex(id + int2(0,1))];
+    float2 source = _VelocitySourceRead[id];
+    float2 alpha = _Viscosity * _DeltaTime * (float2)_Resolution * (float2)_Resolution;
+    _VelocityFieldWrite[id] = (source + alpha.x * (vLeft + vRight) + alpha.y * (vUp + vDown)) / (1.0 + 2.0 * (alpha.x + alpha.y));
 }
 
 [numthreads(8,8,1)]

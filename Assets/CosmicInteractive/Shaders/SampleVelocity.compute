@@ -1,0 +1,19 @@
+#pragma kernel SampleVelocity
+
+// Buffer, Texture
+Texture2D<float2> _VelocityFieldRead;
+StructuredBuffer<float2> _SampleUvBufferRead;
+RWStructuredBuffer<float2> _SampleVelocityBufferWrite;
+
+// SampleVelocity
+uint _SamplePoints;
+SamplerState linearClampSampler;
+
+[numthreads(64,1,1)]
+void SampleVelocity(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    uint id = dispatchThreadID.x;
+    if (id >= _SamplePoints) return;
+    float2 uv = _SampleUvBufferRead[id];
+    _SampleVelocityBufferWrite[id] = _VelocityFieldRead.SampleLevel(linearClampSampler, uv, 0);
+}
