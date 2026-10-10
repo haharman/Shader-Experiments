@@ -2037,6 +2037,7 @@ MonoBehaviour:
   stableFluids: {fileID: 1611301588}
   particles: {fileID: 1363980085}
   dye: {fileID: 475418630}
+  textDye: {fileID: 1795426620}
   boids: {fileID: 1441507155}
   resolutionX: 4800
   resolutionY: 1080
@@ -4125,9 +4126,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacae4fc03d14ec6b8c66d58af84f042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dye
-  resetDyeInterval: 10000
   dyeInitTex: {fileID: 2800000, guid: cb703762093bb5243867a1353eca3d4b, type: 3}
   shader: {fileID: 7200000, guid: 3bef54b0bed2477db82b72f778918824, type: 3}
+  correctionIntensity: 0.005
+  addMat: {fileID: 0}
 --- !u!1 &481700135
 GameObject:
   m_ObjectHideFlags: 0
@@ -4930,8 +4932,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 419430399
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0.09411765}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -7244,7 +7246,7 @@ GameObject:
   - component: {fileID: 873637761}
   - component: {fileID: 873637760}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: Dye RawImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7520,6 +7522,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 873637762}
+  - {fileID: 2040474502}
   - {fileID: 591301803}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13569,9 +13572,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Boids
   boidInstance: {fileID: 8187384762781553640, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
   shader: {fileID: 7200000, guid: 3c4e9158c4c7bc64e9320809fd923abc, type: 3}
-  boidCount: 80
-  minBounds: {x: -50, y: -10, z: -1}
-  maxBounds: {x: 50, y: 10, z: -10}
+  boidsCount: 68
+  minBounds: {x: -50, y: -10, z: -4}
+  maxBounds: {x: 50, y: 10, z: -15}
   minDisplayArea: {x: -44.5, y: -9}
   maxDisplayArea: {x: 44.5, y: 9}
   minVelocity: 4
@@ -13584,9 +13587,9 @@ MonoBehaviour:
   separationWeight: 10
   alignmentRadius: 5
   alignmentWeight: 0.8
-  upstreamWeight: 20
+  upstreamWeight: 10
   containmentWeight: 1
-  scale: {x: 300, y: 300, z: 300}
+  scale: {x: 400, y: 400, z: 400}
   rotation: {x: 0, y: 90, z: 0}
 --- !u!1 &1443389148
 GameObject:
@@ -16238,6 +16241,64 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
   model: {fileID: 0}
+--- !u!1 &1795426617
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1795426619}
+  - component: {fileID: 1795426620}
+  m_Layer: 5
+  m_Name: TextDye
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1795426619
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795426617}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.10691672, y: 0.10691672, z: 0.10691672}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1795426620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795426617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d80c84cb43ab46768a8b42ce1e18d80e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TextDye
+  textTex:
+  - {fileID: 2800000, guid: 0901c370e74886c42a72cfef7b43473c, type: 3}
+  shader: {fileID: 7200000, guid: 3bef54b0bed2477db82b72f778918824, type: 3}
+  correctionIntensity: 0
+  addMat: {fileID: 2100000, guid: ee57719b56bf89a44a399bd57009d983, type: 2}
+  rawImage: {fileID: 2040474500}
+  fadeInDuration: 5
+  holdDuration: 1
+  flowDuration: 15
+  restDuration: 10
 --- !u!1 &1800738031
 GameObject:
   m_ObjectHideFlags: 0
@@ -18394,6 +18455,78 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
   model: {fileID: 0}
+--- !u!1 &2040474499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2040474502}
+  - component: {fileID: 2040474501}
+  - component: {fileID: 2040474500}
+  m_Layer: 5
+  m_Name: TextDye RawImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2040474500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040474499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &2040474501
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040474499}
+  m_CullTransparentMesh: 1
+--- !u!224 &2040474502
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040474499}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 897437004}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2062164023
 GameObject:
   m_ObjectHideFlags: 0
@@ -18934,4 +19067,5 @@ SceneRoots:
   - {fileID: 1611301587}
   - {fileID: 1363980082}
   - {fileID: 475418629}
+  - {fileID: 1795426619}
   - {fileID: 700176947}

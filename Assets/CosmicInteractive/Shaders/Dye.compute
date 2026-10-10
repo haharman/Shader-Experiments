@@ -6,8 +6,10 @@ Texture2D<float4> _DyeTextureRead;
 RWTexture2D<float4> _DyeTextureWrite;
 
 // Common
+float _AdvectWeight;
 uint2 _Resolution;
 float _DeltaTime;
+float _CorrectionIntensity;
 
 // AdvectDye
 SamplerState linearRepeatSampler;
@@ -19,6 +21,12 @@ void AdvectDye(uint3 dispatchThreadID : SV_DispatchThreadID)
     if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
     
     float2 uv = (id + 0.5) / float2(_Resolution);
-    float2 velocity = _VelocityFieldRead.SampleLevel(linearRepeatSampler, uv, 0);
-    _DyeTextureWrite[id] = _DyeTextureRead.SampleLevel(linearRepeatSampler, uv - velocity * _DeltaTime, 0);
+    float2 velocity = _VelocityFieldRead.SampleLevel(linearRepeatSampler, uv, 0) * _AdvectWeight;
+    float4 color = _DyeTextureRead.SampleLevel(linearRepeatSampler, uv - velocity * _DeltaTime, 0);
+    float luminance = dot(color, float3(0.2126, 0.7152, 0.0722));
+    float t = smoothstep(0.25, 0.35, luminance) * smoothstep(1.0, 0.7, luminance);
+    float volumeFactor = lerp(0.7, 1.1, t);
+    float saturateFactor = lerp(1.0, 1.3, t);
+    float4 targetColor = float4(lerp(luminance.xxx, color, saturateFactor) * volumeFactor, 1.0);
+    _DyeTextureWrite[id] = lerp(color, targetColor, _CorrectionIntensity);
 }

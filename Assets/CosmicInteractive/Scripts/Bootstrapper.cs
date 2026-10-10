@@ -11,6 +11,7 @@ public class Bootstrapper : MonoBehaviour
     [SerializeField] private StableFluids stableFluids;
     [SerializeField] private Particles particles;
     [SerializeField] private Dye dye;
+    [SerializeField] private TextDye textDye;
     [SerializeField] private Boids boids;
     [SerializeField] private int resolutionX;
     [SerializeField] private int resolutionY;
@@ -37,6 +38,11 @@ public class Bootstrapper : MonoBehaviour
             Debug.LogError("[Bootstrapper] Dye を割り当ててください");
             return;
         }
+        if (textDye == null)
+        {
+            Debug.LogError("[Bootstrapper] TextDye を割り当ててください");
+            return;
+        }
         if (boids == null)
         {
             Debug.LogError("[Bootstrapper] Boids を割り当ててください");
@@ -46,6 +52,7 @@ public class Bootstrapper : MonoBehaviour
         
         stableFluids.Initialize(resolutionX / velocityDownsample, resolutionY / velocityDownsample);
         particles.Initialize(resolutionX,resolutionY);
+        textDye.Initialize(resolutionX,resolutionY);
         dye.Initialize(resolutionX,resolutionY);
         boids.Initialize(resolutionX,resolutionY);
         _combined = new RenderTexture(resolutionX, resolutionY, 0, RenderTextureFormat.ARGB32);
@@ -57,6 +64,7 @@ public class Bootstrapper : MonoBehaviour
         if (!_initialized) return;
         RenderTexture velocityField = stableFluids.Tick();
         RenderTexture dyeTexture = dye.Tick(velocityField, Time.deltaTime);
+        textDye.Tick(velocityField, Time.deltaTime);
         RenderTexture particleTexture = particles.Tick(velocityField, Time.deltaTime);
         boids.Tick(velocityField);
 

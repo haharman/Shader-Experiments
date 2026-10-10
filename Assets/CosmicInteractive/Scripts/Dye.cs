@@ -3,9 +3,10 @@ using UnityEngine.UI;
 
 public class Dye : MonoBehaviour
 {
-    [SerializeField] private float resetDyeInterval;
     [SerializeField] private Texture2D dyeInitTex;
     [SerializeField] private ComputeShader shader;
+    [SerializeField, Range(0f, 1f)] private float correctionIntensity;
+    [SerializeField] private Material addMat;
     private PingPongRenderTexture _dye;
     private int _advectDyeKernelIndex;
     private Vector3Int _advectDyeGroupSize;
@@ -31,8 +32,10 @@ public class Dye : MonoBehaviour
     
     public RenderTexture Tick(RenderTexture velocityField, float deltaTime)
     {
+        shader.SetFloat("_AdvectWeight", 1f);
         shader.SetFloat("_DeltaTime", deltaTime);
         shader.SetInts("_Resolution", _w, _h);
+        shader.SetFloat("_CorrectionIntensity", correctionIntensity);
         shader.SetTexture(_advectDyeKernelIndex, "_VelocityFieldRead", velocityField);
         shader.SetTexture(_advectDyeKernelIndex, "_DyeTextureRead", _dye.read);
         shader.SetTexture(_advectDyeKernelIndex, "_DyeTextureWrite", _dye.write);
