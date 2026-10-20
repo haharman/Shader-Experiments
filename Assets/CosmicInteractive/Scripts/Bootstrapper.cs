@@ -13,8 +13,8 @@ public class Bootstrapper : MonoBehaviour
     [SerializeField] private Dye dye;
     [SerializeField] private TextDye textDye;
     [SerializeField] private Boids boids;
-    [SerializeField] private int resolutionX;
-    [SerializeField] private int resolutionY;
+    [SerializeField] private Nebula nebula;
+    [SerializeField] private Vector2Int resolution;
     [SerializeField, Min(1)] private int velocityDownsample;
     [SerializeField] private RawImage image; 
     [SerializeField] private Material addMat;
@@ -50,12 +50,13 @@ public class Bootstrapper : MonoBehaviour
 
         _initialized = true;
         
-        stableFluids.Initialize(resolutionX / velocityDownsample, resolutionY / velocityDownsample);
-        particles.Initialize(resolutionX,resolutionY);
-        textDye.Initialize(resolutionX,resolutionY);
-        dye.Initialize(resolutionX,resolutionY);
-        boids.Initialize(resolutionX,resolutionY);
-        _combined = new RenderTexture(resolutionX, resolutionY, 0, RenderTextureFormat.ARGB32);
+        stableFluids.Initialize(resolution / velocityDownsample);
+        particles.Initialize(resolution);
+        textDye.Initialize(resolution);
+        dye.Initialize(resolution);
+        boids.Initialize(resolution);
+        nebula.Initialize(resolution);
+        _combined = new RenderTexture(resolution.x, resolution.y, 0, RenderTextureFormat.ARGB32);
         image.texture = _combined;
     }
 
@@ -67,10 +68,12 @@ public class Bootstrapper : MonoBehaviour
         textDye.Tick(velocityField, Time.deltaTime);
         RenderTexture particleTexture = particles.Tick(velocityField, Time.deltaTime);
         boids.Tick(velocityField);
+        nebula.Tick(velocityField);
+        //RenderTexture nebulaeTexture = nebulae.Tick(velocityField);
 
         Graphics.Blit(dyeTexture, _combined);
-        //Graphics.Blit(Texture2D.blackTexture,_combined);
         Graphics.Blit(particleTexture, _combined, addMat);
+        //Graphics.Blit(nebulaeTexture, _combined, addMat);
     }
 
     private void OnDestroy()

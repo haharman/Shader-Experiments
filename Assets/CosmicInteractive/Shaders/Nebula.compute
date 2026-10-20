@@ -1,0 +1,232 @@
+#pragma kernel WriteGradients
+#pragma kernel AccumulatePerlin
+#pragma kernel InitializeCloud
+#pragma kernel InitializeVeil
+#pragma kernel AdvectCloud
+#pragma kernel AdvectVeil
+#pragma kernel SweepHorizon
+#pragma kernel IlluminateCloud
+#pragma kernel IlluminateVeil
+#pragma kernel Compose
+
+#define PI 3.14159265359f
+
+struct StarData
+{
+    float3 Position;
+    float Euv;
+    float Optical;
+};
+
+// Texture
+Texture2D<float2> _VelocityRead;
+Texture2D<float2> _GradientRead;
+RWTexture2D<float2> _GradientWrite;
+Texture2D<float2> _CloudRead;
+RWTexture2D<float2> _CloudWrite;
+Texture2D<float> _VeilRead;
+RWTexture2D<float> _VeilWrite;
+Texture2DArray<float2> _ShadowMapRead;
+RWTexture2DArray<float2> _ShadowMapWrite;
+Texture2D<float> _FluxRead;
+RWTexture2D<float> _FluxWrite;
+Texture2D<float4> _ReflectionRead;
+RWTexture2D<float4> _ReflectionWrite;
+Texture2D<float4> _NebulaRead;
+RWTexture2D<float4> _NebulaWrite;
+
+// Buffer
+StructuredBuffer<StarData> _StarRead;
+RWStructuredBuffer<StarData> _StarWrite;
+
+// Common
+float _AdvectCloudWeight;
+float _AdvectVeilWeight;
+int2 _Resolution;
+float _DeltaTime;
+float _Aspect;
+
+// InitializeCloud
+
+// AdvectCloud
+float _ParallaxWeight;
+SamplerState linearRepeatSampler;
+SamplerState linear_repeatU_clampV_sampler;
+
+// SweepHorizon
+int _AngleCount;
+float _AngleStep;
+int _StarCount;
+int _RadiusCount;
+float _MaxRadius;
+float _RadiusStep;
+float _MinN;
+
+// IlluminateCloud
+float _MinDist;
+float _ShadowFill;
+float4 _S2Color;
+
+uint2 modIndex(int2 index)
+{
+    int2 res = _Resolution;
+    return (uint2)((index % res + res) % res);
+}
+
+uint pcg(uint v)
+{
+    uint state = v * 747796405u + 2891336453u;
+    uint word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
+    return (word >> 22u) ^ word;
+}
+
+int2 _PerlinResolution;
+uint _PerlinSeed;
+float _PerlinWeight;
+
+[numthreads(8,8,1)]
+void WriteGradients(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    int2 id = dispatchThreadID.xy;
+    if (any(id >= _PerlinResolution)) return;
+    
+    float random = pcg(id.x + pcg(id.y + _PerlinSeed)) / 4294967295.0 * 2 * PI;
+    float s, c;
+    sincos(random, s, c);
+    _GradientWrite[id] = float2(c,s);
+}
+
+[numthreads(8,8,1)]
+void AccumulatePerlin(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    int2 id = dispatchThreadID.xy;
+    if (any(id >= _Resolution)) return;
+
+    float2 uv = (id + 0.5) / float2(_Resolution);
+    float2 p = uv * _PerlinResolution;
+    int2 i = (int2)floor(p);
+    int2 i1 = (i + 1) % _PerlinResolution;
+    float2 f = frac(p);
+
+    float n00 = dot(_GradientRead[i], f - float2(0, 0));
+    float n10 = dot(_GradientRead[int2(i1.x, i.y)], f - float2(1, 0));
+    float n01 = dot(_GradientRead[int2(i.x, i1.y)], f - float2(0, 1));
+    float n11 = dot(_GradientRead[i1], f - float2(1, 1));
+
+    float2 s = f * f * f * (f * (f * 6 - 15) + 10);
+    float n = lerp(lerp(n00, n10, s.x), lerp(n01, n11, s.x), s.y);
+
+    _CloudWrite[id] = _CloudRead[id] + float2(n * _PerlinWeight, 0);
+}
+
+[numthreads(8,8,1)]
+void InitializeCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    int2 id = dispatchThreadID.xy;
+    if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
+    
+    
+}
+
+[numthreads(8,8,1)]
+void InitializeVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+}
+
+[numthreads(8,8,1)]
+void AdvectCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    uint2 id = dispatchThreadID.xy;
+    if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
+     
+    float2 uv = (id + 0.5) / float2(_Resolution);
+    float parallax = (1.0 - _CloudRead[id].x) * _ParallaxWeight;
+    float2 velocity = _VelocityRead.SampleLevel(linearRepeatSampler, uv, 0) * (_AdvectCloudWeight - parallax);
+    _CloudWrite[id] = _CloudRead.SampleLevel(linearRepeatSampler, uv - velocity * _DeltaTime, 0);
+}
+
+[numthreads(8,8,1)]
+void AdvectVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    uint2 id = dispatchThreadID.xy;
+    if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
+    
+    float2 uv = (id + 0.5) / float2(_Resolution);
+    float2 velocity = _VelocityRead.SampleLevel(linearRepeatSampler, uv, 0) * _AdvectVeilWeight;
+    _VeilWrite[id] = _VeilRead.SampleLevel(linearRepeatSampler, uv - velocity * _DeltaTime, 0);
+}
+
+[numthreads(64,1,1)]
+void SweepHorizon(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    uint2 id = dispatchThreadID.xy;
+    if (id.x >= _AngleCount || id.y >= _StarCount) return;
+    float angle = _AngleStep * id.x;
+    float s, c;
+    sincos(angle, s, c);
+    float maxSlope = 0;
+    StarData star = _StarRead[id.y];
+    for (uint i = 0; i < _RadiusCount; i++)
+    {
+        float r = _RadiusStep * (i + 0.5);
+        float2 uv = star.Position.xy + float2(r * c / _Aspect, r * s);
+        float2 cloud = _CloudRead.SampleLevel(linearRepeatSampler, uv, 0);
+        float h = cloud.x;
+        float n = cloud.y;
+        float slope = r / (star.Position.z - h);
+        _ShadowMapWrite[uint3(id.x, i, id.y)] = slope > maxSlope ? float2(1,0) : float2(0,0);
+        if (n <= _MinN) continue;
+        maxSlope = max(maxSlope, slope);
+    }
+}
+
+[numthreads(8,8,1)]
+void IlluminateCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    uint2 id = dispatchThreadID.xy;
+    if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
+    
+    float2 uv = (id + 0.5) / float2(_Resolution);
+    float2 cloud = _CloudRead.SampleLevel(linearRepeatSampler, uv, 0);
+    if (cloud.y < _MinN)
+    {
+        _FluxWrite[id] = 0;
+        return;
+    }
+    float3 norm = normalize(float3(
+        -((_CloudRead[modIndex(id + uint2(1, 0))].x - _CloudRead[modIndex(id + uint2(-1, 0))].x) / 2 * _Resolution.y),
+        -((_CloudRead[modIndex(id + uint2(0, 1))].x - _CloudRead[modIndex(id + uint2(0, -1))].x) / 2 * _Resolution.y),
+        1));
+    float flux = 0;
+    for (uint i = 0; i < _StarCount; i++)
+    {
+        StarData star = _StarRead[i];
+        float2 starPos = star.Position.xy - round(star.Position.xy - uv);
+        float3 toStar = float3((starPos - uv) * float2(_Aspect, 1), star.Position.z - cloud.x);
+        float toStarDist = max(length(toStar), _MinDist);
+        float3 toStarDir = normalize(toStar);
+        
+        float r = length(-toStar.xy);
+        float theta = atan2(-toStar.y, -toStar.x);
+        float2 shadowMapUv = float2((theta + 0.5*_AngleStep) / (2*PI) , r / _MaxRadius);
+        float shadow = _ShadowMapRead.SampleLevel(linear_repeatU_clampV_sampler, float3(shadowMapUv, i), 0).r;
+        flux += star.Euv / (4 * PI * toStarDist * toStarDist) * max(0, dot(norm, toStarDir)) * max(shadow, _ShadowFill);
+    }
+    _FluxWrite[id] = flux;
+    float n = _CloudRead.SampleLevel(linearRepeatSampler, uv, 0).g;
+    n = exp(-50.0 * (n-0.5) * (n-0.5));
+    float volumeFactor = flux / dot(norm, float3(0,0,1));
+    float4 color = float4(_S2Color.rgb * volumeFactor, _S2Color.a * n);
+    _NebulaWrite[id] = color;
+}
+
+[numthreads(8,8,1)]
+void IlluminateVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+}
+
+[numthreads(8,8,1)]
+void Compose(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    
+}

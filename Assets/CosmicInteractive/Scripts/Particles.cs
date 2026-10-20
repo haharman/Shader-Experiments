@@ -14,8 +14,7 @@ public class Particles : MonoBehaviour
     [SerializeField] float slowVelocity;
     [SerializeField] float fastVelocity;
 
-    private int _w;
-    private int _h;
+    private Vector2Int _res;
     private PingPongRenderTexture _particleTexture;
     private ComputeBuffer _particleBuffer;
     
@@ -28,15 +27,14 @@ public class Particles : MonoBehaviour
     {
         public Vector2 Position;
     }
-    public void Initialize(int w, int h)
+    public void Initialize(Vector2Int resolution)
     {
         if (stableFluids == null) {
             Debug.LogError("[Particles] stableFluids を割り当ててください");
             return;
         }
 
-        _w = w;
-        _h = h;
+        _res = resolution;
         
         // KernelIndex, KernelSize を取得
         _fadeKernelIndex = shader.FindKernel("Fade");
@@ -48,8 +46,8 @@ public class Particles : MonoBehaviour
         _updateKernelSize = new Vector2Int((int)x, (int)y);
 
         // Textureを初期化
-        var particleTexFirstRead = new RenderTexture(_w, _h, 0, RenderTextureFormat.ARGBHalf) { enableRandomWrite = true };
-        var particleTexFirstWrite = new RenderTexture(_w, _h, 0, RenderTextureFormat.ARGBHalf) { enableRandomWrite = true };
+        var particleTexFirstRead = new RenderTexture(_res.x, _res.y, 0, RenderTextureFormat.ARGBHalf) { enableRandomWrite = true };
+        var particleTexFirstWrite = new RenderTexture(_res.x, _res.y, 0, RenderTextureFormat.ARGBHalf) { enableRandomWrite = true };
         particleTexFirstRead.Create();
         particleTexFirstWrite.Create();
         Graphics.Blit(Texture2D.blackTexture, particleTexFirstRead);
@@ -62,8 +60,8 @@ public class Particles : MonoBehaviour
         for (int i = 0; i < particleCount; i++)
         {
             initial[i].Position = new Vector2(
-                UnityEngine.Random.Range(0f, _w),
-                UnityEngine.Random.Range(0f, _h)
+                UnityEngine.Random.Range(0f, _res.x),
+                UnityEngine.Random.Range(0f, _res.y)
             );
         }
         _particleBuffer.SetData(initial);
@@ -78,13 +76,13 @@ public class Particles : MonoBehaviour
         shader.SetVector("_FastColor", fastColor);
         shader.SetFloat("_SlowVelocitySq",slowVelocity * slowVelocity);
         shader.SetFloat("_FastVelocitySq", fastVelocity * fastVelocity);
-        shader.SetInts("_Resolution", _w, _h);
+        shader.SetInts("_Resolution", _res.x, _res.y);
         
         shader.SetTexture(_fadeKernelIndex, "_ParticleTextureRead", _particleTexture.read);
         shader.SetTexture(_fadeKernelIndex, "_ParticleTextureWrite", _particleTexture.write);
         shader.Dispatch(_fadeKernelIndex,
-            (_w + _fadeKernelSize.x - 1) / _fadeKernelSize.x,
-            (_h + _fadeKernelSize.y - 1) / _fadeKernelSize.y,
+            (_res.x + _fadeKernelSize.x - 1) / _fadeKernelSize.x,
+            (_res.y + _fadeKernelSize.y - 1) / _fadeKernelSize.y,
             1);
 
         shader.SetTexture(_updateKernelIndex, "_VelocityField", vel);

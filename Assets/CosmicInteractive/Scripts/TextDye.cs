@@ -17,20 +17,19 @@ public class TextDye : MonoBehaviour
     private PingPongRenderTexture _dye;
     private int _advectDyeKernelIndex;
     private Vector3Int _advectDyeGroupSize;
-    private int _w, _h;
+    private Vector2Int _res;
     private int _textureIndex;
     private bool _doesAdvect;
     private float _advectWeight;
 
     
-    public void Initialize(int w, int h)
+    public void Initialize(Vector2Int resolution)
     {
-        _w = w;
-        _h = h;
+        _res = resolution;
         
         // RTの初期化
-        var dyeFirstReadRt = new RenderTexture(_w, _h, 0, RenderTextureFormat.ARGBHalf) { enableRandomWrite = true };
-        var dyeFirstWriteRt = new RenderTexture(_w, _h, 0, RenderTextureFormat.ARGBHalf) { enableRandomWrite = true };
+        var dyeFirstReadRt = new RenderTexture(_res.x, _res.y, 0, RenderTextureFormat.ARGBHalf) { enableRandomWrite = true };
+        var dyeFirstWriteRt = new RenderTexture(_res.x, _res.y, 0, RenderTextureFormat.ARGBHalf) { enableRandomWrite = true };
         dyeFirstReadRt.Create();
         dyeFirstWriteRt.Create();
         _dye = new PingPongRenderTexture(dyeFirstReadRt, dyeFirstWriteRt);
@@ -70,15 +69,15 @@ public class TextDye : MonoBehaviour
         if (!_doesAdvect) return;
         shader.SetFloat("_AdvectWeight", _advectWeight);
         shader.SetFloat("_DeltaTime", deltaTime);
-        shader.SetInts("_Resolution", _w, _h);
+        shader.SetInts("_Resolution", _res.x, _res.y);
         shader.SetFloat("_CorrectionIntensity", correctionIntensity);
         shader.SetTexture(_advectDyeKernelIndex, "_VelocityFieldRead", velocityField);
         shader.SetTexture(_advectDyeKernelIndex, "_DyeTextureRead", _dye.read);
         shader.SetTexture(_advectDyeKernelIndex, "_DyeTextureWrite", _dye.write);
         
         shader.Dispatch(_advectDyeKernelIndex,
-            (_w + _advectDyeGroupSize.x - 1) / _advectDyeGroupSize.x,
-            (_h + _advectDyeGroupSize.y - 1) / _advectDyeGroupSize.y,
+            (_res.x + _advectDyeGroupSize.x - 1) / _advectDyeGroupSize.x,
+            (_res.y + _advectDyeGroupSize.y - 1) / _advectDyeGroupSize.y,
             1);
         
         _dye.Swap();

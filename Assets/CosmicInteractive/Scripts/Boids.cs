@@ -5,9 +5,10 @@ using Random = UnityEngine.Random;
 
 public class Boids : MonoBehaviour
 {
+    private const int MaxSamplePoints = 100;
+    
     [SerializeField] private Boid boidInstance;
     [SerializeField] private ComputeShader shader;
-    
     [SerializeField, Range(1, 100)] private int boidsCount = 10;
     [Header("Boidが生成、移動可能な領域")]
     [SerializeField] private Vector3 minBounds;
@@ -45,18 +46,17 @@ public class Boids : MonoBehaviour
     
     private ComputeBuffer _sampleUvBuffer;
     private ComputeBuffer _sampleVelocityBuffer;
+    
     private int _sampleVelocityKernelIndex;
     private Vector3Int _sampleVelocityGroupSize;
-    private const int MaxSamplePoints = 100;
-    private Vector2 _resolution;
-    
+    private Vector2Int _res;
     private bool _needsRefresh;
 
     private void OnValidate() { _needsRefresh = true; }
     
-    public void Initialize(float resolutionX, float resolutionY)
+    public void Initialize(Vector2Int resolution)
     {
-        _resolution = new Vector2(resolutionX, resolutionY);
+        _res = resolution;
         Refresh();
         
         // ComputeBufferの設定
@@ -102,7 +102,6 @@ public class Boids : MonoBehaviour
             _boids[i].velocity = Random.insideUnitSphere * Random.Range(minVelocity, maxVelocity);
             _boids[i].model.localRotation = Quaternion.Euler(rotation);
             _uvs[i] = ((Vector2)position - minDisplayArea) / (maxDisplayArea - minDisplayArea);
-            Debug.Log($"i[{i}] = {_uvs[i]}");
         }
 
         _needsRefresh = false;
