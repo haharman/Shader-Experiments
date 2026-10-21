@@ -1699,45 +1699,64 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Nebula
   addVeilMat: {fileID: 0}
   debugRawImage: {fileID: 2119618760}
+  fishCamera: {fileID: 1047956214}
   shader: {fileID: 7200000, guid: 9ea48596e2994260b7764652fe66da74, type: 3}
-  advectCloudWeight: 0.15
-  advectVeilWeight: 0
+  viewerHeight: 2
+  flowReferenceDistance: 0.25
   starCount: 1
   angleCount: 2048
   radiusCount: 1024
   minN: 0.02
   minDist: 0.02
-  shadowFill: 0.1
+  shadowFill: 0.3
   bowlDepth: 0.1
   hDiffMin: 0.001
   cloudCellSize: 1
-  parallaxWeight: 0
   minHeight: 0.42
   maxHeight: 0.58
   starHeight: 0.6
-  perlinSeed: 0
+  perlinSeed: 2
   s2Thickness: 0.005
-  s2Weight: 0.1
-  s2Color: {r: 0.8509804, g: 0, b: 0.31127638, a: 1}
+  s2Weight: 0.3
+  s2Color: {r: 0.8509804, g: 0, b: 0.033718213, a: 1}
   haThickness: 0.025
   haWeight: 0.2
-  haColor: {r: 1, g: 0.46785375, b: 0.33333337, a: 1}
+  haColor: {r: 1, g: 0.33333337, b: 0.67578954, a: 1}
   layerSampleCount: 20
   layerThkCutoffRatio: 3
   nRef: 0.5
   limbGainMax: 4.49
-  o3Weight: 1
-  o3Color: {r: 0.27735847, g: 0.7155693, b: 1, a: 0}
-  fogScale: 0.08
-  fogLodStart: 5
-  fogLevels: 5
+  o3Weight: 3.15
+  o3Color: {r: 0, g: 0.63899803, b: 1, a: 0}
+  fogScale: 0.3
+  fogLodStart: 3.5
+  fogLevels: 4
   fogFalloff: 1
   logUMin: -1
   logUMax: 3
+  reflectionScale: 3.24
+  hgG: 0.6
+  nReflect: 0.5
+  opticalExtinction: {x: 20, y: 28, z: 40}
+  starlightColor: {r: 0.53396225, g: 0.63458395, b: 1, a: 1}
+  veilNoiseCellsY: 3
+  veilSeed: 4
+  veilOctaves: 5
+  veilWarp: 0.3
+  veilCutoff: 0.4
+  veilScale: 10
+  veilHeight: 1.2
+  veilExtinction: {x: 0.6, y: 1, z: 1.6}
+  veilFloor: 0
+  veilGlowScale: 0.22
+  veilScatterN: 0.3
+  veilLightLength: 0.15
+  veilLightTaps: 8
+  veilLightExtinction: 8
   sunEuv: 1
-  sunOptical: 0
+  sunOptical: 3
   debugMode: 0
-  debugRange: {x: -2, y: 1}
+  debugRange: {x: 0, y: 1}
 --- !u!4 &175022360
 Transform:
   m_ObjectHideFlags: 0
@@ -9916,6 +9935,134 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishBoid
   velocity: {x: 0, y: 0, z: 0}
   model: {fileID: 0}
+--- !u!1 &1047956213
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1047956216}
+  - component: {fileID: 1047956214}
+  - component: {fileID: 1047956215}
+  m_Layer: 0
+  m_Name: Fish Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!20 &1047956214
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047956213}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 10
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 8
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!114 &1047956215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047956213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
+--- !u!4 &1047956216
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047956213}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1841727495}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1051033755
 GameObject:
   m_ObjectHideFlags: 0
@@ -17463,7 +17610,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -17487,7 +17634,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1047956216}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1841727496

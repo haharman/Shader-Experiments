@@ -34,6 +34,9 @@ Texture2D<float> _FluxRead;
 RWTexture2D<float> _FluxWrite;
 Texture2D<float4> _ReflectionRead;
 RWTexture2D<float4> _ReflectionWrite;
+Texture2D<float4> _FishRead; // 魚（雲の手前、Veil の後ろ）を別カメラで描いた絵。A = 魚がある所
+Texture2D<float4> _VeilLightRead;
+RWTexture2D<float4> _VeilLightWrite;
 Texture2D<float4> _NebulaRead;
 RWTexture2D<float4> _NebulaWrite;
 
@@ -42,8 +45,8 @@ StructuredBuffer<StarData> _StarRead;
 RWStructuredBuffer<StarData> _StarWrite;
 
 // Common
-float _AdvectCloudWeight;
-float _AdvectVeilWeight;
+float _ViewerHeight;          // 観測者の高さ
+float _FlowReferenceDistance; // 観測者からの距離がこの値の面で、DepthSpeed が 1 になる
 int2 _Resolution;
 float _DeltaTime;
 float _Aspect;
@@ -51,7 +54,6 @@ float _Aspect;
 // InitializeCloud
 
 // AdvectCloud
-float _ParallaxWeight;
 SamplerState linearRepeatSampler;
 SamplerState linear_repeatU_clampV_sampler;
 
@@ -70,6 +72,11 @@ float _HDiffMin; // slope の分母（光源の高さ - 面の高さ）の下限
 float _MinDist;
 float _ShadowFill;
 float4 _S2Color;
+float _ReflectionScale; // 反射光の明るさの倍率
+float _HgG;             // 位相関数の g（前へ散る偏り）
+float _NReflect;        // 反射が頭打ちになる密度の目安
+float3 _OpticalExtinction; // dustPath に掛ける RGB の係数（青ほど大きい）
+float4 _StarlightColor; // 星の光の色（白青）
 
 // Compose
 float4 _HaColor;
@@ -90,6 +97,22 @@ float _O3Weight;
 float _LogUMin;
 float _LogUMax;
 
+// Veil（手前の塵）。InitializeVeil・IlluminateVeil・Compose が使う
+int _VeilNoiseCellsY;       // 一番粗いオクターブの縦の格子数
+uint _VeilSeed;
+int _VeilOctaves;
+float _VeilWarp;            // ノイズの位置を歪める量（uv）。大きいほど渦巻く
+float _VeilCutoff;          // これより低いノイズの所は塵なし
+float _VeilScale;           // 密度の倍率
+float _VeilHeight;          // 塵の高さ（光源より大きい）
+float3 _VeilExtinction;     // 吸収の RGB の係数（青ほど大きい）
+float _VeilFloor;           // 画面全体に薄く広がる塵の量
+float _VeilGlowScale;       // 散乱光の明るさの倍率
+float _VeilScatterN;        // 散乱が頭打ちになる密度の目安
+float _VeilLightLength;     // 塵が自分の影を落とす距離（光源の方へ読む長さ）
+int _VeilLightTaps;         // その距離を読む点の数
+float _VeilLightExtinction; // 光源の方の塵の量に掛ける係数
+
 // DebugView
 // 0 は Final（Compose の結果をそのまま見る）。この場合 DebugView は Dispatch しない
 // 値は Nebula.cs の enum DebugMode と同じ並びにする
@@ -100,6 +123,10 @@ float _LogUMax;
 #define DEBUG_LAYERS 5
 #define DEBUG_FOGFLUX 6
 #define DEBUG_IONIZATION 7
+#define DEBUG_DUST_PATH 8
+#define DEBUG_REFLECTION 9
+#define DEBUG_VEIL 10
+#define DEBUG_VEIL_LIGHT 11
 int _DebugMode;
 float2 _DebugRange;
 
@@ -107,6 +134,13 @@ uint2 modIndex(int2 index)
 {
     int2 res = _Resolution;
     return (uint2)((index % res + res) % res);
+}
+
+// 高さ h の面の、流れの速さの係数。観測者に近い（手前の）面ほど速く、遠い面ほど遅い（遠近法の視差）
+float DepthSpeed(float h)
+{
+    // 観測者からの距離は、0 以下にならないよう下限で切る
+    return _FlowReferenceDistance / max(_ViewerHeight - h, 0.01);
 }
 
 // 点と光源の差 (x, y)（V座標系）を、画面の端でつなげた最短の向きに直す
@@ -244,6 +278,46 @@ uint pcg(uint v)
     return (word >> 22u) ^ word;
 }
 
+// 画面の端でつながる勾配ノイズ（Perlin ノイズ）。格子点の番号を格子の数 period で割った余りにしてから、ランダムな向きを決める
+float2 LatticeGradient(int2 cell, int2 period, uint seed)
+{
+    cell = ((cell % period) + period) % period;
+    float angle = pcg((uint)cell.x + pcg((uint)cell.y + seed)) / 4294967295.0 * 2 * PI;
+    return float2(cos(angle), sin(angle));
+}
+
+// p は格子の単位の位置。戻り値はおよそ -0.7〜0.7
+float GradientNoise(float2 p, int2 period, uint seed)
+{
+    int2 i = (int2)floor(p);
+    float2 f = frac(p);
+
+    float n00 = dot(LatticeGradient(i, period, seed), f);
+    float n10 = dot(LatticeGradient(i + int2(1, 0), period, seed), f - float2(1, 0));
+    float n01 = dot(LatticeGradient(i + int2(0, 1), period, seed), f - float2(0, 1));
+    float n11 = dot(LatticeGradient(i + int2(1, 1), period, seed), f - float2(1, 1));
+
+    float2 s = f * f * f * (f * (f * 6 - 15) + 10);
+    return lerp(lerp(n00, n10, s.x), lerp(n01, n11, s.x), s.y);
+}
+
+// fBm: オクターブ o ごとに格子の数を 2^o 倍、重みを 0.5^o 倍にして足す。戻り値は 0〜1
+float VeilFbm(float2 uv, uint seed)
+{
+    int2 baseCells = int2(round(_VeilNoiseCellsY * _Aspect), _VeilNoiseCellsY);
+    float sum = 0;
+    float weightSum = 0;
+    float weight = 1;
+    for (int o = 0; o < _VeilOctaves; o++)
+    {
+        int2 cells = baseCells << o;
+        sum += weight * GradientNoise(uv * cells, cells, seed + o);
+        weightSum += weight;
+        weight *= 0.5;
+    }
+    return saturate(0.5 + 0.5 * (sum / weightSum) / 0.707);
+}
+
 int2 _PerlinResolution;
 uint _PerlinSeed;
 float _PerlinWeight;
@@ -312,6 +386,17 @@ void InitializeCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
 [numthreads(8,8,1)]
 void InitializeVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
 {
+    uint2 id = dispatchThreadID.xy;
+    if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
+
+    float2 uv = (id + 0.5) / float2(_Resolution);
+
+    // ドメインワープ: ノイズの位置を、別のノイズでずらす。糸が絡まったような、煙の形になる
+    float2 warp = (float2(VeilFbm(uv, _VeilSeed), VeilFbm(uv, _VeilSeed + 100)) - 0.5) * _VeilWarp;
+    float f = VeilFbm(uv + warp, _VeilSeed + 200);
+
+    // _VeilCutoff より低い所は塵なし。残りを 0〜_VeilScale に引き伸ばす
+    _VeilWrite[id] = _VeilScale * saturate((f - _VeilCutoff) / (1 - _VeilCutoff));
 }
 
 [numthreads(8,8,1)]
@@ -321,8 +406,7 @@ void AdvectCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
     if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
      
     float2 uv = (id + 0.5) / float2(_Resolution);
-    float parallax = (1.0 - _CloudRead[id].x) * _ParallaxWeight;
-    float2 velocity = _VelocityRead.SampleLevel(linearRepeatSampler, uv, 0) * (_AdvectCloudWeight - parallax);
+    float2 velocity = _VelocityRead.SampleLevel(linearRepeatSampler, uv, 0) * DepthSpeed(_CloudRead[id].x);
     _CloudWrite[id] = _CloudRead.SampleLevel(linearRepeatSampler, uv - velocity * _DeltaTime, 0);
 }
 
@@ -333,7 +417,7 @@ void AdvectVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
     if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
     
     float2 uv = (id + 0.5) / float2(_Resolution);
-    float2 velocity = _VelocityRead.SampleLevel(linearRepeatSampler, uv, 0) * _AdvectVeilWeight;
+    float2 velocity = _VelocityRead.SampleLevel(linearRepeatSampler, uv, 0) * DepthSpeed(_VeilHeight);
     _VeilWrite[id] = _VeilRead.SampleLevel(linearRepeatSampler, uv - velocity * _DeltaTime, 0);
 }
 
@@ -346,6 +430,7 @@ void SweepHorizon(uint3 dispatchThreadID : SV_DispatchThreadID)
     float s, c;
     sincos(angle, s, c);
     float maxSlope = 0;
+    float maxDensity = 0; // maxSlope を作った点（遮っている稜線）の密度。n_max
     StarData star = _StarRead[id.y];
     for (uint i = 0; i < _RadiusCount; i++)
     {
@@ -361,10 +446,51 @@ void SweepHorizon(uint3 dispatchThreadID : SV_DispatchThreadID)
 
         // 光源の高さ以上の面は、分母が _HDiffMin になり、slope が非常に大きい（その後ろを遮る壁）
         float slope = r / max(star.Position.z - h, _HDiffMin);
-        _ShadowMapWrite[uint3(id.x, i, id.y)] = slope > maxSlope ? float2(1,0) : float2(0,0);
+
+        // R: EUV が届くか（1 = 照らされる、0 = 影）
+        float lit = slope > maxSlope ? 1 : 0;
+
+        // G: dustPath（可視光が、遮る稜線の中を通った塵の量）の近似 = 影の深さ × 稜線の密度
+        // 影の深さ = 稜線をかすめる光線の、この距離での高さ - この点の面の高さ（照らされる所では負なので 0 になる）
+        float dustPath = 0;
+        if (maxSlope > 0)
+        {
+            float rayHeight = star.Position.z - r / maxSlope;
+            dustPath = maxDensity * max(rayHeight - h, 0);
+        }
+        _ShadowMapWrite[uint3(id.x, i, id.y)] = float2(lit, dustPath);
+
+        // 面なしの点は遮らない
         if (n <= _MinN) continue;
-        maxSlope = max(maxSlope, slope);
+        if (slope > maxSlope)
+        {
+            maxSlope = slope;
+            maxDensity = n;
+        }
     }
+}
+
+// 可視光の透過率（RGB）。dustPath が大きいほど暗くなり、係数が大きい青から先に減るので、残った光は赤くなる
+float3 Transmittance(float dustPath)
+{
+    return exp(-_OpticalExtinction * dustPath);
+}
+
+// 塵が光を散らす向きの割合（Henyey-Greenstein の位相関数）
+// mu = 光の進む向きと、散らされた光の向きのなす角の cos（1 = 前へ、-1 = 来た向きへはね返る）
+float PhaseHG(float mu)
+{
+    float g2 = _HgG * _HgG;
+    return (1 - g2) / (4 * PI * pow(1 + g2 - 2 * _HgG * mu, 1.5));
+}
+
+// 光源 k の光が、点にどれだけ届くか。toStarXY は点から光源への差（V座標系、WrapDelta 後）
+// 戻り値 = (EUV が届くか, dustPath)
+float2 StarReach(uint k, float2 toStarXY)
+{
+    float theta = atan2(-toStarXY.y, -toStarXY.x); // 光源から点への向き
+    float2 shadowMapUv = float2((theta + 0.5 * _AngleStep) / (2 * PI), length(toStarXY) / _MaxRadius);
+    return _ShadowMapRead.SampleLevel(linear_repeatU_clampV_sampler, float3(shadowMapUv, k), 0);
 }
 
 [numthreads(8,8,1)]
@@ -378,10 +504,12 @@ void IlluminateCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
     if (!(cloud.y >= _MinN))
     {
         _FluxWrite[id] = 0;
+        _ReflectionWrite[id] = 0;
         return;
     }
     float2 gradient = HeightGradient(id);
     float flux = 0;
+    float3 reflection = 0;
     for (uint i = 0; i < _StarCount; i++)
     {
         StarData star = _StarRead[i];
@@ -399,18 +527,66 @@ void IlluminateCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
         float toStarDist = max(length(toStar), _MinDist);
         float3 toStarDir = normalize(toStar);
 
-        // 影の読み取り: 光源から見たこの点の角度 theta（光源から点への向き）
-        float theta = atan2(-toStarXY.y, -toStarXY.x);
-        float2 shadowMapUv = float2((theta + 0.5*_AngleStep) / (2*PI) , r / _MaxRadius);
-        float shadow = _ShadowMapRead.SampleLevel(linear_repeatU_clampV_sampler, float3(shadowMapUv, i), 0).r;
-        flux += star.Euv / (4 * PI * toStarDist * toStarDist) * max(0, dot(normalBowl, toStarDir)) * max(shadow, _ShadowFill);
+        // 距離の2乗と入射角で薄まった分。EUV と可視光で共通
+        float baseAmount = max(0, dot(normalBowl, toStarDir)) / (4 * PI * toStarDist * toStarDist);
+
+        float2 reach = StarReach(i, toStarXY);
+        float shadow = reach.x;   // EUV が届くか
+        float dustPath = reach.y; // 可視光が通った塵の量
+
+        flux += star.Euv * baseAmount * max(shadow, _ShadowFill);
+
+        // 反射光: 光は光源からこの点へ向き (-toStarDir) で進み、真上（h が増える向き）の観測者へ散らされる
+        // 2つの向きのなす角の cos は -toStarDir.z。影の中は Transmittance で暗く赤くなる
+        reflection += star.Optical * baseAmount * PhaseHG(-toStarDir.z) * Transmittance(dustPath);
     }
+    // 塵（密度）が多いほど反射するが、ある程度で頭打ちになる
+    reflection *= _ReflectionScale * _StarlightColor.rgb * (1 - exp(-cloud.y / _NReflect));
+
     _FluxWrite[id] = flux;
+    _ReflectionWrite[id] = float4(reflection, 1);
 }
 
 [numthreads(8,8,1)]
 void IlluminateVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
 {
+    uint2 id = dispatchThreadID.xy;
+    if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
+
+    float2 uv = (id + 0.5) / float2(_Resolution);
+    float n = _VeilRead[id];
+
+    float3 light = 0;
+    for (int i = 0; i < _StarCount; i++)
+    {
+        StarData star = _StarRead[i];
+        float2 toStarXY = WrapDelta((star.Position.xy - uv) * float2(_Aspect, 1));
+        float heightDiff = _VeilHeight - star.Position.z; // 光源は塵より奥にある
+        float dist = max(length(float3(toStarXY, heightDiff)), _MinDist);
+
+        // 光は光源からこの点へ進み、真上の観測者へ散らされる。進む向きの上向き成分が heightDiff / dist なので、
+        // それが前方散乱の角の cos。光源が真下に近いほど前へ散る（逆光）
+        float mu = heightDiff / dist;
+        float baseAmount = 1 / (4 * PI * dist * dist);
+
+        // 光源の方へ _VeilLightLength だけ進みながら、途中の塵の量（密度 × 長さ）を足す
+        // 多いほど、この点に届く光が減る。塵が自分の影を落とすので、光源側の縁だけが明るくなる
+        float2 stepXY = toStarXY / max(length(toStarXY), 1e-4) * (_VeilLightLength / _VeilLightTaps);
+        float dust = 0;
+        for (int t = 0; t < _VeilLightTaps; t++)
+        {
+            float2 uvT = uv + stepXY * (t + 0.5) / float2(_Aspect, 1);
+            dust += _VeilRead.SampleLevel(linearRepeatSampler, uvT, 0);
+        }
+        dust *= _VeilLightLength / _VeilLightTaps;
+        float reach = exp(-_VeilLightExtinction * dust);
+
+        light += star.Optical * baseAmount * PhaseHG(mu) * reach;
+    }
+
+    // 塵が多いほど散らすが、ある程度で頭打ちになる（薄い所は光らない）
+    float scatter = 1 - exp(-n / _VeilScatterN);
+    _VeilLightWrite[id] = float4(light * scatter * _VeilGlowScale * _StarlightColor.rgb, 1);
 }
 
 [numthreads(8,8,1)]
@@ -423,10 +599,24 @@ void Compose(uint3 dispatchThreadID : SV_DispatchThreadID)
     float n = _CloudRead[id].y;
     float fogFlux = FogFlux(uv);
 
-    // 層 + 霧（水素の色）+ [O III]。反射光・手前の塵は後の工程
+    // 層 + 霧（水素の色）+ [O III] + 反射光 を、手前の塵で吸収し、塵の散乱光を足す
     float3 color = Layers(id);
     color += _HaColor.rgb * _FogScale * fogFlux;
     color += OIII(fogFlux, n);
+    color += _ReflectionRead[id].rgb;
+
+    // 魚: 雲の手前にいるので、雲の色を魚の色で置き換える。Veil はその手前にあるので、
+    // このあとの吸収と散乱光が、魚にもかかる（魚が煙の向こうに見える）
+    // fish.rgb は A を掛けた色（MSAA で縁が平均されるとそうなる）なので、雲の色は (1 - A) だけ残して足す
+    float4 fish = _FishRead[id];
+    color = color * (1 - fish.a) + fish.rgb;
+
+    // 手前の塵の吸収: 画面全体に薄く広がる塵 + 筋や塊の塵。青から先に削られて、赤茶〜黒になる
+    float veilN = _VeilRead[id];
+    color *= exp(-_VeilExtinction * (_VeilFloor + veilN));
+
+    // 手前の塵が星の光を散らして光る分。塵自身が出す光なので、吸収のあとに足す
+    color += _VeilLightRead[id].rgb;
     _NebulaWrite[id] = float4(color, 1);
 }
 
@@ -476,6 +666,28 @@ void DebugView(uint3 dispatchThreadID : SV_DispatchThreadID)
         float2 uv = (id + 0.5) / float2(_Resolution);
         float u = IonizationParameter(FogFlux(uv), _CloudRead[id].y);
         color = saturate((log10(max(u, 1e-6)) - _DebugRange.x) / rangeWidth);
+    }
+    else if (_DebugMode == DEBUG_DUST_PATH)
+    {
+        // 光源 0 の dustPath を画面の位置で見る（影の奥ほど明るい）
+        float2 uv = (id + 0.5) / float2(_Resolution);
+        float2 toStarXY = WrapDelta((_StarRead[0].Position.xy - uv) * float2(_Aspect, 1));
+        color = saturate((StarReach(0, toStarXY).y - _DebugRange.x) / rangeWidth);
+    }
+    else if (_DebugMode == DEBUG_REFLECTION)
+    {
+        // 反射光（RGB）を _DebugRange で 0〜1 に伸ばして見る
+        color = saturate((_ReflectionRead[id].rgb - _DebugRange.x) / rangeWidth);
+    }
+    else if (_DebugMode == DEBUG_VEIL)
+    {
+        // 手前の塵の密度 n を、グレーで見る
+        color = saturate((_VeilRead[id] - _DebugRange.x) / rangeWidth);
+    }
+    else if (_DebugMode == DEBUG_VEIL_LIGHT)
+    {
+        // 手前の塵の散乱光（RGB）を見る
+        color = saturate((_VeilLightRead[id].rgb - _DebugRange.x) / rangeWidth);
     }
 
     _NebulaWrite[id] = float4(color, 1);

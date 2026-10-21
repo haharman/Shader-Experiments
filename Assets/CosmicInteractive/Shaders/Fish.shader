@@ -64,7 +64,8 @@ Shader "Custom/Fish"
             half4 frag(Varyings IN) : SV_Target
             {
                 half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
-                return color;
+                // 魚は不透明。A を 1 にして、Nebula の Compose が「魚がある所」の目印に使えるようにする
+                return half4(color.rgb, 1);
             }
             ENDHLSL
         }
