@@ -1,5 +1,6 @@
 #pragma kernel WriteGradients
 #pragma kernel AccumulatePerlin
+#pragma kernel RemapHeight
 #pragma kernel InitializeCloud
 #pragma kernel InitializeVeil
 #pragma kernel AdvectCloud
@@ -8,6 +9,7 @@
 #pragma kernel IlluminateCloud
 #pragma kernel IlluminateVeil
 #pragma kernel Compose
+#pragma kernel DebugView
 
 #define PI 3.14159265359f
 
@@ -61,16 +63,178 @@ int _RadiusCount;
 float _MaxRadius;
 float _RadiusStep;
 float _MinN;
+float _BowlDepth; // お椀で、光源から最も遠い点（r = _MaxRadius）が上がる量
+float _HDiffMin; // slope の分母（光源の高さ - 面の高さ）の下限
 
 // IlluminateCloud
 float _MinDist;
 float _ShadowFill;
 float4 _S2Color;
 
+// Compose
+float4 _HaColor;
+float _S2Thickness;
+float _HaThickness;
+float _S2Weight;
+float _HaWeight;
+int _LayerSampleCount;
+float _LayerThkCutoffRatio;
+float _NRef;
+float _LimbGainMax;
+float _FogScale;
+float _FogLodStart;
+int _FogLevels;
+float _FogFalloff;
+float4 _O3Color;
+float _O3Weight;
+float _LogUMin;
+float _LogUMax;
+
+// DebugView
+// 0 は Final（Compose の結果をそのまま見る）。この場合 DebugView は Dispatch しない
+// 値は Nebula.cs の enum DebugMode と同じ並びにする
+#define DEBUG_HEIGHT 1
+#define DEBUG_DENSITY 2
+#define DEBUG_NORMAL 3
+#define DEBUG_FLUX 4
+#define DEBUG_LAYERS 5
+#define DEBUG_FOGFLUX 6
+#define DEBUG_IONIZATION 7
+int _DebugMode;
+float2 _DebugRange;
+
 uint2 modIndex(int2 index)
 {
     int2 res = _Resolution;
     return (uint2)((index % res + res) % res);
+}
+
+// 点と光源の差 (x, y)（V座標系）を、画面の端でつなげた最短の向きに直す
+float2 WrapDelta(float2 delta)
+{
+    return float2(delta.x - _Aspect * round(delta.x / _Aspect),
+                  delta.y - round(delta.y));
+}
+
+// お椀で上がる高さ。r は、光源からの最短距離（V座標系の長さ）
+float BowlRise(float r)
+{
+    float t = r / _MaxRadius;
+    return _BowlDepth * t * t;
+}
+
+// 高さの勾配 (gx, gy)。画面の高さ 1 あたり、高さ h がどれだけ増えるか（お椀なし）
+float2 HeightGradient(uint2 id)
+{
+    int2 p = id;
+
+    // 上下左右の隣のテクセルの高さ（画面の端は反対側につなげて読む）
+    float hRight = _CloudRead[modIndex(p + int2(1, 0))].x;
+    float hLeft  = _CloudRead[modIndex(p + int2(-1, 0))].x;
+    float hUp    = _CloudRead[modIndex(p + int2(0, 1))].x;
+    float hDown  = _CloudRead[modIndex(p + int2(0, -1))].x;
+
+    // 勾配: 画面の高さ 1 あたり、高さ h がどれだけ増えるか
+    // 2 テクセル離れた点の差を、2 / _Resolution.y で割る = 差 * _Resolution.y / 2
+    float gx = (hRight - hLeft) * _Resolution.y * 0.5;
+    float gy = (hUp - hDown) * _Resolution.y * 0.5;
+
+    return float2(gx, gy);
+}
+
+// 勾配から法線（長さ 1）を作る。高さが右へ増える面 (gx > 0) は、法線が左へ傾く
+float3 NormalFromGradient(float2 gradient)
+{
+    return normalize(float3(-gradient.x, -gradient.y, 1));
+}
+
+// 面の法線（お椀なし）。x, y, z = N.x, N.y, N.h（z が観測者の側）
+float3 SurfaceNormal(uint2 id)
+{
+    return NormalFromGradient(HeightGradient(id));
+}
+
+// 密度 n が濃いほど薄くなる層の厚さ
+float LayerThickness(float baseThickness, float n)
+{
+    return baseThickness * _NRef / n;
+}
+
+// 電離面のまわりの層 1 枚分の明るさ（周縁増光はまだ掛けない）
+// uv: 今のピクセル / normalXY: 法線の x, y / thickness: 層の厚さ（画面の高さが 1）
+float3 LayerGlow(float2 uv, float2 normalXY, float thickness, float3 color, float weight)
+{
+    float sum = 0;
+    for (int i = 0; i < _LayerSampleCount; i++)
+    {
+        // t: 層の範囲（厚さ * _LayerThkCutoffRatio）のうち、どこまで進んだか (0〜1)
+        float t = (i + 0.5) / _LayerSampleCount;
+
+        // 電離面から離れた距離 d
+        float d = t * _LayerThkCutoffRatio * thickness;
+
+        // 距離 d の層は、画面上で法線の向きに d だけずれて見える。
+        // だから、d だけ逆向きにずらした所の電離面に届いた光 (flux) を読む。
+        // u は横の目盛りが aspect 倍に伸びているので、x だけ aspect で割る
+        float2 shift = float2(normalXY.x / _Aspect, normalXY.y) * d;
+        float flux = _FluxRead.SampleLevel(linearRepeatSampler, uv - shift, 0);
+
+        // 離れるほど暗い: exp(-d / thickness) = exp(-t * _LayerThkCutoffRatio)
+        sum += exp(-t * _LayerThkCutoffRatio) * flux;
+    }
+
+    // 点の間隔 / 厚さ = _LayerThkCutoffRatio / _LayerSampleCount を掛けて、足し合わせを積分の近似にする
+    sum *= _LayerThkCutoffRatio / _LayerSampleCount;
+    return color * weight * sum;
+}
+
+// s2 と ha の層を足し、周縁増光を掛けたもの。面なしは 0
+float3 Layers(uint2 id)
+{
+    float n = _CloudRead[id].y;
+    if (!(n >= _MinN)) return 0;
+
+    float2 uv = (id + 0.5) / float2(_Resolution);
+    float3 normal = SurfaceNormal(id);
+
+    // 壁を真横から見るほど (N.h が小さいほど) 明るい線になる
+    float limb = min(1.0 / normal.z, _LimbGainMax);
+
+    float3 s2 = LayerGlow(uv, normal.xy, LayerThickness(_S2Thickness, n), _S2Color.rgb, _S2Weight);
+    float3 ha = LayerGlow(uv, normal.xy, LayerThickness(_HaThickness, n), _HaColor.rgb, _HaWeight);
+    return (s2 + ha) * limb;
+}
+
+// 霧に使う flux: 粗さの違うミップレベルを重ねて、まわりへにじませた flux
+// lod = _FogLodStart, +1, +2, ... を _FogLevels 枚。粗いほど重みを _FogFalloff 倍ずつ弱める
+float FogFlux(float2 uv)
+{
+    float sum = 0;
+    float weightSum = 0;
+    float weight = 1;
+    for (int i = 0; i < _FogLevels; i++)
+    {
+        sum += weight * _FluxRead.SampleLevel(linearRepeatSampler, uv, _FogLodStart + i);
+        weightSum += weight;
+        weight *= _FogFalloff;
+    }
+    // 重みの合計が 1 になるように割る（枚数を変えても霧全体の明るさが変わらない）
+    return sum / weightSum;
+}
+
+// 電離パラメータ U: ガス 1 粒あたりに届く光の多さ。面なし (n が _MinN 未満) は n = _MinN として扱う
+float IonizationParameter(float fogFlux, float n)
+{
+    return fogFlux / max(n, _MinN);
+}
+
+// [O III] の青緑。U が大きい (光が強く密度が低い) 所でだけ出る
+float3 OIII(float fogFlux, float n)
+{
+    float u = IonizationParameter(fogFlux, n);
+    // log10(U) が logUMin のとき 0、logUMax のとき 1
+    float t = saturate((log10(max(u, 1e-6)) - _LogUMin) / (_LogUMax - _LogUMin));
+    return _O3Color.rgb * _O3Weight * t * fogFlux;
 }
 
 uint pcg(uint v)
@@ -117,6 +281,23 @@ void AccumulatePerlin(uint3 dispatchThreadID : SV_DispatchThreadID)
     float n = lerp(lerp(n00, n10, s.x), lerp(n01, n11, s.x), s.y);
 
     _CloudWrite[id] = _CloudRead[id] + float2(n * _PerlinWeight, 0);
+}
+
+// 雲の高さ（R）を、今の範囲 [_HeightSrcMin, _HeightSrcMax] から [_HeightMin, _HeightMax] に引き伸ばす（初期化のときだけ）
+float _HeightSrcMin;
+float _HeightSrcMax;
+float _HeightMin;
+float _HeightMax;
+
+[numthreads(8,8,1)]
+void RemapHeight(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    int2 id = dispatchThreadID.xy;
+    if (any(id >= _Resolution)) return;
+
+    float2 cloud = _CloudRead[id];
+    float t = (cloud.x - _HeightSrcMin) / (_HeightSrcMax - _HeightSrcMin);
+    _CloudWrite[id] = float2(lerp(_HeightMin, _HeightMax, t), cloud.y);
 }
 
 [numthreads(8,8,1)]
@@ -171,9 +352,15 @@ void SweepHorizon(uint3 dispatchThreadID : SV_DispatchThreadID)
         float r = _RadiusStep * (i + 0.5);
         float2 uv = star.Position.xy + float2(r * c / _Aspect, r * s);
         float2 cloud = _CloudRead.SampleLevel(linearRepeatSampler, uv, 0);
-        float h = cloud.x;
         float n = cloud.y;
-        float slope = r / (star.Position.z - h);
+
+        // 光源 k から見た高さ: 読んだ位置の、光源からの最短距離 r' でお椀の分だけ上げる
+        // （光線上の距離 r ではなく r' を使うのは、IlluminateCloud が同じ点で測る距離と揃えるため）
+        float distanceToStar = length(WrapDelta(float2(r * c, r * s)));
+        float h = cloud.x + BowlRise(distanceToStar);
+
+        // 光源の高さ以上の面は、分母が _HDiffMin になり、slope が非常に大きい（その後ろを遮る壁）
+        float slope = r / max(star.Position.z - h, _HDiffMin);
         _ShadowMapWrite[uint3(id.x, i, id.y)] = slope > maxSlope ? float2(1,0) : float2(0,0);
         if (n <= _MinN) continue;
         maxSlope = max(maxSlope, slope);
@@ -188,36 +375,37 @@ void IlluminateCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
     
     float2 uv = (id + 0.5) / float2(_Resolution);
     float2 cloud = _CloudRead.SampleLevel(linearRepeatSampler, uv, 0);
-    if (cloud.y < _MinN)
+    if (!(cloud.y >= _MinN))
     {
         _FluxWrite[id] = 0;
         return;
     }
-    float3 norm = normalize(float3(
-        -((_CloudRead[modIndex(id + uint2(1, 0))].x - _CloudRead[modIndex(id + uint2(-1, 0))].x) / 2 * _Resolution.y),
-        -((_CloudRead[modIndex(id + uint2(0, 1))].x - _CloudRead[modIndex(id + uint2(0, -1))].x) / 2 * _Resolution.y),
-        1));
+    float2 gradient = HeightGradient(id);
     float flux = 0;
     for (uint i = 0; i < _StarCount; i++)
     {
         StarData star = _StarRead[i];
-        float2 starPos = star.Position.xy - round(star.Position.xy - uv);
-        float3 toStar = float3((starPos - uv) * float2(_Aspect, 1), star.Position.z - cloud.x);
+        // この点から光源への差（V座標系。画面の端でつなげた最短の向き）と、その距離
+        float2 toStarXY = WrapDelta((star.Position.xy - uv) * float2(_Aspect, 1));
+        float r = length(toStarXY);
+
+        // 光源 k から見た面: 高さをお椀の分だけ上げ、勾配もお椀の分だけ補正する
+        // お椀の勾配は、光源から遠ざかる向きに増える。点から光源への差 toStarXY は逆向きなので、引く
+        float hBowl = cloud.x + BowlRise(r);
+        float2 gradientBowl = gradient - 2 * _BowlDepth * toStarXY / (_MaxRadius * _MaxRadius);
+        float3 normalBowl = NormalFromGradient(gradientBowl);
+
+        float3 toStar = float3(toStarXY, star.Position.z - hBowl);
         float toStarDist = max(length(toStar), _MinDist);
         float3 toStarDir = normalize(toStar);
-        
-        float r = length(-toStar.xy);
-        float theta = atan2(-toStar.y, -toStar.x);
+
+        // 影の読み取り: 光源から見たこの点の角度 theta（光源から点への向き）
+        float theta = atan2(-toStarXY.y, -toStarXY.x);
         float2 shadowMapUv = float2((theta + 0.5*_AngleStep) / (2*PI) , r / _MaxRadius);
         float shadow = _ShadowMapRead.SampleLevel(linear_repeatU_clampV_sampler, float3(shadowMapUv, i), 0).r;
-        flux += star.Euv / (4 * PI * toStarDist * toStarDist) * max(0, dot(norm, toStarDir)) * max(shadow, _ShadowFill);
+        flux += star.Euv / (4 * PI * toStarDist * toStarDist) * max(0, dot(normalBowl, toStarDir)) * max(shadow, _ShadowFill);
     }
     _FluxWrite[id] = flux;
-    float n = _CloudRead.SampleLevel(linearRepeatSampler, uv, 0).g;
-    n = exp(-50.0 * (n-0.5) * (n-0.5));
-    float volumeFactor = flux / dot(norm, float3(0,0,1));
-    float4 color = float4(_S2Color.rgb * volumeFactor, _S2Color.a * n);
-    _NebulaWrite[id] = color;
 }
 
 [numthreads(8,8,1)]
@@ -228,5 +416,67 @@ void IlluminateVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
 [numthreads(8,8,1)]
 void Compose(uint3 dispatchThreadID : SV_DispatchThreadID)
 {
-    
+    uint2 id = dispatchThreadID.xy;
+    if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
+
+    float2 uv = (id + 0.5) / float2(_Resolution);
+    float n = _CloudRead[id].y;
+    float fogFlux = FogFlux(uv);
+
+    // 層 + 霧（水素の色）+ [O III]。反射光・手前の塵は後の工程
+    float3 color = Layers(id);
+    color += _HaColor.rgb * _FogScale * fogFlux;
+    color += OIII(fogFlux, n);
+    _NebulaWrite[id] = float4(color, 1);
+}
+
+[numthreads(8,8,1)]
+void DebugView(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    uint2 id = dispatchThreadID.xy;
+    if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
+
+    float3 color = 0;
+    float rangeWidth = _DebugRange.y - _DebugRange.x;
+
+    if (_DebugMode == DEBUG_HEIGHT)
+    {
+        // 高さ h を _DebugRange で 0〜1 に伸ばして、グレーで見る
+        float h = _CloudRead[id].x;
+        color = saturate((h - _DebugRange.x) / rangeWidth);
+    }
+    else if (_DebugMode == DEBUG_DENSITY)
+    {
+        // 密度 n を同じように見る。面なし（n が _MinN 未満）は暗い青
+        float n = _CloudRead[id].y;
+        color = n >= _MinN ? saturate((n - _DebugRange.x) / rangeWidth) : float3(0, 0, 0.2);
+    }
+    else if (_DebugMode == DEBUG_NORMAL)
+    {
+        // -1〜1 を 0〜1 に直して、N.x, N.y, N.h を R, G, B に
+        color = SurfaceNormal(id) * 0.5 + 0.5;
+    }
+    else if (_DebugMode == DEBUG_FLUX)
+    {
+        // flux は桁が大きく変わるので log10 で見る。_DebugRange は log10 の値
+        float flux = _FluxRead[id];
+        color = saturate((log10(max(flux, 1e-6)) - _DebugRange.x) / rangeWidth);
+    }
+    else if (_DebugMode == DEBUG_LAYERS)
+    {
+        color = saturate((Layers(id) - _DebugRange.x) / rangeWidth);
+    }
+    else if (_DebugMode == DEBUG_FOGFLUX)
+    {
+        float2 uv = (id + 0.5) / float2(_Resolution);
+        color = saturate((log10(max(FogFlux(uv), 1e-6)) - _DebugRange.x) / rangeWidth);
+    }
+    else if (_DebugMode == DEBUG_IONIZATION)
+    {
+        float2 uv = (id + 0.5) / float2(_Resolution);
+        float u = IonizationParameter(FogFlux(uv), _CloudRead[id].y);
+        color = saturate((log10(max(u, 1e-6)) - _DebugRange.x) / rangeWidth);
+    }
+
+    _NebulaWrite[id] = float4(color, 1);
 }

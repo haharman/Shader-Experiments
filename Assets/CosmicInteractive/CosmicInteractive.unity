@@ -1700,29 +1700,44 @@ MonoBehaviour:
   addVeilMat: {fileID: 0}
   debugRawImage: {fileID: 2119618760}
   shader: {fileID: 7200000, guid: 9ea48596e2994260b7764652fe66da74, type: 3}
-  advectCloudWeight: 0.1
+  advectCloudWeight: 0.15
   advectVeilWeight: 0
   starCount: 1
   angleCount: 2048
   radiusCount: 1024
   minN: 0.02
   minDist: 0.02
-  shadowFill: 0.3
-  cloudCellSize: 5
+  shadowFill: 0.1
+  bowlDepth: 0.1
+  hDiffMin: 0.001
+  cloudCellSize: 1
   parallaxWeight: 0
-  cloudHeightMax: 1
-  starHeight: 1.1
+  minHeight: 0.42
+  maxHeight: 0.58
+  starHeight: 0.6
   perlinSeed: 0
-  s2Thickness: 0.3
-  s2Weight: 0
-  s2Color: {r: 0.45098042, g: 1, b: 0.8459316, a: 0.3764706}
-  haThickness: 0
-  haWeight: 0
-  haColor: {r: 0, g: 0, b: 0, a: 0}
-  o3Weight: 0
-  o3Color: {r: 0, g: 0, b: 0, a: 0}
-  sunEuv: 2
+  s2Thickness: 0.005
+  s2Weight: 0.1
+  s2Color: {r: 0.8509804, g: 0, b: 0.31127638, a: 1}
+  haThickness: 0.025
+  haWeight: 0.2
+  haColor: {r: 1, g: 0.46785375, b: 0.33333337, a: 1}
+  layerSampleCount: 20
+  layerThkCutoffRatio: 3
+  nRef: 0.5
+  limbGainMax: 4.49
+  o3Weight: 1
+  o3Color: {r: 0.27735847, g: 0.7155693, b: 1, a: 0}
+  fogScale: 0.08
+  fogLodStart: 5
+  fogLevels: 5
+  fogFalloff: 1
+  logUMin: -1
+  logUMax: 3
+  sunEuv: 1
   sunOptical: 0
+  debugMode: 0
+  debugRange: {x: -2, y: 1}
 --- !u!4 &175022360
 Transform:
   m_ObjectHideFlags: 0
@@ -5400,7 +5415,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &591301803
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19191,7 +19206,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2040474500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19710,7 +19725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
