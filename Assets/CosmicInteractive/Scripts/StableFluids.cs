@@ -67,8 +67,8 @@ public class StableFluids : MonoBehaviour
         _pressurePingPong = new PingPongRenderTexture(pressureRead, pressureWrite);
 
         // Buffer
-        _inputBuffer = new ComputeBuffer(MaxInputs, Marshal.SizeOf<InputData>());
-        _inputBuffer.SetData(new InputData[MaxInputs]);
+        _inputBuffer = new ComputeBuffer(MaxInputs, Marshal.SizeOf<VelocityInputData>());
+        _inputBuffer.SetData(new VelocityInputData[MaxInputs]);
     }
 
     public RenderTexture Tick()
@@ -79,7 +79,7 @@ public class StableFluids : MonoBehaviour
         shader.SetFloat("_VelocityBlendFactor", velocityBlendFactor);
         shader.SetFloat("_Viscosity", viscosity);
 
-        if (inputSource.TryGetInput(out InputData[] input))
+        if (inputSource.TryGetInput(out VelocityInputData[] input))
         {
             shader.SetInt("_MaxInputs", MaxInputs);
             shader.SetInt("_InputCount", input.Length);

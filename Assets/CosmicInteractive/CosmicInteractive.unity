@@ -128,8 +128,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 10927826}
-  - component: {fileID: 10927825}
   - component: {fileID: 10927827}
+  - component: {fileID: 10927828}
+  - component: {fileID: 10927829}
   m_Layer: 0
   m_Name: RPLIDAR C1
   m_TagString: Untagged
@@ -137,20 +138,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &10927825
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 10927824}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa8d203c1c525114d92ff78791efa78e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LidarMinimalTest
-  portName: COM3
-  baudRate: 460800
 --- !u!4 &10927826
 Transform:
   m_ObjectHideFlags: 0
@@ -159,12 +146,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 10927824}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.58935, y: 0, z: -9.9324}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 64.97441, y: 251.58199, z: 269.9241}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 604230036}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &10927827
 MonoBehaviour:
@@ -180,6 +167,55 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RpLidarC1
   portName: COM3
   baudRate: 460800
+  firstScanTimeoutSec: 5
+  scanTimeoutSec: 1
+  stalledToFailedSec: 60
+--- !u!114 &10927828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10927824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3aec74520ae44461aa336800d3a449a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SensorInputSource
+  lidar: {fileID: 10927827}
+  angleOffsetDeg: 0
+  boardWidthMm: 6000
+  boardHeightMm: 800
+  backgroundBinDeg: 1
+  backgroundScanCount: 20
+  backgroundMarginMm: 50
+  blobGapBaseMm: 40
+  blobGapFactor: 1.5
+  minBlobPoints: 2
+  minBlobWidthMm: 35
+  maxMatchMm: 300
+  graceScans: 2
+  velocitySmoothing: 0.3
+  minSpeedMmPerSec: 250
+  radiusMm: 100
+  logTouches: 1
+--- !u!114 &10927829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10927824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efff469ad1dae44478e919f143f2411a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VelocityInputDebugView
+  sensor: {fileID: 10927828}
+  useMock: 0
+  arrowSeconds: 0.5
+  lineWidthPx: 3
+  color: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &11796730
 GameObject:
   m_ObjectHideFlags: 0
@@ -5652,6 +5688,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 664870779}
+  - {fileID: 10927826}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &627457741
@@ -5932,6 +5969,7 @@ MonoBehaviour:
   pointerRadiusPx: 100
   boidsRadiusPx: 20
   boids: {fileID: 1441507155}
+  sensor: {fileID: 10927828}
 --- !u!1 &667494609
 GameObject:
   m_ObjectHideFlags: 0
@@ -7867,7 +7905,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &873149457
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19823,4 +19861,3 @@ SceneRoots:
   - {fileID: 475418629}
   - {fileID: 1795426619}
   - {fileID: 700176947}
-  - {fileID: 10927826}
