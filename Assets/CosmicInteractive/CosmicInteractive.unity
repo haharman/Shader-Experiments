@@ -1709,7 +1709,7 @@ MonoBehaviour:
   minN: 0.02
   minDist: 0.02
   shadowFill: 0.3
-  bowlDepth: 0.1
+  bowlDepth: 4.99
   hDiffMin: 0.001
   cloudCellSize: 1
   minHeight: 0.42
@@ -1720,23 +1720,23 @@ MonoBehaviour:
   s2Weight: 0.3
   s2Color: {r: 0.8509804, g: 0, b: 0.033718213, a: 1}
   haThickness: 0.025
-  haWeight: 0.2
-  haColor: {r: 1, g: 0.33333337, b: 0.67578954, a: 1}
+  haWeight: 0.5
+  haColor: {r: 1, g: 0.42116195, b: 0.30592978, a: 1}
   layerSampleCount: 20
   layerThkCutoffRatio: 3
   nRef: 0.5
-  limbGainMax: 4.49
-  o3Weight: 3.15
-  o3Color: {r: 0, g: 0.63899803, b: 1, a: 0}
-  fogScale: 0.3
-  fogLodStart: 3.5
+  limbGainMax: 1.1
+  o3Weight: 0.45
+  o3Color: {r: 1, g: 0.59164417, b: 0.9328022, a: 0}
+  fogScale: 0.43
+  fogLodStart: 4.66
   fogLevels: 4
   fogFalloff: 1
   logUMin: -1
   logUMax: 3
   reflectionScale: 3.24
   hgG: 0.6
-  nReflect: 0.5
+  nReflect: 0.3
   opticalExtinction: {x: 20, y: 28, z: 40}
   starlightColor: {r: 0.53396225, g: 0.63458395, b: 1, a: 1}
   veilNoiseCellsY: 3
@@ -1748,7 +1748,7 @@ MonoBehaviour:
   veilHeight: 1.2
   veilExtinction: {x: 0.6, y: 1, z: 1.6}
   veilFloor: 0
-  veilGlowScale: 0.22
+  veilGlowScale: 1.36
   veilScatterN: 0.3
   veilLightLength: 0.15
   veilLightTaps: 8
@@ -5999,11 +5999,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc1b41c93b494b49982882a445355720, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputSource
-  minVelocityPx: 1
-  pointerRadiusPx: 100
-  boidsRadiusPx: 20
-  boids: {fileID: 1441507155}
-  sensor: {fileID: 10927828}
+  minVelocityPx: 0
+  pointerRadiusPx: 0
+  boidsRadiusPx: 0
+  boids: {fileID: 0}
+  sensor: {fileID: 0}
 --- !u!1 &667494609
 GameObject:
   m_ObjectHideFlags: 0

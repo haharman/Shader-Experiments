@@ -39,6 +39,7 @@ public class InputSource : MonoBehaviour
     
     public bool TryGetInput(out VelocityInputData[] input)
     {
+        /*
         input = default;
         if (Time.deltaTime <= 0f) { return false; }
 
@@ -61,6 +62,9 @@ public class InputSource : MonoBehaviour
         if (hasPointer) { input[next++] = pointerInput; }
         if (hasSensor) { sensorInput.CopyTo(input, next); }
         return input.Length > 0;
+        */
+        input = default;
+        return false;
     }
 
     /// <summary>
