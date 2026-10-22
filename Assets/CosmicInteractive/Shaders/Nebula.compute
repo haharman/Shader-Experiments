@@ -1,10 +1,12 @@
 #pragma kernel WriteGradients
 #pragma kernel AccumulatePerlin
-#pragma kernel RemapHeight
 #pragma kernel InitializeCloud
+#pragma kernel RemapCloud
 #pragma kernel InitializeVeil
 #pragma kernel AdvectCloud
 #pragma kernel AdvectVeil
+#pragma kernel SharpenCloud
+#pragma kernel SharpenVeil
 #pragma kernel SweepHorizon
 #pragma kernel IlluminateCloud
 #pragma kernel IlluminateVeil
@@ -56,6 +58,34 @@ float _DeltaTime;
 float _Aspect;
 
 // InitializeCloud
+int _DensityCellsY;  // 密度のノイズの、一番粗いオクターブの縦の格子数
+int _DensityOctaves;
+float _DensityWarp;  // ノイズの位置を歪める量（uv）
+float _DensityRidge; // 尾根の鋭さ。大きいほど細い筋になる
+uint _DensitySeed;
+
+// 密度の読み出し
+float _DensityMin; // 保存されている密度の範囲（RemapCloud が、この範囲に引き伸ばして書く）
+float _DensityMax;
+float _DensityContrast; // 1 でそのまま。大きいほど、薄い所は薄く、濃い所は濃くなって、筋が際立つ
+
+// 保存された密度を、読むときだけコントラストの強い値に変換する（RT は変えない）。
+// 範囲 [_DensityMin, _DensityMax] を 0〜1 にして S 字カーブ（0.5 を中心に、両端へ押し出す）を通し、元の範囲に戻す。
+// 0→0、0.5→0.5、1→1 は保つ。_DensityContrast が 1 なら恒等
+float ContrastDensity(float n)
+{
+    float range = max(_DensityMax - _DensityMin, 1e-6);
+    float t = saturate((n - _DensityMin) / range);
+    float p = max(_DensityContrast, 1e-3);
+    float s = t < 0.5 ? 0.5 * pow(2 * t, p) : 1 - 0.5 * pow(2 * (1 - t), p);
+    return _DensityMin + s * range;
+}
+
+// SharpenCloud / SharpenVeil
+float _CloudUnsharp; // 移流のぼやけを戻す強さ。流れが _UnsharpFlowReference のときの値。0 で何もしない
+float _VeilUnsharp;  // 同上（Veil）
+float _UnsharpFlowReference; // 1フレームの移動量がこの値（ピクセル）のとき、強さの倍率が 1
+float _UnsharpMaxScale;      // 強さの倍率の上限
 
 // AdvectCloud
 SamplerState linearRepeatSampler;
@@ -229,7 +259,7 @@ float3 LayerGlow(float2 uv, float2 normalXY, float thickness, float3 color, floa
 // s2 と ha の層を足し、周縁増光を掛けたもの。面なしは 0
 float3 Layers(uint2 id)
 {
-    float n = _CloudRead[id].y;
+    float n = ContrastDensity(_CloudRead[id].y);
     if (!(n >= _MinN)) return 0;
 
     float2 uv = (id + 0.5) / float2(_Resolution);
@@ -305,14 +335,19 @@ float GradientNoise(float2 p, int2 period, uint seed)
     return lerp(lerp(n00, n10, s.x), lerp(n01, n11, s.x), s.y);
 }
 
+// ---- Veil と Cloud の密度で共通のノイズ ----
+// 1. Fbm（細かさの違うノイズを重ねる）→ 2. WarpedFbm（位置を歪める）→ 3. RidgeNoise（尾根にする）
+// の順に組み合わせる。Veil は 2 まで、Cloud の密度は 3 まで使う
+
 // fBm: オクターブ o ごとに格子の数を 2^o 倍、重みを 0.5^o 倍にして足す。戻り値は 0〜1
-float VeilFbm(float2 uv, uint seed)
+// cellsY は一番粗いオクターブの、縦の格子数
+float Fbm(float2 uv, int cellsY, int octaves, uint seed)
 {
-    int2 baseCells = int2(round(_VeilNoiseCellsY * _Aspect), _VeilNoiseCellsY);
+    int2 baseCells = int2(round(cellsY * _Aspect), cellsY);
     float sum = 0;
     float weightSum = 0;
     float weight = 1;
-    for (int o = 0; o < _VeilOctaves; o++)
+    for (int o = 0; o < octaves; o++)
     {
         int2 cells = baseCells << o;
         sum += weight * GradientNoise(uv * cells, cells, seed + o);
@@ -320,6 +355,21 @@ float VeilFbm(float2 uv, uint seed)
         weight *= 0.5;
     }
     return saturate(0.5 + 0.5 * (sum / weightSum) / 0.707);
+}
+
+// ドメインワープ: ノイズの位置を、別の fBm でずらしてから読む。糸が絡まったような、うねる形になる
+// warp はずらす量（uv）。戻り値は 0〜1
+float WarpedFbm(float2 uv, int cellsY, int octaves, uint seed, float warp)
+{
+    float2 offset = (float2(Fbm(uv, cellsY, octaves, seed), Fbm(uv, cellsY, octaves, seed + 100)) - 0.5) * warp;
+    return Fbm(uv + offset, cellsY, octaves, seed + 200);
+}
+
+// リッジ: 0〜1 の値を、0.5 を頂点にした尾根（0.5 で 1、0 と 1 で 0）に折り返す。細い筋になる
+// sharpness が大きいほど、尾根が細くなる（1 で折り返しだけ）
+float RidgeNoise(float f, float sharpness)
+{
+    return pow(1 - abs(2 * f - 1), sharpness);
 }
 
 int2 _PerlinResolution;
@@ -361,21 +411,24 @@ void AccumulatePerlin(uint3 dispatchThreadID : SV_DispatchThreadID)
     _CloudWrite[id] = _CloudRead[id] + float2(n * _PerlinWeight, 0);
 }
 
-// 雲の高さ（R）を、今の範囲 [_HeightSrcMin, _HeightSrcMax] から [_HeightMin, _HeightMax] に引き伸ばす（初期化のときだけ）
+// 雲の高さ（R）と密度（G）を、今の範囲 [Src Min, Src Max] から [Min, Max] に引き伸ばす（初期化のときだけ）
 float _HeightSrcMin;
 float _HeightSrcMax;
 float _HeightMin;
 float _HeightMax;
+float _DensitySrcMin;
+float _DensitySrcMax;
 
 [numthreads(8,8,1)]
-void RemapHeight(uint3 dispatchThreadID : SV_DispatchThreadID)
+void RemapCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
 {
     int2 id = dispatchThreadID.xy;
     if (any(id >= _Resolution)) return;
 
     float2 cloud = _CloudRead[id];
-    float t = (cloud.x - _HeightSrcMin) / (_HeightSrcMax - _HeightSrcMin);
-    _CloudWrite[id] = float2(lerp(_HeightMin, _HeightMax, t), cloud.y);
+    float height = lerp(_HeightMin, _HeightMax, (cloud.x - _HeightSrcMin) / (_HeightSrcMax - _HeightSrcMin));
+    float density = lerp(_DensityMin, _DensityMax, (cloud.y - _DensitySrcMin) / max(_DensitySrcMax - _DensitySrcMin, 1e-6));
+    _CloudWrite[id] = float2(height, density);
 }
 
 [numthreads(8,8,1)]
@@ -383,8 +436,12 @@ void InitializeCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
 {
     int2 id = dispatchThreadID.xy;
     if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
-    
-    
+
+    // 密度（G）に、高さとは独立したノイズを書く。高さ（R）はそのまま残す。画面の端でつながる
+    // ワープした fBm を尾根にして、うねる細い筋にする。値の範囲は RemapCloud が引き伸ばす
+    float2 uv = (id + 0.5) / float2(_Resolution);
+    float f = WarpedFbm(uv, max(_DensityCellsY, 2), _DensityOctaves, _DensitySeed, _DensityWarp);
+    _CloudWrite[id] = float2(_CloudRead[id].x, RidgeNoise(f, _DensityRidge));
 }
 
 [numthreads(8,8,1)]
@@ -395,9 +452,7 @@ void InitializeVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
 
     float2 uv = (id + 0.5) / float2(_Resolution);
 
-    // ドメインワープ: ノイズの位置を、別のノイズでずらす。糸が絡まったような、煙の形になる
-    float2 warp = (float2(VeilFbm(uv, _VeilSeed), VeilFbm(uv, _VeilSeed + 100)) - 0.5) * _VeilWarp;
-    float f = VeilFbm(uv + warp, _VeilSeed + 200);
+    float f = WarpedFbm(uv, _VeilNoiseCellsY, _VeilOctaves, _VeilSeed, _VeilWarp);
 
     // _VeilCutoff より低い所は塵なし。残りを 0〜_VeilScale に引き伸ばす
     _VeilWrite[id] = _VeilScale * saturate((f - _VeilCutoff) / (1 - _VeilCutoff));
@@ -425,6 +480,99 @@ void AdvectVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
     _VeilWrite[id] = _VeilRead.SampleLevel(linearRepeatSampler, uv - velocity * _DeltaTime, 0);
 }
 
+// ---- 移流のぼやけの抑制（アンシャープマスク）----
+// 移流は、1フレームごとにバイリニア補間で読むので、毎回少しずつ平均化されてぼやける。
+// 移流のあとに、周囲との差（元の値 - ぼかした値）を足して、細部を戻す。
+// 3x3 近傍の最小・最大を超えないよう切るので、輪郭が縁取られず、繰り返しても発散しない
+
+// 3x3 近傍の、重み付き平均（1-2-1 の重み）と最小・最大
+struct Neighborhood
+{
+    float blurSum;
+    float lo;
+    float hi;
+};
+
+Neighborhood NewNeighborhood()
+{
+    Neighborhood nb;
+    nb.blurSum = 0;
+    nb.lo = 1e30;
+    nb.hi = -1e30;
+    return nb;
+}
+
+void Accumulate(inout Neighborhood nb, float value, float weight)
+{
+    nb.blurSum += value * weight;
+    nb.lo = min(nb.lo, value);
+    nb.hi = max(nb.hi, value);
+}
+
+// 元の値 + sharpness * (元の値 - ぼかした値)。近傍の範囲に切る
+float Unsharp(float center, Neighborhood nb, float sharpness)
+{
+    float blurred = nb.blurSum / 16.0; // 重みの合計は 16
+    return clamp(center + sharpness * (center - blurred), nb.lo, nb.hi);
+}
+
+// 1-2-1 の重み（x と y の積）
+float KernelWeight(int2 d)
+{
+    return (2 - abs(d.x)) * (2 - abs(d.y));
+}
+
+// ぼやけの量は、1フレームの移動量（ピクセル）にほぼ比例する。流れがなければ移流で平均化されず、ぼやけない。
+// なので、移流と同じ式で出した移動量に比例して、強さの倍率を決める。流れがない所は 0、流れが速い所は大きくなる
+float UnsharpFlowScale(float2 uv, float depthSpeed)
+{
+    float2 shiftPx = _VelocityRead.SampleLevel(linearRepeatSampler, uv, 0) * depthSpeed * _DeltaTime * _Resolution;
+    return min(length(shiftPx) / max(_UnsharpFlowReference, 1e-6), _UnsharpMaxScale);
+}
+
+// Cloud: 密度（G）だけを戻す。高さ（R）は法線と流れの速さに効くので触らない
+[numthreads(8,8,1)]
+void SharpenCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    int2 id = dispatchThreadID.xy;
+    if (any(id >= _Resolution)) return;
+
+    float2 cloud = _CloudRead[id];
+    Neighborhood nb = NewNeighborhood();
+    for (int dy = -1; dy <= 1; dy++)
+    {
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            int2 d = int2(dx, dy);
+            Accumulate(nb, _CloudRead[modIndex(id + d)].y, KernelWeight(d));
+        }
+    }
+    float2 uv = (id + 0.5) / float2(_Resolution);
+    float strength = _CloudUnsharp * UnsharpFlowScale(uv, DepthSpeed(cloud.x));
+    _CloudWrite[id] = float2(cloud.x, Unsharp(cloud.y, nb, strength));
+}
+
+[numthreads(8,8,1)]
+void SharpenVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    int2 id = dispatchThreadID.xy;
+    if (any(id >= _Resolution)) return;
+
+    Neighborhood nb = NewNeighborhood();
+    for (int dy = -1; dy <= 1; dy++)
+    {
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            int2 d = int2(dx, dy);
+            Accumulate(nb, _VeilRead[modIndex(id + d)], KernelWeight(d));
+        }
+    }
+    float2 uv = (id + 0.5) / float2(_Resolution);
+    float strength = _VeilUnsharp * UnsharpFlowScale(uv, DepthSpeed(_VeilHeight));
+    _VeilWrite[id] = Unsharp(_VeilRead[id], nb, strength);
+}
+
+
 [numthreads(64,1,1)]
 void SweepHorizon(uint3 dispatchThreadID : SV_DispatchThreadID)
 {
@@ -441,7 +589,7 @@ void SweepHorizon(uint3 dispatchThreadID : SV_DispatchThreadID)
         float r = _RadiusStep * (i + 0.5);
         float2 uv = star.Position.xy + float2(r * c / _Aspect, r * s);
         float2 cloud = _CloudRead.SampleLevel(linearRepeatSampler, uv, 0);
-        float n = cloud.y;
+        float n = ContrastDensity(cloud.y);
 
         // 光源 k から見た高さ: 読んだ位置の、光源からの最短距離 r' でお椀の分だけ上げる
         // （光線上の距離 r ではなく r' を使うのは、IlluminateCloud が同じ点で測る距離と揃えるため）
@@ -505,6 +653,7 @@ void IlluminateCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
     
     float2 uv = (id + 0.5) / float2(_Resolution);
     float2 cloud = _CloudRead.SampleLevel(linearRepeatSampler, uv, 0);
+    cloud.y = ContrastDensity(cloud.y);
     if (!(cloud.y >= _MinN))
     {
         _FluxWrite[id] = 0;
@@ -656,7 +805,7 @@ void Compose(uint3 dispatchThreadID : SV_DispatchThreadID)
     if (id.x >= _Resolution.x || id.y >= _Resolution.y) return;
 
     float2 uv = (id + 0.5) / float2(_Resolution);
-    float n = _CloudRead[id].y;
+    float n = ContrastDensity(_CloudRead[id].y);
     float fogFlux = FogFlux(uv);
 
     // 一番奥の星空の上に、層 + 霧（水素の色）+ [O III] + 反射光 を重ね、手前の塵で吸収し、塵の散乱光を足す
@@ -699,7 +848,7 @@ void DebugView(uint3 dispatchThreadID : SV_DispatchThreadID)
     else if (_DebugMode == DEBUG_DENSITY)
     {
         // 密度 n を同じように見る。面なし（n が _MinN 未満）は暗い青
-        float n = _CloudRead[id].y;
+        float n = ContrastDensity(_CloudRead[id].y);
         color = n >= _MinN ? saturate((n - _DebugRange.x) / rangeWidth) : float3(0, 0, 0.2);
     }
     else if (_DebugMode == DEBUG_NORMAL)
@@ -725,7 +874,7 @@ void DebugView(uint3 dispatchThreadID : SV_DispatchThreadID)
     else if (_DebugMode == DEBUG_IONIZATION)
     {
         float2 uv = (id + 0.5) / float2(_Resolution);
-        float u = IonizationParameter(FogFlux(uv), _CloudRead[id].y);
+        float u = IonizationParameter(FogFlux(uv), ContrastDensity(_CloudRead[id].y));
         color = saturate((log10(max(u, 1e-6)) - _DebugRange.x) / rangeWidth);
     }
     else if (_DebugMode == DEBUG_DUST_PATH)

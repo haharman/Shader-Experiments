@@ -5,11 +5,11 @@ using Random = UnityEngine.Random;
 
 public class Boids : MonoBehaviour
 {
-    private const int MaxSamplePoints = 100;
+    private const int MaxSamplePoints = 200;
     
     [SerializeField] private Boid boidInstance;
     [SerializeField] private ComputeShader shader;
-    [SerializeField, Range(1, 100)] private int boidsCount = 10;
+    [SerializeField, Range(1, 200)] private int boidsCount = 10;
     [SerializeField] private SensorInputSource inputSource;
     [Header("Boidが生成、移動可能な領域")]
     [SerializeField] private Vector3 minBounds;

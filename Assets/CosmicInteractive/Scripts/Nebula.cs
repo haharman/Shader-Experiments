@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
@@ -31,6 +32,7 @@ public class Nebula : MonoBehaviour
     
     // Const
     private const int MaxStars = 10;
+    private const int DensitySeedOffset = 7919; // 密度のノイズのシードを、高さからずらす量
     
     // Inspector
     [SerializeField] private Material addVeilMat;
@@ -47,10 +49,18 @@ public class Nebula : MonoBehaviour
     [SerializeField] private float shadowFill = 0.05f;
     [SerializeField] private float bowlDepth = 0.3f; // お椀で、光源から最も遠い点が上がる量
     [SerializeField] private float hDiffMin = 0.001f; // 光源の高さ - 面の高さ の下限
-    [SerializeField] private float cloudCellSize = 0.05f;
+    [FormerlySerializedAs("cloudCellSize")]
+    [SerializeField] private float heightCellSize = 0.05f; // 高さのノイズの、画面の高さあたりのセル数
+    [SerializeField] private float densityCellSize = 3f; // 密度のノイズの、一番粗いオクターブの画面の高さあたりのセル数（整数に丸める）
+    [SerializeField, Range(1, 8)] private int densityOctaves = 4; // 密度のノイズを重ねる層の数
+    [SerializeField] private float densityWarp = 0.3f; // 密度のノイズの位置を歪める量（uv）
+    [SerializeField, Min(1f)] private float densityRidge = 1.5f; // 尾根の鋭さ。大きいほど細い筋になる
 
     [SerializeField] private float minHeight = 0.42f; // 雲の高さの最小値
     [SerializeField] private float maxHeight = 0.58f; // 雲の高さの最大値
+    [SerializeField] private float minDensity = 0.1f; // 雲の密度の最小値
+    [SerializeField] private float maxDensity = 0.9f; // 雲の密度の最大値
+    [SerializeField, Min(1f)] private float densityContrast = 2f; // 密度を読むときのコントラスト。1 でそのまま、大きいほど筋が際立つ
     [SerializeField] private float starHeight;
 
     [Header("Nebula")] 
@@ -85,6 +95,12 @@ public class Nebula : MonoBehaviour
     [SerializeField] private Vector3 opticalExtinction = new Vector3(20f, 28f, 40f); // dustPath に掛ける RGB の係数
     [SerializeField] private Color starlightColor = new Color(0.72f, 0.78f, 1f); // 星の光の色（白青）
     
+    [Header("移流のぼやけの抑制（アンシャープマスク）")]
+    [SerializeField, Min(0f)] private float cloudUnsharp = 0.3f; // 雲の密度。流れが unsharpFlowReference のときの強さ。0 で何もしない
+    [SerializeField, Min(0f)] private float veilUnsharp = 0.3f;  // 手前の塵の密度。同上
+    [SerializeField, Min(0.001f)] private float unsharpFlowReference = 0.5f; // 1フレームの移動量（ピクセル）がこの値のとき、強さが上の値になる。流れがなければ強さは 0
+    [SerializeField, Min(0f)] private float unsharpMaxScale = 4f; // 流れが速い所の、強さの倍率の上限
+
     [Header("Veil")]
     [SerializeField] private int veilNoiseCellsY = 3; // 一番粗いオクターブの縦の格子数
     [SerializeField] private uint veilSeed = 1;
@@ -113,11 +129,13 @@ public class Nebula : MonoBehaviour
     // Kernel
     private Kernel2D _writeGradients;
     private Kernel2D _accumulatePerlin;
-    private Kernel2D _remapHeight;
+    private Kernel2D _remapCloud;
     private Kernel2D _initializeCloud;
     private Kernel2D _initializeVeil;
     private Kernel2D _advectCloud;
     private Kernel2D _advectVeil;
+    private Kernel2D _sharpenCloud;
+    private Kernel2D _sharpenVeil;
     private Kernel2D _sweepHorizon;
     private Kernel2D _illuminateCloud;
     private Kernel2D _illuminateVeil;
@@ -153,11 +171,13 @@ public class Nebula : MonoBehaviour
         // Kernel
         _writeGradients = new Kernel2D(shader, "WriteGradients");
         _accumulatePerlin = new Kernel2D(shader, "AccumulatePerlin");
-        _remapHeight = new Kernel2D(shader, "RemapHeight");
+        _remapCloud = new Kernel2D(shader, "RemapCloud");
         _initializeCloud = new Kernel2D(shader, "InitializeCloud");
         _initializeVeil = new Kernel2D(shader, "InitializeVeil");
         _advectCloud = new Kernel2D(shader, "AdvectCloud");
         _advectVeil = new Kernel2D(shader, "AdvectVeil");
+        _sharpenCloud = new Kernel2D(shader, "SharpenCloud");
+        _sharpenVeil = new Kernel2D(shader, "SharpenVeil");
         _sweepHorizon = new Kernel2D(shader, "SweepHorizon");
         _illuminateCloud = new Kernel2D(shader, "IlluminateCloud");
         _illuminateVeil = new Kernel2D(shader, "IlluminateVeil");
@@ -171,7 +191,7 @@ public class Nebula : MonoBehaviour
         cloudRead.Create();
         cloudWrite.Create();
         _cloudPingPong = new PingPongRenderTexture(cloudRead, cloudWrite);
-        BakePerlinNoise(cloudRead, cloudCellSize);
+        BakePerlinNoise(cloudRead, heightCellSize);
         debugRawImage.texture = _cloudPingPong.read;
         
         var veilRead = new RenderTexture(_res.x, _res.y, 0, RenderTextureFormat.RFloat){ enableRandomWrite = true };
@@ -239,7 +259,8 @@ public class Nebula : MonoBehaviour
         
         // ノイズ作成
         Perlin(100f, 1f);
-        RemapHeight();
+        InitializeCloud();
+        RemapCloud();
         InitializeVeil();
         //Perlin(20f, 0.6f);
         //Perlin(10f, 0.1f);
@@ -263,30 +284,55 @@ public class Nebula : MonoBehaviour
     }
 
     /// <summary>
-    /// 雲の高さ（cloud の R）を、実際の最小値・最大値を使って minHeight〜maxHeight に引き伸ばす。初期化のときだけ呼ぶ
+    /// 雲の密度（cloud の G）に、高さとは独立した、ワープした fBm の尾根のノイズを書く。高さ（R）はそのまま。初期化のときだけ呼ぶ
     /// </summary>
-    private void RemapHeight()
+    private void InitializeCloud()
     {
-        // GPU の値を CPU に読み戻して、高さの最小値と最大値を求める
+        shader.SetInts("_Resolution", _res.x, _res.y);
+        shader.SetFloat("_Aspect", (float)_res.x / _res.y);
+        shader.SetInt("_DensityCellsY", Mathf.RoundToInt(densityCellSize));
+        shader.SetInt("_DensityOctaves", densityOctaves);
+        shader.SetFloat("_DensityWarp", densityWarp);
+        shader.SetFloat("_DensityRidge", densityRidge);
+        shader.SetInt("_DensitySeed", perlinSeed + DensitySeedOffset); // 高さと同じ勾配にならないよう、シードをずらす
+
+        _initializeCloud.SetTexture("_CloudRead", _cloudPingPong.read);
+        _initializeCloud.SetTexture("_CloudWrite", _cloudPingPong.write);
+        _initializeCloud.Dispatch(_res);
+        _cloudPingPong.Swap();
+    }
+
+    /// <summary>
+    /// 雲の高さ（cloud の R）を minHeight〜maxHeight に、密度（G）を minDensity〜maxDensity に、
+    /// それぞれ実際の最小値・最大値を使って引き伸ばす。初期化のときだけ呼ぶ
+    /// </summary>
+    private void RemapCloud()
+    {
+        // GPU の値を CPU に読み戻して、高さと密度の最小値・最大値を求める
         var request = AsyncGPUReadback.Request(_cloudPingPong.read);
         request.WaitForCompletion();
-        float srcMin = float.MaxValue;
-        float srcMax = float.MinValue;
+        var src = new Vector4(float.MaxValue, float.MinValue, float.MaxValue, float.MinValue); // 高さの最小・最大、密度の最小・最大
         foreach (var cloud in request.GetData<Vector2>())
         {
-            srcMin = Mathf.Min(srcMin, cloud.x);
-            srcMax = Mathf.Max(srcMax, cloud.x);
+            src.x = Mathf.Min(src.x, cloud.x);
+            src.y = Mathf.Max(src.y, cloud.x);
+            src.z = Mathf.Min(src.z, cloud.y);
+            src.w = Mathf.Max(src.w, cloud.y);
         }
 
         shader.SetInts("_Resolution", _res.x, _res.y);
-        shader.SetFloat("_HeightSrcMin", srcMin);
-        shader.SetFloat("_HeightSrcMax", srcMax);
+        shader.SetFloat("_HeightSrcMin", src.x);
+        shader.SetFloat("_HeightSrcMax", src.y);
         shader.SetFloat("_HeightMin", minHeight);
         shader.SetFloat("_HeightMax", maxHeight);
+        shader.SetFloat("_DensitySrcMin", src.z);
+        shader.SetFloat("_DensitySrcMax", src.w);
+        shader.SetFloat("_DensityMin", minDensity);
+        shader.SetFloat("_DensityMax", maxDensity);
 
-        _remapHeight.SetTexture("_CloudRead", _cloudPingPong.read);
-        _remapHeight.SetTexture("_CloudWrite", _cloudPingPong.write);
-        _remapHeight.Dispatch(_res);
+        _remapCloud.SetTexture("_CloudRead", _cloudPingPong.read);
+        _remapCloud.SetTexture("_CloudWrite", _cloudPingPong.write);
+        _remapCloud.Dispatch(_res);
         _cloudPingPong.Swap();
     }
 
@@ -363,6 +409,7 @@ public class Nebula : MonoBehaviour
         shader.SetFloat("_RadiusStep", maxRadius / radiusCount);
         shader.SetInt("_StarCount", starCount);
         shader.SetFloat("_MinN", minN);
+        shader.SetFloat("_DensityContrast", densityContrast);
         shader.SetFloat("_MinDist", minDist);
         shader.SetFloat("_ShadowFill", shadowFill);
         shader.SetFloat("_BowlDepth", bowlDepth);
@@ -394,9 +441,6 @@ public class Nebula : MonoBehaviour
         shader.SetInt("_DebugMode", (int)debugMode);
         shader.SetVector("_DebugRange", debugRange);
 
-        _initializeCloud.SetTexture("_CloudWrite", _cloudPingPong.read);
-        _initializeCloud.Dispatch(_res);
-        
         _advectCloud.SetTexture("_VelocityRead", velocityField);
         _advectCloud.SetTexture("_CloudRead", _cloudPingPong.read);
         _advectCloud.SetTexture("_CloudWrite", _cloudPingPong.write);
@@ -407,9 +451,11 @@ public class Nebula : MonoBehaviour
         _advectVeil.SetTexture("_VeilWrite", _veilPingPong.write);
         _advectVeil.Dispatch(_res);
         _veilPingPong.Swap();
+        SharpenAdvected(_sharpenVeil, _veilPingPong, velocityField, "_VeilRead", "_VeilWrite", "_VeilUnsharp", veilUnsharp);
         
         
         _cloudPingPong.Swap();
+        SharpenAdvected(_sharpenCloud, _cloudPingPong, velocityField, "_CloudRead", "_CloudWrite", "_CloudUnsharp", cloudUnsharp);
 
         _sweepHorizon.SetTexture("_CloudRead", _cloudPingPong.read);
         _sweepHorizon.SetTexture("_ShadowMapWrite", _shadowMap);
@@ -472,7 +518,7 @@ public class Nebula : MonoBehaviour
                 float py = (float)y / h * cellsY;
                 int i = (y * w + x) * 2;
                 data[i]     = Mathf.PerlinNoise(px, py);
-                data[i + 1] = Mathf.PerlinNoise(px + 123.4f, py + 567.8f);
+                data[i + 1] = 0f; // 密度（G）は InitializeCloud が GPU で書く
             }
         }
 
@@ -482,6 +528,23 @@ public class Nebula : MonoBehaviour
 
         Graphics.Blit(texture, target);
         Object.Destroy(texture);
+    }
+
+    /// <summary>
+    /// 移流のあとに、アンシャープマスクでぼやけを戻す。強さは、流れが速い所ほど大きい。read を読んで write に書き、入れ替える。強さが 0 なら何もしない
+    /// </summary>
+    private void SharpenAdvected(Kernel2D kernel, PingPongRenderTexture target, RenderTexture velocityField, string readName, string writeName, string strengthName, float strength)
+    {
+        if (strength <= 0f) return;
+
+        shader.SetFloat(strengthName, strength);
+        shader.SetFloat("_UnsharpFlowReference", unsharpFlowReference);
+        shader.SetFloat("_UnsharpMaxScale", unsharpMaxScale);
+        kernel.SetTexture("_VelocityRead", velocityField);
+        kernel.SetTexture(readName, target.read);
+        kernel.SetTexture(writeName, target.write);
+        kernel.Dispatch(_res);
+        target.Swap();
     }
 
     /// <summary>

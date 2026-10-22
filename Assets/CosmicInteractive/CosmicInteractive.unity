@@ -198,8 +198,8 @@ MonoBehaviour:
   maxMatchMm: 300
   graceSeconds: 0.3
   velocitySmoothing: 1
-  minSpeedMmPerSec: 250
-  radiusMm: 100
+  minSpeedMmPerSec: 100
+  radiusMm: 50
   logTouches: 1
 --- !u!114 &10927829
 MonoBehaviour:
@@ -208,7 +208,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 10927824}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: efff469ad1dae44478e919f143f2411a, type: 3}
   m_Name: 
@@ -1742,9 +1742,16 @@ MonoBehaviour:
   shadowFill: 0.3
   bowlDepth: 4.99
   hDiffMin: 0.001
-  cloudCellSize: 1
+  heightCellSize: 1
+  densityCellSize: 7
+  densityOctaves: 5
+  densityWarp: 0.15
+  densityRidge: 4.37
   minHeight: 0.42
   maxHeight: 0.58
+  minDensity: 0.5
+  maxDensity: 1.2
+  densityContrast: 10
   starHeight: 0.6
   perlinSeed: 2
   s2Thickness: 0.005
@@ -1770,6 +1777,10 @@ MonoBehaviour:
   nReflect: 0.3
   opticalExtinction: {x: 20, y: 28, z: 40}
   starlightColor: {r: 0.53396225, g: 0.63458395, b: 1, a: 1}
+  cloudUnsharp: 0.3
+  veilUnsharp: 0.3
+  unsharpFlowReference: 0.5
+  unsharpMaxScale: 4
   veilNoiseCellsY: 3
   veilSeed: 4
   veilOctaves: 5
@@ -14623,7 +14634,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Boids
   boidInstance: {fileID: 8187384762781553640, guid: 494fc928d0448fa4e9c4f9a78fd3eb34, type: 3}
   shader: {fileID: 7200000, guid: 3c4e9158c4c7bc64e9320809fd923abc, type: 3}
-  boidsCount: 100
+  boidsCount: 200
   inputSource: {fileID: 10927828}
   minBounds: {x: -50, y: -10, z: -4}
   maxBounds: {x: 50, y: 10, z: -15}
@@ -19635,7 +19646,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2040474500
 MonoBehaviour:
   m_ObjectHideFlags: 0
