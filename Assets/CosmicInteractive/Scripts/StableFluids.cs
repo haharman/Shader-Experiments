@@ -7,7 +7,7 @@ public class StableFluids : MonoBehaviour
     private const int MaxInputs = 1000;
 
     // Inspector
-    [SerializeField] private InputSource inputSource;
+    [SerializeField] private SensorInputSource inputSource;
     [SerializeField] private ComputeShader shader;
     [SerializeField, Range(1, 1000)] private int pressureJacobiCount;
     [SerializeField, Range(1, 1000)] private int diffuseJacobiCount;
@@ -38,7 +38,7 @@ public class StableFluids : MonoBehaviour
     {
         if (inputSource == null)
         {
-            Debug.LogError("[StableFluids] InputSource を割り当ててください");
+            Debug.LogError("[StableFluids] SensorInputSource を割り当ててください");
             return;
         }
 
@@ -79,7 +79,7 @@ public class StableFluids : MonoBehaviour
         shader.SetFloat("_VelocityBlendFactor", velocityBlendFactor);
         shader.SetFloat("_Viscosity", viscosity);
 
-        if (inputSource.TryGetInput(out VelocityInputData[] input))
+        if (inputSource.TryGetVelocityInput(out VelocityInputData[] input))
         {
             shader.SetInt("_MaxInputs", MaxInputs);
             shader.SetInt("_InputCount", input.Length);

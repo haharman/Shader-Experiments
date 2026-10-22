@@ -100,6 +100,9 @@ public class Nebula : MonoBehaviour
     [SerializeField] private float veilLightLength = 0.15f; // 塵が自分の影を落とす距離
     [SerializeField] private int veilLightTaps = 8; // その距離を読む点の数
     [SerializeField] private float veilLightExtinction = 8f; // 光源の方の塵の量に掛ける係数
+
+    [Header("Starfield")]
+    [SerializeField] private int starFieldCount; // 0 なら星空は描かない
     
     [Header("Debug")]
     [SerializeField] private float sunEuv;
@@ -118,6 +121,7 @@ public class Nebula : MonoBehaviour
     private Kernel2D _sweepHorizon;
     private Kernel2D _illuminateCloud;
     private Kernel2D _illuminateVeil;
+    private Kernel2D _bakeStarField;
     private Kernel2D _compose;
     private Kernel2D _debugView;
     
@@ -132,6 +136,7 @@ public class Nebula : MonoBehaviour
     private RenderTexture _veilLight; // 手前の塵の散乱光
     private RenderTexture _fish; // 魚だけを描いた絵（fishCamera の出力）
     private RenderTexture _nebula; // 色 完成品
+    private RenderTexture _starField; // StarField（更新しない）
     
     
     private RenderTexture _spawnFieldRt; // 星団がスポーンしやすい位置
@@ -156,6 +161,7 @@ public class Nebula : MonoBehaviour
         _sweepHorizon = new Kernel2D(shader, "SweepHorizon");
         _illuminateCloud = new Kernel2D(shader, "IlluminateCloud");
         _illuminateVeil = new Kernel2D(shader, "IlluminateVeil");
+        _bakeStarField = new Kernel2D(shader, "BakeStarField");
         _compose = new Kernel2D(shader, "Compose");
         _debugView = new Kernel2D(shader, "DebugView");
         
@@ -188,6 +194,7 @@ public class Nebula : MonoBehaviour
         _reflection = new RenderTexture(_res.x, _res.y, 0, RenderTextureFormat.ARGBHalf){ enableRandomWrite = true };
         _veilLight = new RenderTexture(_res.x, _res.y, 0, RenderTextureFormat.ARGBHalf){ enableRandomWrite = true };
         _nebula = new RenderTexture(_res.x, _res.y, 0, RenderTextureFormat.ARGBHalf){ enableRandomWrite = true };
+        _starField = new RenderTexture(_res.x, _res.y, 0, RenderTextureFormat.ARGBHalf){ enableRandomWrite = true };
 
         _gradient.Create();
         _flux.Create();
@@ -205,6 +212,7 @@ public class Nebula : MonoBehaviour
             fishCamera.targetTexture = _fish;
         }
         _nebula.Create();
+        _starField.Create();
         
         ClearRt(_gradient);
         
@@ -235,6 +243,23 @@ public class Nebula : MonoBehaviour
         InitializeVeil();
         //Perlin(20f, 0.6f);
         //Perlin(10f, 0.1f);
+
+        // StarField
+        BakeStarField();
+    }
+
+    /// <summary>
+    /// StarField に starFieldCount 個の星を1ピクセルずつ焼き込む。初期化のときだけ呼ぶ
+    /// </summary>
+    private void BakeStarField()
+    {
+        ClearRt(_starField);
+        if (starFieldCount <= 0) return;
+
+        shader.SetInts("_Resolution", _res.x, _res.y);
+        shader.SetInt("_StarFieldCount", starFieldCount);
+        _bakeStarField.SetTexture("_StarFieldWrite", _starField);
+        _bakeStarField.Dispatch(new Vector2Int(starFieldCount, 1));
     }
 
     /// <summary>
@@ -409,6 +434,7 @@ public class Nebula : MonoBehaviour
         _compose.SetTexture("_ReflectionRead", _reflection);
         _compose.SetTexture("_VeilRead", _veilPingPong.read);
         _compose.SetTexture("_FishRead", _fish);
+        _compose.SetTexture("_StarFieldRead", _starField);
         _compose.SetTexture("_VeilLightRead", _veilLight);
         _compose.SetTexture("_NebulaWrite", _nebula);
         _compose.Dispatch(_res);
@@ -491,5 +517,7 @@ public class Nebula : MonoBehaviour
         _veilLight = null;
         if(_nebula != null)_nebula.Release();
         _nebula = null;
+        if(_starField != null)_starField.Release();
+        _starField = null;
     }
 }

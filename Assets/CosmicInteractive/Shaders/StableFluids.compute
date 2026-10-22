@@ -7,6 +7,7 @@
 
 struct InputData
 {
+    int id; // C# の VelocityInputData と同じ並び（Id が先頭）。流体では使わない
     float2 position;
     float2 velocity;
     float radius;

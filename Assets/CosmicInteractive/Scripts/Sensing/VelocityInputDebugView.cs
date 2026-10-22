@@ -24,7 +24,7 @@ public class VelocityInputDebugView : MonoBehaviour
         VelocityInputData[] inputs = null;
         bool hasInput;
         if (useMock) { inputs = MockInputs(); hasInput = true; }
-        else if (sensor != null) { hasInput = sensor.TryGetInput(out inputs); }
+        else if (sensor != null) { hasInput = sensor.TryGetVelocityInput(out inputs); }
         else { hasInput = false; }
 
         GUI.color = color;
@@ -101,6 +101,6 @@ public class VelocityInputDebugView : MonoBehaviour
         float t = Time.time;
         Vector2 position = new Vector2(0.5f + 0.3f * Mathf.Cos(t), 0.5f + 0.3f * Mathf.Sin(t));
         Vector2 velocity = new Vector2(-Mathf.Sin(t), Mathf.Cos(t)) * 0.3f; // 位置の微分の向き（円の接線）
-        return new[] { new VelocityInputData(position, velocity, 0.1f) };
+        return new[] { new VelocityInputData(-1, position, velocity, 0.1f) };
     }
 }

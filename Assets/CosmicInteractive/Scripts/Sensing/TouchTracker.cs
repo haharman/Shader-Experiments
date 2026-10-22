@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +14,8 @@ public class TrackedBlob
 }
 
 /// <summary>
-/// 周ごとの塊を、前の周の塊と近い順に対応づけてIDを付け、移動量から速度を出す
+/// 周ごとの塊を、前の周の塊と近い順に対応づけてIDを付け、移動量から速度を出す。
+/// 見えなくなってから graceSeconds 秒を超えたトラックは消え、そのあとに現れた塊は新しいIDになる
 /// </summary>
 public class TouchTracker
 {
@@ -32,7 +34,12 @@ public class TouchTracker
 
     private readonly List<TrackedBlob> _tracks = new List<TrackedBlob>();
     private readonly List<Pair> _pairs = new List<Pair>();
-    private int _nextId = 1;
+    private readonly Func<int> _newId; // 新しいIDを返す。複数のトラッカーでIDが重ならないよう、持ち主から受け取る
+
+    public TouchTracker(Func<int> newId)
+    {
+        _newId = newId ?? throw new ArgumentNullException(nameof(newId));
+    }
 
     public IReadOnlyList<TrackedBlob> Tracks => _tracks;
 
@@ -44,7 +51,7 @@ public class TouchTracker
         _tracks.Clear();
     }
 
-    public void Update(List<Blob> blobs, float time, float maxMatchMm, int graceScans, float velocitySmoothing)
+    public void Update(List<Blob> blobs, float time, float maxMatchMm, float graceSeconds, float velocitySmoothing)
     {
         // 前の周の「新しい」印を消す
         foreach (var track in _tracks) { track.IsNew = false; }
@@ -73,7 +80,12 @@ public class TouchTracker
             var track = _tracks[pair.Track];
             Vector2 center = blobs[pair.Blob].Center;
             float dt = time - track.LastSeenTime;
-            if (dt > 0f)
+            if (track.MissedScans > 0)
+            {
+                // 見えない間に動いた分は、速度として信頼できない（離して別の所を触った跳びが、速度になってしまう）
+                track.VelocityMm = Vector2.zero;
+            }
+            else if (dt > 0f)
             {
                 // 今の周の差だけから出した速度は、位置のゆれがそのまま出る。前の速度との平均を取ってなめらかにする
                 Vector2 rawVelocity = (center - track.PositionMm) / dt;
@@ -84,12 +96,12 @@ public class TouchTracker
             track.MissedScans = 0;
         }
 
-        // 4. 対応づかなかったトラックは、猶予を超えたら消す。後ろから消すと、前の添字がずれない
+        // 4. 対応づかなかったトラックは、最後に見えてから graceSeconds 秒を超えたら消す。後ろから消すと、前の添字がずれない
         for (int t = _tracks.Count - 1; t >= 0; t--)
         {
             if (trackMatched[t]) continue;
             _tracks[t].MissedScans++;
-            if (_tracks[t].MissedScans > graceScans)
+            if (time - _tracks[t].LastSeenTime > graceSeconds)
             {
                 if (LogEvents) { Debug.Log($"[TouchTracker] lost id={_tracks[t].Id} positionMm={_tracks[t].PositionMm}"); }
                 _tracks.RemoveAt(t);
@@ -102,7 +114,7 @@ public class TouchTracker
             if (blobMatched[b]) continue;
             _tracks.Add(new TrackedBlob
             {
-                Id = _nextId++,
+                Id = _newId(),
                 PositionMm = blobs[b].Center,
                 VelocityMm = Vector2.zero,
                 LastSeenTime = time,

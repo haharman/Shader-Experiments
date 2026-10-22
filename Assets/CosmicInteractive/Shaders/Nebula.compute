@@ -8,6 +8,7 @@
 #pragma kernel SweepHorizon
 #pragma kernel IlluminateCloud
 #pragma kernel IlluminateVeil
+#pragma kernel BakeStarField
 #pragma kernel Compose
 #pragma kernel DebugView
 
@@ -37,6 +38,8 @@ RWTexture2D<float4> _ReflectionWrite;
 Texture2D<float4> _FishRead; // 魚（雲の手前、Veil の後ろ）を別カメラで描いた絵。A = 魚がある所
 Texture2D<float4> _VeilLightRead;
 RWTexture2D<float4> _VeilLightWrite;
+Texture2D<float4> _StarFieldRead;
+RWTexture2D<float4> _StarFieldWrite;
 Texture2D<float4> _NebulaRead;
 RWTexture2D<float4> _NebulaWrite;
 
@@ -48,6 +51,7 @@ RWStructuredBuffer<StarData> _StarWrite;
 float _ViewerHeight;          // 観測者の高さ
 float _FlowReferenceDistance; // 観測者からの距離がこの値の面で、DepthSpeed が 1 になる
 int2 _Resolution;
+int _StarFieldCount; // 焼き込む星の数
 float _DeltaTime;
 float _Aspect;
 
@@ -589,6 +593,62 @@ void IlluminateVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
     _VeilLightWrite[id] = float4(light * scatter * _VeilGlowScale * _StarlightColor.rgb, 1);
 }
 
+#define STAR_MAX_RADIUS 4.0 // 明るさ 1 の星の半径（ピクセル）
+#define SPIKE_MAX_LENGTH 30.0 // 明るさ 1 の星の回折スパイクの長さ（ピクセル）
+#define SPIKE_GAIN 0.2 // スパイクの根元の明るさ（星の明るさに対する倍率）
+// StarField: 1スレッド = 1個の星。星の番号から位置・明るさ・色を決めて、1ピクセルに書く
+[numthreads(8,8,1)]
+void BakeStarField(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    uint i = dispatchThreadID.x;
+    if (dispatchThreadID.y != 0 || i >= (uint)_StarFieldCount) return;
+
+    uint h0 = pcg(i);
+    uint h1 = pcg(h0);
+    uint h2 = pcg(h1);
+
+    uint2 pixel = uint2(h0 % (uint)_Resolution.x, h1 % (uint)_Resolution.y);
+    float brightness = pow(h2 / 4294967295.0, 3.0); // 暗い星が多く、明るい星が少ない
+    float temperature = brightness;                 // 明るい星ほど青白い（0 = 赤っぽい, 1 = 青白い）
+    float3 tint = lerp(float3(1.0, 0.8, 0.65), float3(0.7, 0.8, 1.0), temperature);
+
+    // 回折スパイク: 縦と、そこから ±60° の 3本の直線を、星から両向きに伸ばして 6本にする。
+    // 長さは明るさの2乗に比例（暗い星は短くて目立たない）。根元から先へ (1 - t)^2 で薄くなる
+    // 星の本体より先に書く。あとで本体の円が根元を上書きする
+    float spikeLength = brightness * brightness * SPIKE_MAX_LENGTH;
+    for (int lineIndex = 0; lineIndex < 3; lineIndex++)
+    {
+        float angle = PI * 0.5 + lineIndex * PI / 3.0; // 90°, 150°, 210°（210° は 30° の反対向き。両向きに描くので 3本で 6方向）
+        float2 dir = float2(cos(angle), sin(angle));
+        for (int stepIndex = 1; stepIndex <= (int)ceil(spikeLength); stepIndex++)
+        {
+            float t = stepIndex / spikeLength;
+            if (t > 1.0) break;
+            float3 spikeColor = tint * brightness * SPIKE_GAIN * (1.0 - t) * (1.0 - t);
+            for (int side = -1; side <= 1; side += 2)
+            {
+                int2 sp = (int2)pixel + (int2)round(dir * stepIndex * side);
+                if (sp.x < 0 || sp.y < 0 || sp.x >= _Resolution.x || sp.y >= _Resolution.y) continue;
+                _StarFieldWrite[sp] = float4(spikeColor, 1);
+            }
+        }
+    }
+
+    // 明るさ 0.9〜1 の星は、明るさに比例して大きくする（0.9 で半径 0 = 1ピクセル、1 で半径 STAR_MAX_RADIUS ピクセル）
+    float radius = saturate((brightness - 0.9) / 0.1) * STAR_MAX_RADIUS;
+    int r = (int)ceil(radius);
+    for (int dy = -r; dy <= r; dy++)
+    {
+        for (int dx = -r; dx <= r; dx++)
+        {
+            if (dx * dx + dy * dy > radius * radius) continue;
+            int2 p = (int2)pixel + int2(dx, dy);
+            if (p.x < 0 || p.y < 0 || p.x >= _Resolution.x || p.y >= _Resolution.y) continue;
+            _StarFieldWrite[p] = float4(tint * brightness, 1);
+        }
+    }
+}
+
 [numthreads(8,8,1)]
 void Compose(uint3 dispatchThreadID : SV_DispatchThreadID)
 {
@@ -599,8 +659,9 @@ void Compose(uint3 dispatchThreadID : SV_DispatchThreadID)
     float n = _CloudRead[id].y;
     float fogFlux = FogFlux(uv);
 
-    // 層 + 霧（水素の色）+ [O III] + 反射光 を、手前の塵で吸収し、塵の散乱光を足す
-    float3 color = Layers(id);
+    // 一番奥の星空の上に、層 + 霧（水素の色）+ [O III] + 反射光 を重ね、手前の塵で吸収し、塵の散乱光を足す
+    float3 color = _StarFieldRead[id].rgb;
+    color += Layers(id);
     color += _HaColor.rgb * _FogScale * fogFlux;
     color += OIII(fogFlux, n);
     color += _ReflectionRead[id].rgb;
