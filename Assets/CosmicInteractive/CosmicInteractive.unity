@@ -183,18 +183,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SensorInputSource
   lidar: {fileID: 10927827}
-  boidsRadiusPx: 5
+  cam: {fileID: 1841727494}
+  boidsRadiusPx: 7
   boids: {fileID: 1441507155}
-  angleOffsetDeg: 0
-  boardWidthMm: 2000
-  boardHeightMm: 800
+  angleOffsetDeg: 180
+  boardWidthMm: 3250
+  boardHeightMm: 1200
   backgroundBinDeg: 1
   backgroundScanCount: 20
   backgroundMarginMm: 50
   blobGapBaseMm: 40
   blobGapFactor: 1.5
   minBlobPoints: 2
-  minBlobWidthMm: 35
+  minBlobWidthMm: 20
   maxMatchMm: 300
   graceSeconds: 0.3
   velocitySmoothing: 1
@@ -1734,7 +1735,7 @@ MonoBehaviour:
   shader: {fileID: 7200000, guid: 9ea48596e2994260b7764652fe66da74, type: 3}
   viewerHeight: 2
   flowReferenceDistance: 0.25
-  starCount: 1
+  solarBodies: {fileID: 1641842317}
   angleCount: 2048
   radiusCount: 1024
   minN: 0.02
@@ -1754,18 +1755,21 @@ MonoBehaviour:
   densityContrast: 10
   starHeight: 0.6
   perlinSeed: 2
+  seedTransitionEnabled: 1
+  seedInterval: 180
+  seedBlendDuration: 60
   s2Thickness: 0.005
   s2Weight: 0.3
-  s2Color: {r: 0.8509804, g: 0, b: 0.033718213, a: 1}
+  s2Color: {r: 0.8509804, g: 0.77865136, b: 0, a: 1}
   haThickness: 0.025
   haWeight: 0.5
-  haColor: {r: 1, g: 0.42116195, b: 0.30592978, a: 1}
+  haColor: {r: 1, g: 0.4413029, b: 0, a: 1}
   layerSampleCount: 20
   layerThkCutoffRatio: 3
   nRef: 0.5
   limbGainMax: 1.1
   o3Weight: 0.45
-  o3Color: {r: 1, g: 0.59164417, b: 0.9328022, a: 0}
+  o3Color: {r: 0.5921569, g: 0.9842345, b: 1, a: 0}
   fogScale: 0.43
   fogLodStart: 4.66
   fogLevels: 4
@@ -1795,6 +1799,12 @@ MonoBehaviour:
   veilLightLength: 0.15
   veilLightTaps: 8
   veilLightExtinction: 8
+  fishVeilCompensation: 0.8
+  fishVeilCompensationMax: 8
+  veilSeedTransitionEnabled: 1
+  veilSeedInterval: 20
+  veilSeedBlendDuration: 0.1
+  particleScale: 1
   starFieldCount: 10000
   sunEuv: 1
   sunOptical: 3
@@ -2500,14 +2510,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Bootstrapper
   stableFluids: {fileID: 1611301588}
   particles: {fileID: 1363980085}
-  dye: {fileID: 475418630}
   textDye: {fileID: 1795426620}
   boids: {fileID: 1441507155}
   nebula: {fileID: 175022359}
+  solarBodies: {fileID: 1641842317}
+  letterBoxCamera: {fileID: 1841727497}
   resolution: {x: 2560, y: 800}
   velocityDownsample: 10
-  image: {fileID: 873637760}
-  addMat: {fileID: 2100000, guid: 361b05b34b767a74bbe5e3f4879cb694, type: 2}
 --- !u!4 &230858937
 Transform:
   m_ObjectHideFlags: 0
@@ -3251,7 +3260,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3853268898807207900, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -8053,7 +8062,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &873637760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10527,7 +10536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3853268898807207900, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -11186,7 +11195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3853268898807207900, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -12029,7 +12038,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3853268898807207900, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -12871,7 +12880,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3853268898807207900, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -13614,7 +13623,7 @@ MonoBehaviour:
   slowColor: {r: 0, g: 0, b: 0, a: 0}
   fastColor: {r: 1, g: 1, b: 1, a: 0}
   slowVelocity: 0
-  fastVelocity: 700
+  fastVelocity: 500
 --- !u!1 &1367390597
 GameObject:
   m_ObjectHideFlags: 0
@@ -15898,7 +15907,7 @@ MonoBehaviour:
   pressureJacobiCount: 256
   diffuseJacobiCount: 233
   velocityBlendFactor: 0.3
-  viscosity: 0.0001
+  viscosity: 0.001
 --- !u!1 &1614306365
 GameObject:
   m_ObjectHideFlags: 0
@@ -16134,6 +16143,169 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   model: {fileID: 0}
   escapeVelocity: {x: 0, y: 0, z: 0}
+--- !u!1 &1641842316
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1641842318}
+  - component: {fileID: 1641842317}
+  m_Layer: 0
+  m_Name: SolarBodies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1641842317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641842316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2327cb53e21b5d6489a507b15a56220f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SolarBodies
+  bodyPrefab: {fileID: 647784611595761672, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+  inputSource: {fileID: 10927828}
+  poolSize: 9
+  displayCamera: {fileID: 1841727494}
+  worldZ: 0
+  minMass: 1.5
+  maxMass: 6
+  massBias: 2
+  minTemperature: 1500
+  maxTemperature: 30000
+  temperatureCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxEuv: 1
+  maxOptical: 3
+  euvCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 0.125
+      inSlope: 0.75
+      outSlope: 0.75
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 3
+      outSlope: 3
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  opticalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 0.25
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  lightFadeInTime: 0.3
+  scaleMotionInfluence: 1
+  followStrength: 10
+  gravity: 0.8
+  exponent: 1
+  softening: 0.05
+  drag: 0.15
+  maxSpeed: 3
+  maxScale: 2
+  minScale: 0.05
+  farRadiusV: 0.5
+  vanishRadiusV: 0.03
+  scaleExponent: 1
+  scaleSmoothing: 8
+  despawnMarginV: 4.07
+  nearCenterRadiusV: 0.1
+--- !u!4 &1641842318
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641842316}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6848518934625186374}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1643849513
 GameObject:
   m_ObjectHideFlags: 0
@@ -17814,6 +17986,7 @@ GameObject:
   - component: {fileID: 1841727494}
   - component: {fileID: 1841727493}
   - component: {fileID: 1841727496}
+  - component: {fileID: 1841727497}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -17919,7 +18092,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -17940,6 +18113,18 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &1841727497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841727492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9eacd089c9ec4d058dd484d29032175e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LetterBoxCamera
 --- !u!1 &1844570868
 GameObject:
   m_ObjectHideFlags: 0
@@ -18480,7 +18665,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3853268898807207900, guid: dfa2d0b30acdb9a4f89e00c4380268ab, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -18642,6 +18827,55 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   model: {fileID: 0}
   escapeVelocity: {x: 0, y: 0, z: 0}
+--- !u!1 &1900000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1900000002}
+  - component: {fileID: 1900000003}
+  m_Layer: 0
+  m_Name: Global Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1900000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1900000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 1
+  priority: 1
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 3f7a9c1d5b2e4a8f9d6c0b1e7a4d2c85, type: 2}
 --- !u!1 &1901653186
 GameObject:
   m_ObjectHideFlags: 0
@@ -20174,7 +20408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -20243,6 +20477,72 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   model: {fileID: 0}
   escapeVelocity: {x: 0, y: 0, z: 0}
+--- !u!1001 &6848518934625186373
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1641842318}
+    m_Modifications:
+    - target: {fileID: 2393373600817137959, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+      propertyPath: m_Name
+      value: SolarBody
+      objectReference: {fileID: 0}
+    - target: {fileID: 2393373600817137959, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223267614415807119, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223267614415807119, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223267614415807119, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223267614415807119, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223267614415807119, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223267614415807119, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223267614415807119, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223267614415807119, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223267614415807119, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223267614415807119, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+--- !u!4 &6848518934625186374 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8223267614415807119, guid: 0b911f31c8fa1ca4784901a386d5a7ac, type: 3}
+  m_PrefabInstance: {fileID: 6848518934625186373}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7217144491361963958
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20326,3 +20626,5 @@ SceneRoots:
   - {fileID: 475418629}
   - {fileID: 1795426619}
   - {fileID: 700176947}
+  - {fileID: 1641842318}
+  - {fileID: 1900000002}

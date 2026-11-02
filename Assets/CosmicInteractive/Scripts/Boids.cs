@@ -45,7 +45,7 @@ public class Boids : MonoBehaviour
     [SerializeField] private float baseWaveSpeed = 5f;      // 通常の波の速さ
     [SerializeField] private float maxWaveSpeed = 40f;      // EscapeVelocity が maxEscapeVelocity のときの波の速さ
     [SerializeField] private float maxAmplitudeScale = 2f;  // 同じときの振幅の倍率（通常は 1）
-    [SerializeField] private float waveSpeedSmoothing = 5f; // 大きいほど、速さの変化にすばやく追従する
+    [SerializeField] private float waveSpeedSmoothing = 5f; // 大きいほど、速さの変化にすばやく追従する（光り方も同じ）
 
     [Header("メッシュ")]
     [SerializeField] private float maxScale = 1f;
@@ -130,6 +130,17 @@ public class Boids : MonoBehaviour
         maxDisplayArea = center + new Vector2(halfWidth, halfHeight);
     }
 
+    private static bool IsFinite(Vector2 v) { return float.IsFinite(v.x) && float.IsFinite(v.y); }
+
+    private static bool IsFinite(Vector3 v) { return float.IsFinite(v.x) && float.IsFinite(v.y) && float.IsFinite(v.z); }
+
+    /// <summary>ワールドの XY が、表示される領域の中にあるか</summary>
+    private bool IsInsideDisplayArea(Vector2 position)
+    {
+        return position.x >= minDisplayArea.x && position.x <= maxDisplayArea.x
+            && position.y >= minDisplayArea.y && position.y <= maxDisplayArea.y;
+    }
+
     private void Refresh()
     {
         for (int i = transform.childCount - 1; i >= 0; i--)
@@ -176,7 +187,25 @@ public class Boids : MonoBehaviour
                 touchPositions[p] = minDisplayArea + points[p].PositionUv * displaySize;
             }
         }
-        
+
+        // テレポート: 触れた点があるとき、表示範囲の外にいる魚を、一番近い点へ移す（奥行き z は変えない）。
+        // 位置は後続の処理（近傍の計算と Escape）より先に確定させたいので、魚ごとのループとは別に行う
+        if (touchPositions != null)
+        {
+            foreach (var boid in _boids)
+            {
+                var current = boid.transform.position;
+                if (IsInsideDisplayArea(current)) continue;
+
+                var nearest = touchPositions[0];
+                foreach (var touchPosition in touchPositions)
+                {
+                    if (Vector2.Distance(touchPosition, current) < Vector2.Distance(nearest, current)) { nearest = touchPosition; }
+                }
+                boid.transform.position = new Vector3(nearest.x, nearest.y, current.z);
+            }
+        }
+
         for (int i = 0; i < boidsCount; i++)
         {
             Vector3 targetVelocity = Vector3.zero;
@@ -201,8 +230,9 @@ public class Boids : MonoBehaviour
                 
                 if (dist < separationRadius)
                 {
-                    var dir = (pos - _boids[j].transform.position).normalized;
-                    separationVelocitySum += dir / dist;// * dist);
+                    // 完全に同じ位置だと向きが決まらず 0/0 で NaN になるので、ランダムな向きと下限距離で逃がす
+                    var dir = dist > 1e-6f ? (pos - _boids[j].transform.position) / dist : Random.onUnitSphere;
+                    separationVelocitySum += dir / Mathf.Max(dist, 1e-3f);
                     separationCount++;
                 }
 
@@ -227,6 +257,12 @@ public class Boids : MonoBehaviour
                     if (dist < escapeRadius)
                     {
                         Vector3 escapeAngle = new Vector3(pos.x - touchPosition.x, pos.y - touchPosition.y, 0f).normalized;
+                        if (escapeAngle == Vector3.zero)
+                        {
+                            // 点の真上（テレポート直後など）は向きが決まらないので、ランダムな向きに逃がす
+                            Vector2 random = Random.insideUnitCircle.normalized;
+                            escapeAngle = new Vector3(random.x, random.y, 0f);
+                        }
                         _boids[i].escapeVelocity += escapeAngle * Mathf.Min(Mathf.Clamp01(escapeRadius/dist) * escapeWeight, maxEscapeVelocity);
                         escape = true;
                     }
@@ -252,7 +288,10 @@ public class Boids : MonoBehaviour
             }
 
             // Upsteam
-            Vector3 upstreamVelocity = new Vector3(_sampleVelocities[i].x, _sampleVelocities[i].y, 0) * -1f;
+            // 速度場が NaN/Inf を返しても、位置まで壊れないよう 0 として扱う
+            Vector2 sampled = _sampleVelocities[i];
+            if (!IsFinite(sampled)) { sampled = Vector2.zero; }
+            Vector3 upstreamVelocity = new Vector3(sampled.x, sampled.y, 0) * -1f;
             targetVelocity += upstreamVelocity * upstreamWeight;
             
             // Containment
@@ -266,6 +305,8 @@ public class Boids : MonoBehaviour
             _boids[i].velocity = v.normalized * Mathf.Clamp(v.magnitude, minVelocity, maxVelocity);
             
             // EscapeVelocityの更新
+            if (!IsFinite(_boids[i].velocity)) { _boids[i].velocity = Vector3.zero; }
+            if (!IsFinite(_boids[i].escapeVelocity)) { _boids[i].escapeVelocity = Vector3.zero; }
             _boids[i].escapeVelocity *= escapeDecay;
             if(_boids[i].velocity.magnitude < 0.1f) _boids[i].velocity = Vector3.zero;
             
@@ -273,7 +314,8 @@ public class Boids : MonoBehaviour
             var escapeRatio = maxEscapeVelocity > 0f ? Mathf.Clamp01(_boids[i].escapeVelocity.magnitude / maxEscapeVelocity) : 0f;
             var waveSpeed = Mathf.Lerp(baseWaveSpeed, maxWaveSpeed, escapeRatio);
             var amplitudeScale = Mathf.Lerp(1f, maxAmplitudeScale, escapeRatio);
-            _boids[i].AdvanceWave(waveSpeed, amplitudeScale, waveSpeedSmoothing, Time.deltaTime);
+            // 光り方: 逃げ速度のみ。波打ちと同じ escapeRatio（0~1）を渡す
+            _boids[i].AdvanceWave(waveSpeed, amplitudeScale, escapeRatio, waveSpeedSmoothing, Time.deltaTime);
             
             // Rotationの更新
             if (escape)
@@ -298,6 +340,7 @@ public class Boids : MonoBehaviour
             // Positionの更新
             var position = pos;
             position += (_boids[i].velocity + _boids[i].escapeVelocity) * Time.deltaTime;
+            if (!IsFinite(position)) { position = pos; }
             _boids[i].transform.position = position;
             _uvs[i] = ((Vector2)position - minDisplayArea) / (maxDisplayArea - minDisplayArea);
 

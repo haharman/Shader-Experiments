@@ -15,6 +15,10 @@ Shader "Custom/Fish"
         _HighlightCenter("Highlight Center", Range(0, 1)) = 0.5
         _HighlightWidth("Highlight Width", Range(0.01, 0.5)) = 0.04
         _HighlightStrength("Highlight Strength", Range(0, 1)) = 0.25
+        [HDR] _GlowColor("Glow Color", Color) = (0.45, 0.75, 1.0, 1)
+        _GlowIntensity("Glow Intensity (HDR)", Range(0, 16)) = 2
+        _GlowCurve("Glow Curve", Range(0.1, 4)) = 1
+        _Glow("Glow (from Boid, 0-1)", Range(0, 1)) = 0
     }
 
     SubShader
@@ -67,6 +71,10 @@ Shader "Custom/Fish"
                 float _HighlightCenter;
                 float _HighlightWidth;
                 float _HighlightStrength;
+                half4 _GlowColor;
+                float _GlowIntensity;                        // 光り方が 1 のときの明るさ（HDR なので 1 を超えてよい）
+                float _GlowCurve;                            // 速さに対する立ち上がり（1 = 線形、大きいほど速い時だけ光る）
+                float _Glow;                                 // 速さに対応した 0~1。Boid が個体ごとに渡す
             CBUFFER_END
 
             Varyings vert(Attributes IN)
@@ -115,6 +123,10 @@ Shader "Custom/Fish"
                 half3 albedo = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv).rgb * _BaseColor.rgb;
                 // 色は A 掛け済み。帯の白は A に入れず rgb に足す（背景は (1 - alphaBase) のまま見える）
                 half3 color = albedo * alphaBase + h * half3(1, 1, 1);
+
+                // 全身の青白い発光。自発光なので A に関係なく全身に足す（A は変えないので背景は透けたまま）
+                float glow = pow(saturate(_Glow), _GlowCurve);
+                color += _GlowColor.rgb * (_GlowIntensity * glow);
                 return half4(color, alphaBase);
             }
             ENDHLSL

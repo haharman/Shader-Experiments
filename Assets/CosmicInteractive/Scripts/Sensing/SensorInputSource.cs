@@ -51,7 +51,8 @@ public class SensorInputSource : MonoBehaviour
     }
 
     [SerializeField] private RpLidarC1 lidar; // 未割り当てなら、センサーの入力は入らない（ポインターとBoidsだけ動く）
-
+    [SerializeField] private Camera cam;
+    
     [Header("Boids")]
     [SerializeField] private float boidsRadiusPx;
     [SerializeField] private Boids boids;
@@ -92,6 +93,8 @@ public class SensorInputSource : MonoBehaviour
     private readonly List<Blob> _pointerBlobs = new List<Blob>();
     private readonly List<BoardPoint> _boardPoints = new List<BoardPoint>();
     private readonly List<Blob> _blobs = new List<Blob>();
+    private int _pointCacheFrame = -1; // TryGetPointInput の結果をキャッシュしたフレーム
+    private PointInputData[] _pointCache;
     private int _foregroundCount; // 直近の周で、背景差分を通った点の数（ログ用）
     private float _nextLogTime;
 
@@ -143,7 +146,7 @@ public class SensorInputSource : MonoBehaviour
 
         // Boidsの入力。半径はpx→UV(高さ基準)
         var (pos, vel) = boids.GetInputs();
-        var boidsRadius = boidsRadiusPx / Screen.height;
+        var boidsRadius = boidsRadiusPx / cam.pixelRect.height;
         var pointerInputs = _pointer.Velocities;
 
         // out 引数は条件式の中だと代入が保証されないので、先に null で用意する
@@ -164,25 +167,36 @@ public class SensorInputSource : MonoBehaviour
     }
 
     /// <summary>
-    /// 星用。新しく触れた点を取り出す（1フレームに1回呼ぶ）。
-    /// センサーの点とポインターの点を合わせて返し、取り出した点は空にする
+    /// 星用。新しく触れた点を取り出す。
+    /// センサーの点とポインターの点を合わせて返す。
+    /// 同じフレームの中では、何回呼んでも同じ結果を返す（Boids と SolarBodies など、複数の呼び出し元が同じ点を受け取れる）
     /// </summary>
     public bool TryGetPointInput(out PointInputData[] input)
     {
-        input = default;
+        if (_pointCacheFrame != Time.frameCount)
+        {
+            _pointCacheFrame = Time.frameCount;
+            _pointCache = TakePointInput();
+        }
+        input = _pointCache;
+        return input != null;
+    }
 
+    /// <summary>新しく触れた点を取り出し、元の点は空にする。点がなければ null</summary>
+    private PointInputData[] TakePointInput()
+    {
         // out 引数は条件式の中だと代入が保証されないので、先に null で用意する
         PointInputData[] sensorInput = null;
         var hasSensor = TryGetSensorPointInput(out sensorInput);
         var pointerPoints = _pointer.Points;
-        if (!hasSensor && pointerPoints.Count == 0) { return false; }
+        if (!hasSensor && pointerPoints.Count == 0) { return null; }
 
         var sensorCount = hasSensor ? sensorInput.Length : 0;
-        input = new PointInputData[sensorCount + pointerPoints.Count];
-        if (hasSensor) { sensorInput.CopyTo(input, 0); }
-        pointerPoints.CopyTo(input, sensorCount);
+        var points = new PointInputData[sensorCount + pointerPoints.Count];
+        if (hasSensor) { sensorInput.CopyTo(points, 0); }
+        pointerPoints.CopyTo(points, sensorCount);
         pointerPoints.Clear();
-        return true;
+        return points;
     }
 
     /// <summary>センサーの流体用入力。次の周が届くまでは、同じ値を毎フレーム返す</summary>
@@ -217,10 +231,12 @@ public class SensorInputSource : MonoBehaviour
         _pointerBlobs.Clear();
         if (Pointer.current != null && Pointer.current.press.isPressed)
         {
-            var uv = Pointer.current.position.ReadValue();
-            uv.x /= Screen.width;
-            uv.y /= Screen.height;
-            _pointerBlobs.Add(new Blob(ToBoardMm(uv), 0f, 1));
+            Rect r = cam.pixelRect;
+            var screenPos = Pointer.current.position.ReadValue();
+            float u = (screenPos.x - r.x) / r.width;
+            float v = (screenPos.y - r.y) / r.height;
+            if (u >= 0f && u <= 1f && v >= 0f && v <= 1f)
+                _pointerBlobs.Add(new Blob(ToBoardMm(new Vector2(u, v)), 0f, 1));
         }
 
         // ポインターは1つしかないので、距離で対応づける必要はない（素早く動かしても同じIDのまま）
@@ -264,7 +280,9 @@ public class SensorInputSource : MonoBehaviour
 
     /// <summary>
     /// 点を板座標（mm。x右・y下、原点はセンサーの回転中心）に変換し、黒板の範囲内の前景だけを _boardPoints に残す。
-    /// 並びは入力のまま（角度の昇順）
+    /// 並びは、取り付けのずれを引いた角度の昇順。
+    /// センサーの1周は生の角度 0° で区切られているが、板は取り付け次第でそこをまたぐ。
+    /// そこで、継ぎ目を引いた角度 0°（板の反対側）に置き直して並べ、板の中で塊が分かれないようにする
     /// </summary>
     private void ToBoardPoints(LidarPoint[] points)
     {
@@ -278,13 +296,20 @@ public class SensorInputSource : MonoBehaviour
             if (!_background.IsForeground(p, backgroundMarginMm)) continue;
             _foregroundCount++;
 
-            float a = (p.Angle - angleOffsetDeg) * Mathf.Deg2Rad;
+            float a = Mathf.Repeat(p.Angle - angleOffsetDeg, 360f) * Mathf.Deg2Rad;
             float x = p.Distance * Mathf.Sin(a);
             float y = -p.Distance * Mathf.Cos(a);
             if (x < -halfWidth || x > halfWidth || y < 0f || y > boardHeightMm) continue;
 
-            _boardPoints.Add(new BoardPoint(new Vector2(x, y), p.Distance, p.Angle * Mathf.Deg2Rad));
+            _boardPoints.Add(new BoardPoint(new Vector2(x, y), p.Distance, a));
         }
+
+        _boardPoints.Sort(CompareByAngle);
+    }
+
+    private static int CompareByAngle(BoardPoint a, BoardPoint b)
+    {
+        return a.AngleRad.CompareTo(b.AngleRad);
     }
 
     /// <summary>追跡中のトラックを、流体用の入力と星用の点にして、source に並べ直す。センサーもポインターも共通</summary>

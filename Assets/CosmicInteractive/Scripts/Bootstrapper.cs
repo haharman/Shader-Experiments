@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// ScriptableObjectからパラメーターを受け取り、Initializeする
@@ -10,17 +9,15 @@ public class Bootstrapper : MonoBehaviour
 {
     [SerializeField] private StableFluids stableFluids;
     [SerializeField] private Particles particles;
-    [SerializeField] private Dye dye;
     [SerializeField] private TextDye textDye;
     [SerializeField] private Boids boids;
     [SerializeField] private Nebula nebula;
+    [SerializeField] private SolarBodies solarBodies;
+    [SerializeField] private LetterBoxCamera letterBoxCamera;
     [SerializeField] private Vector2Int resolution;
     [SerializeField, Min(1)] private int velocityDownsample;
-    [SerializeField] private RawImage image; 
-    [SerializeField] private Material addMat;
 
     private bool _initialized;
-    private RenderTexture _combined;
 
     private void Start()
     {
@@ -33,11 +30,6 @@ public class Bootstrapper : MonoBehaviour
             Debug.LogError("[Bootstrapper] Particles を割り当ててください");
             return;
         }
-        if (dye == null)
-        {
-            Debug.LogError("[Bootstrapper] Dye を割り当ててください");
-            return;
-        }
         if (textDye == null)
         {
             Debug.LogError("[Bootstrapper] TextDye を割り当ててください");
@@ -47,39 +39,30 @@ public class Bootstrapper : MonoBehaviour
         {
             Debug.LogError("[Bootstrapper] Boids を割り当ててください");
         }
+        if (letterBoxCamera == null)
+        {
+            Debug.LogError("[Bootstrapper] LetterBoxCamera を割り当ててください");
+        }
 
         _initialized = true;
         
         stableFluids.Initialize(resolution / velocityDownsample);
         particles.Initialize(resolution);
         textDye.Initialize(resolution);
-        dye.Initialize(resolution);
         boids.Initialize(resolution);
         nebula.Initialize(resolution);
-        _combined = new RenderTexture(resolution.x, resolution.y, 0, RenderTextureFormat.ARGB32);
-        image.texture = _combined;
+        letterBoxCamera.Initialize(resolution);
+        if (solarBodies != null) { solarBodies.Initialize(resolution); }
     }
 
     private void Update()
     {
         if (!_initialized) return;
         RenderTexture velocityField = stableFluids.Tick();
-        RenderTexture dyeTexture = dye.Tick(velocityField, Time.deltaTime);
         textDye.Tick(velocityField, Time.deltaTime);
         RenderTexture particleTexture = particles.Tick(velocityField, Time.deltaTime);
         boids.Tick(velocityField);
-        nebula.Tick(velocityField);
-        //RenderTexture nebulaeTexture = nebulae.Tick(velocityField);
-
-        Graphics.Blit(dyeTexture, _combined);
-        Graphics.Blit(particleTexture, _combined, addMat);
-        //Graphics.Blit(nebulaeTexture, _combined, addMat);
+        nebula.Tick(velocityField, particleTexture);
+        if (solarBodies != null) { solarBodies.Tick(); }
     }
-
-    private void OnDestroy()
-    {
-        if(_combined != null) _combined.Release();
-        _combined = null;
-    }
-    
 }

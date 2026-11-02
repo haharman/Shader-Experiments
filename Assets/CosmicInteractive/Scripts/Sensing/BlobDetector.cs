@@ -12,7 +12,7 @@ public readonly struct BoardPoint
     }
     public readonly Vector2 Position; // 板座標[mm]。x右・y下、原点はセンサーの回転中心
     public readonly float Distance;   // センサーからの距離[mm]
-    public readonly float AngleRad;   // センサーが測った角度[ラジアン]（取り付けのずれを引く前）
+    public readonly float AngleRad;   // 取り付けのずれを引いた角度[ラジアン]。0〜2π。0（継ぎ目）は板の反対側にある
 }
 
 /// <summary>隣り合う点をまとめた塊</summary>

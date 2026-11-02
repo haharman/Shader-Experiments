@@ -3,6 +3,8 @@
 #pragma kernel InitializeCloud
 #pragma kernel RemapCloud
 #pragma kernel InitializeVeil
+#pragma kernel BlendCloud
+#pragma kernel BlendVeil
 #pragma kernel AdvectCloud
 #pragma kernel AdvectVeil
 #pragma kernel SharpenCloud
@@ -29,8 +31,12 @@ Texture2D<float2> _GradientRead;
 RWTexture2D<float2> _GradientWrite;
 Texture2D<float2> _CloudRead;
 RWTexture2D<float2> _CloudWrite;
+Texture2D<float2> _CloudNextRead;       // BlendCloud: 寄せ先の雲
+RWTexture2D<float2> _CloudBlendWrite;   // BlendCloud: 混ぜた雲
 Texture2D<float> _VeilRead;
 RWTexture2D<float> _VeilWrite;
+Texture2D<float> _VeilNextRead;      // BlendVeil: 寄せ先の塵
+RWTexture2D<float> _VeilBlendWrite;  // BlendVeil: 混ぜた塵
 Texture2DArray<float2> _ShadowMapRead;
 RWTexture2DArray<float2> _ShadowMapWrite;
 Texture2D<float> _FluxRead;
@@ -38,6 +44,7 @@ RWTexture2D<float> _FluxWrite;
 Texture2D<float4> _ReflectionRead;
 RWTexture2D<float4> _ReflectionWrite;
 Texture2D<float4> _FishRead; // 魚（雲の手前、Veil の後ろ）を別カメラで描いた絵。A = 魚がある所
+Texture2D<float4> _ParticleRead; // パーティクル（雲の手前、魚の後ろ）。加算で重ねる
 Texture2D<float4> _VeilLightRead;
 RWTexture2D<float4> _VeilLightWrite;
 Texture2D<float4> _StarFieldRead;
@@ -130,6 +137,7 @@ float4 _O3Color;
 float _O3Weight;
 float _LogUMin;
 float _LogUMax;
+float _ParticleScale; // パーティクルの明るさの倍率
 
 // Veil（手前の塵）。InitializeVeil・IlluminateVeil・Compose が使う
 int _VeilNoiseCellsY;       // 一番粗いオクターブの縦の格子数
@@ -146,6 +154,8 @@ float _VeilScatterN;        // 散乱が頭打ちになる密度の目安
 float _VeilLightLength;     // 塵が自分の影を落とす距離（光源の方へ読む長さ）
 int _VeilLightTaps;         // その距離を読む点の数
 float _VeilLightExtinction; // 光源の方の塵の量に掛ける係数
+float _FishVeilCompensation; // 魚の色に掛ける、Veil 吸収の逆補正の強さ（1 = 厳密な逆、0 = 補正なし）
+float _FishVeilCompensationMax; // 逆補正の倍率の上限（濃い塵で値が爆発しないように）
 
 // DebugView
 // 0 は Final（Compose の結果をそのまま見る）。この場合 DebugView は Dispatch しない
@@ -431,6 +441,27 @@ void RemapCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
     _CloudWrite[id] = float2(height, density);
 }
 
+// BlendCloud: 今の雲（_CloudRead）から寄せ先の雲（_CloudNextRead）へ、高さ（R）と密度（G）を混ぜる
+float2 _BlendWeights; // x = 今の雲の重み、y = 寄せ先の雲の重み。x² + y² = 1（独立なノイズを混ぜてもコントラストが落ちない）
+float2 _BlendMeanA;   // 今の雲の、高さと密度の平均
+float2 _BlendMeanB;   // 寄せ先の雲の、高さと密度の平均
+
+[numthreads(8,8,1)]
+void BlendCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    int2 id = dispatchThreadID.xy;
+    if (any(id >= _Resolution)) return;
+
+    // 平均からのずれを、それぞれの重みで足す。平均は、寄せ先の重みの二乗（= 寄せた割合）で補間する
+    float2 meanMix = lerp(_BlendMeanA, _BlendMeanB, _BlendWeights.y * _BlendWeights.y);
+    float2 blended = meanMix
+        + _BlendWeights.x * (_CloudRead[id] - _BlendMeanA)
+        + _BlendWeights.y * (_CloudNextRead[id] - _BlendMeanB);
+
+    // 重みの和が 1 を超える途中で、引き伸ばした範囲をはみ出さないように切る
+    _CloudBlendWrite[id] = float2(clamp(blended.x, _HeightMin, _HeightMax), clamp(blended.y, _DensityMin, _DensityMax));
+}
+
 [numthreads(8,8,1)]
 void InitializeCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
 {
@@ -456,6 +487,25 @@ void InitializeVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
 
     // _VeilCutoff より低い所は塵なし。残りを 0〜_VeilScale に引き伸ばす
     _VeilWrite[id] = _VeilScale * saturate((f - _VeilCutoff) / (1 - _VeilCutoff));
+}
+
+// BlendVeil: 今の塵（_VeilRead）から寄せ先の塵（_VeilNextRead）へ混ぜる。考え方は BlendCloud と同じ
+float2 _VeilBlendWeights; // x = 今の塵の重み、y = 寄せ先の塵の重み。x² + y² = 1
+float2 _VeilBlendMean;    // x = 今の塵の平均、y = 寄せ先の塵の平均
+
+[numthreads(8,8,1)]
+void BlendVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
+{
+    int2 id = dispatchThreadID.xy;
+    if (any(id >= _Resolution)) return;
+
+    float meanMix = lerp(_VeilBlendMean.x, _VeilBlendMean.y, _VeilBlendWeights.y * _VeilBlendWeights.y);
+    float blended = meanMix
+        + _VeilBlendWeights.x * (_VeilRead[id] - _VeilBlendMean.x)
+        + _VeilBlendWeights.y * (_VeilNextRead[id] - _VeilBlendMean.y);
+
+    // 塵は負にならない。上限は InitializeVeil が作る最大値
+    _VeilBlendWrite[id] = clamp(blended, 0, _VeilScale);
 }
 
 [numthreads(8,8,1)]
@@ -486,23 +536,23 @@ void AdvectVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
 // 3x3 近傍の最小・最大を超えないよう切るので、輪郭が縁取られず、繰り返しても発散しない
 
 // 3x3 近傍の、重み付き平均（1-2-1 の重み）と最小・最大
-struct Neighborhood
+struct Nbhd
 {
     float blurSum;
     float lo;
     float hi;
 };
 
-Neighborhood NewNeighborhood()
+Nbhd NewNbhd()
 {
-    Neighborhood nb;
+    Nbhd nb;
     nb.blurSum = 0;
     nb.lo = 1e30;
     nb.hi = -1e30;
     return nb;
 }
 
-void Accumulate(inout Neighborhood nb, float value, float weight)
+void Accumulate(inout Nbhd nb, float value, float weight)
 {
     nb.blurSum += value * weight;
     nb.lo = min(nb.lo, value);
@@ -510,7 +560,7 @@ void Accumulate(inout Neighborhood nb, float value, float weight)
 }
 
 // 元の値 + sharpness * (元の値 - ぼかした値)。近傍の範囲に切る
-float Unsharp(float center, Neighborhood nb, float sharpness)
+float Unsharp(float center, Nbhd nb, float sharpness)
 {
     float blurred = nb.blurSum / 16.0; // 重みの合計は 16
     return clamp(center + sharpness * (center - blurred), nb.lo, nb.hi);
@@ -538,7 +588,7 @@ void SharpenCloud(uint3 dispatchThreadID : SV_DispatchThreadID)
     if (any(id >= _Resolution)) return;
 
     float2 cloud = _CloudRead[id];
-    Neighborhood nb = NewNeighborhood();
+    Nbhd nb = NewNbhd();
     for (int dy = -1; dy <= 1; dy++)
     {
         for (int dx = -1; dx <= 1; dx++)
@@ -558,7 +608,7 @@ void SharpenVeil(uint3 dispatchThreadID : SV_DispatchThreadID)
     int2 id = dispatchThreadID.xy;
     if (any(id >= _Resolution)) return;
 
-    Neighborhood nb = NewNeighborhood();
+    Nbhd nb = NewNbhd();
     for (int dy = -1; dy <= 1; dy++)
     {
         for (int dx = -1; dx <= 1; dx++)
@@ -808,22 +858,28 @@ void Compose(uint3 dispatchThreadID : SV_DispatchThreadID)
     float n = ContrastDensity(_CloudRead[id].y);
     float fogFlux = FogFlux(uv);
 
-    // 一番奥の星空の上に、層 + 霧（水素の色）+ [O III] + 反射光 を重ね、手前の塵で吸収し、塵の散乱光を足す
+    // 一番奥の星空の上に、層 + 霧（水素の色）+ [O III] + 反射光 + パーティクル を重ね、手前の塵で吸収し、塵の散乱光を足す
+    // 奥から Particle → Fish → Veil の順
     float3 color = _StarFieldRead[id].rgb;
     color += Layers(id);
     color += _HaColor.rgb * _FogScale * fogFlux;
     color += OIII(fogFlux, n);
     color += _ReflectionRead[id].rgb;
+    color += _ParticleRead[id].rgb * _ParticleScale; // 加算。魚の後ろなので、次の魚の置き換えで魚がある所は隠れる
 
-    // 魚: 雲の手前にいるので、雲の色を魚の色で置き換える。Veil はその手前にあるので、
+    // 魚: パーティクルまでの色を魚の色で置き換える。Veil はその手前にあるので、
     // このあとの吸収と散乱光が、魚にもかかる（魚が煙の向こうに見える）
     // fish.rgb は A を掛けた色（MSAA で縁が平均されるとそうなる）なので、雲の色は (1 - A) だけ残して足す
+    // 魚の色（青白い発光）は、このあとの Veil の吸収で青から削られて暖色になるので、先に吸収と逆向きの倍率を掛けておく。
+    // 厳密な逆でなくてよい（強さと上限で調整）。青ほど吸収が大きいので、青ほど強く持ち上がって相殺する
+    float veilN = _VeilRead[id];
+    float3 veilOpticalDepth = _VeilExtinction * (_VeilFloor + veilN);
+    float3 fishCompensation = exp(min(veilOpticalDepth * _FishVeilCompensation, log(max(_FishVeilCompensationMax, 1.0))));
     float4 fish = _FishRead[id];
-    color = color * (1 - fish.a) + fish.rgb;
+    color = color * (1 - fish.a) + fish.rgb * fishCompensation;
 
     // 手前の塵の吸収: 画面全体に薄く広がる塵 + 筋や塊の塵。青から先に削られて、赤茶〜黒になる
-    float veilN = _VeilRead[id];
-    color *= exp(-_VeilExtinction * (_VeilFloor + veilN));
+    color *= exp(-veilOpticalDepth);
 
     // 手前の塵が星の光を散らして光る分。塵自身が出す光なので、吸収のあとに足す
     color += _VeilLightRead[id].rgb;
