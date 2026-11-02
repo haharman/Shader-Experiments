@@ -1,5 +1,5 @@
 # Shader Experiments
-
+<img width="560" height="240" alt="cosmic-interactive2" src="https://github.com/user-attachments/assets/018336f2-17d1-484d-85e9-cd7bfabc0084" />
 流体シミュレーション、魚の群れ、星雲、恒星を GPU で描く、インタラクティブな映像作品のプロジェクト（Unity）。
 黒板などの平面に触れた手の位置と動きを入力として、画面の中の宇宙が反応する。
 
